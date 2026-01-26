@@ -25,7 +25,9 @@ logging.basicConfig(
 
 @chz.chz
 class Config:
-    base_model: str = "meta-llama/Llama-3.2-1B"
+    # Hugging Face base model name (e.g., "meta-llama/Llama-3.1-8B").
+    # If omitted and `model_path` is provided, we'll auto-detect the base model from the training run.
+    base_model: str | None = None
     model_path: str | None = None
     max_tokens: int = 512
     temperature: float = 0.7
@@ -100,25 +102,41 @@ class ChatSession:
 async def main(config: Config):
     """Main chat loop."""
 
-    print(f"🚀 Initializing chat with model: {config.base_model}")
-    print(f"📦 Using Path: {config.model_path}")
-
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     try:
         # Create service client
         service_client = tinker.ServiceClient(base_url=config.base_url)
 
+        base_model = config.base_model
+
+        # If model_path is provided, we can auto-detect the base model from the training run.
+        if config.model_path is not None:
+            rest_client = service_client.create_rest_client()
+            training_run = await rest_client.get_training_run_by_tinker_path_async(config.model_path)
+            if base_model is None:
+                base_model = training_run.base_model
+            elif base_model != training_run.base_model:
+                raise ValueError(
+                    f"base_model ({base_model}) does not match training run base model ({training_run.base_model})"
+                )
+
+        if base_model is None:
+            raise ValueError("base_model or model_path must be provided")
+
+        print(f"🚀 Initializing chat with model: {base_model}")
+        print(f"📦 Using Path: {config.model_path}")
+
         # Create sampling client
         sampling_client = service_client.create_sampling_client(
-            base_model=config.base_model,
+            base_model=base_model,
             model_path=config.model_path if config.model_path else None,
         )
 
         # Get tokenizer and renderer
-        tokenizer = get_tokenizer(config.base_model)
+        tokenizer = get_tokenizer(base_model)
         renderer = renderers.get_renderer(
-            get_recommended_renderer_name(config.base_model), tokenizer
+            get_recommended_renderer_name(base_model), tokenizer
         )
 
         # Create chat session

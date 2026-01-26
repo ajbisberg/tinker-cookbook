@@ -14,10 +14,17 @@ python -m tinker_cookbook.chat_app.tinker_chat_cli \
     base_model=meta-llama/Llama-3.1-8B
 ```
 
+If you're pointing at a `tinker://...` checkpoint, you can also omit `base_model` and it will be auto-detected from the training run metadata:
+
+```bash
+python -m tinker_cookbook.chat_app.tinker_chat_cli \
+    model_path=tinker://<unique_id>/sampler_weights/final
+```
+
 ### Arguments
 
 * **model_path**: Path to the trained Tinker sampler checkpoint. Example: `tinker://<unique_id>/sampler_weights/final`. Note that the Tinker chat CLI will not work with training weights which look like `tinker://<unique_id>/weights/final`. Make sure the checkpoint contains `sampler_weights`.
-* **base_model**: Hugging Face base model to use for inference. Example: `meta-llama/Llama-3.1-8B`
+* **base_model**: Hugging Face base model to use for inference. Example: `meta-llama/Llama-3.1-8B`. Optional if `model_path` is provided.
 
 ---
 
