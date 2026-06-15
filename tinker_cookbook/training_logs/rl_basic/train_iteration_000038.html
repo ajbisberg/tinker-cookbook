@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 38</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 38  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:57:09  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 lawns for $8 each, selling 2 collectible figures for $9 each, and working an after-school job for 10 hours at $5 per hour. The total earnings are: 3 * 8 = 24 $ 2 * 9 = 18 $ 10 * 5 = 50 $ Total earnings = 24 + 18 + 50 = 92 $ If the earnings just cover the price of the shoes, then 92 $ = shoe price. Therefore, the shoes cost 92 $. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor&#x27;s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If this money just covers the price of the shoes, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbors’ lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If Joey’s earnings just cover the price of the High Jump sneakers, the cost of the shoes must be 92 dollars. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 = 24 + 2 * 9 = 18 + 10 * 5 = 50 Money earned = 92. If this money just covers the price of the shoes, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total income from mowing lawns = 3 * $8 = $24 Total income from selling collectible figures = 2 * $9 = $18 Total income from after-school job = 10 * $5 = $50 Total income = $24 + $18 + $50 = $92 If Joey&#x27;s earnings just cover the price of the shoes, then the cost of the shoes is $92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If the money just covers the price of the shoes, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total earnings = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total earnings = 3 * 8 = 24 + 2 * 9 = 18 + 10 * 5 = 50. Total earnings = 92. If the earnings just cover the price of the High Jump sneakers, the cost of the shoes is 92. Write your answer in \boxed{} format. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbors’ lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. The total money he expects to earn is: 3 * 8 = 24 $, 2 * 9 = 18 $, 10 * 5 = 50 $. The total money Joey expects to earn is 24 + 18 + 50 = 92 $. If this amount just covers the price of the High Jump sneakers, then the cost of the shoes is 92 $. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. The total money Joey earns = 3 * 8 + 2 * 9 + 10 * 5 = 24 + 18 + 50 = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes must be 92 dollars. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Money earned = 3 * 8 = 24$ + 2 * 9 = 18$ + 10 * 5 = 50$ = 92$. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes is 92$. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor&#x27;s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 = 24 + 2 * 9 = 18 + 10 * 5 = 50. Total money earned = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. The total money earned = 3 x 8 = 24 + 2 x 9 = 18 + 10 x 5 = 50. Total money earned = 92. If this amount just covers the cost of the High Jump sneakers, the cost of the shoes = 92. The cost of the High Jump sneakers = \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbor’s lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 = 24 + 2 * 9 = 18 + 10 * 5 = 50. Total money earned = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the High Jump sneakers is 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Joey wants to buy the latest released pair of designer High Jump basketball sneakers. He plans to mow 3 neighbors’ lawns for $8 a lawn, sell 2 collectible figures to his friends for $9 each, and work an after-school job for 10 hours at $5 per hour. If his earnings just cover the price of the High Jump sneakers, how much do the shoes cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joey plans to earn money by mowing 3 neighbors’ lawns for $8 each, selling 2 collectible figures to his friends for $9 each, and working an after-school job for 10 hours at $5 per hour. Total money earned = 3 * 8 = 24 + 2 * 9 = 18 + 10 * 5 = 50. Total money earned = 92. If his earnings just cover the price of the High Jump sneakers, the cost of the shoes must be 92. \boxed{92}          </p>
+          <p class="lt-p">
+Reference Answer: 92          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+125                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+115                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+111                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+123                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+137                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+116                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+114                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+116                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+125                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+118                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+191                </td>
+                <td>
+117                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by all customers = 40 * 3 = 120. Restaurant donates $2 for every $10 donated by customers. Therefore, restaurant donation = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by 40 customers = 40 * $3 = $120. Donation by the restaurant = $2 for every $10 donated = $2 * ($120 / $10) = $24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = 120. Amount donated by restaurant = 120/10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = 120. Restaurant donation = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total amount donated by customers = 40 * $3 = $120. Amount donated by the restaurant = $2 for every $10 donated = $2 * ($120 / $10) = $24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = $120. Donation by the restaurant = $2 for every $10 donated = $2 * 120/10 = $24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total amount donated by customers = 40 * 3 = 120. The restaurant donates $2 for every $10 donated, hence the donation amount = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = 120. Donation by the restaurant = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant donates $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total money donated by customers = 40 * 3 = 120. Donation by the restaurant = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Therefore, the total donation by customers = 40 * 3 = 120. The restaurant donates $2 for every $10 donated by customers. Therefore, the restaurant donates 120/10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = 120. Donation by restaurant = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Donation by each customer = $3 Donation by 40 customers = 40 * $3 = $120 Restaurant donates $2 for every $10 donated by customers. Therefore, restaurant donates $2 for $120 donated by customers. Donation by restaurant = $2 * (120/10) = $24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total contribution by customers = 40 * 3 = 120. Donation by restaurant = 120 / 10 * 2 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. Total donation by customers = 40 * 3 = 120 The restaurant donates $2 for every $10 donated by customers. Thus, the restaurant donates $2 for every $10 donated by customers = $2 for every $10 = 2 / 10 = 0.2 for every $1 donated by customers. Total donation by customers = 120 Dollars. Restaurant donation = 120 * 0.2 = 24 Dollars. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates 3 dollars. There are 40 customers that day. Total donation by customers = 40 * 3 = 120 dollars. Donation by the restaurant = 120/10 * 2 = 24 dollars. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A restaurant is offering a fundraiser one day where they donate $2 for every $10  donated by customers. The average customer donates 3 and there are 40 customers that day. How much does the restaurant donate? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The restaurant is offering a fundraiser where they donate $2 for every $10 donated by customers. The average customer donates $3. There are 40 customers that day. The total money donated by the customers = 40 * $3 = $120. The restaurant donates $2 for every $10 donated by the customers. Hence, the restaurant donates $2 * ($120 / $10) = $24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+84                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+71                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+84                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+80                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+86                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+73                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+106                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+75                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+93                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up her pool. During the first hour, the pool fills with 8 * 1 = 8 gallons of water. During the next two hours, the pool fills with 10 * 2 = 20 gallons of water. During the fourth hour, the pool fills with 14 * 1 = 14 gallons of water. Total water filled in the pool = 8 + 20 + 14 = 42 gallons. During the fifth hour, 8 gallons of water are lost due to the leak. So, the total water left in the pool after five hours = 42 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours to fill the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. Hence, the pool gets filled with 8 x 1 = 8 gallons of water in the first hour. During the next two hours, the pool fills at 10 gallons of water per hour. Hence, the pool gets filled with 10 x 2 = 20 gallons of water in the next 2 hours. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour. Hence, the pool gets filled with 14 x 1 = 14 gallons of water in the fourth hour. During the fifth hour, the pool loses 8 gallons of water due to a leak. Hence, the pool gets filled with 0 gallons of water in the fifth hour. Total gallons filled = 8 + 20 + 14 = 42. Total gallons lost = 8. Hence, the total gallons of water left in the pool at the end of 5 hours = 42 - 8 = 34. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up her pool. During the first hour, the pool gets 8 gallons of water, so the water in the pool is 8 gallons. During the next two hours, the pool gets 10 gallons of water per hour, so the total water in the pool is 2 * 10 = 20 gallons. The total water in the pool after three hours is 8 + 20 = 28 gallons. During the fourth hour, the pool gets 14 gallons of water, so the total water in the pool is 28 + 14 = 42 gallons. During the fifth hour, the pool loses 8 gallons of water due to the leak, so the total water in the pool is 42 - 8 = 34 gallons. The final number of gallons of water in the pool is 34. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons per hour, so the quantity of water in the pool after the first hour = 8 x 1 = 8 gallons. During the next two hours, the pool fills at 10 gallons per hour, so the quantity of water in the pool after 2 hours = 8 + (10 x 2) = 8 + 20 = 28 gallons. During the fourth hour, the pool fills at a rate of 14 gallons per hour, so the quantity of water in the pool after 4 hours = 28 + (14 x 1) = 28 + 14 = 42 gallons. During the fifth hour, the pool develops a leak and loses 8 gallons of water, so the quantity of water in the pool after 5 hours = 42 - 8 = 34 gallons. Hence, 34 gallons of water are left in the pool after 5 hours. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours filling up her pool. For the first hour, the pool fills at a rate of 8 gallons of water per hour. So, the amount of water filled in 1 hour = 8 gallons. For the next 2 hours, the pool fills at 10 gallons of water per hour. So, the amount of water filled in 2 hours = 20 gallons. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. So, the amount of water filled in 4 hours = 14 x 4 = 56 gallons. Total amount of water filled in 5 hours = 8 + 20 + 56 = 84 gallons. During the fifth hour, the pool develops a leak and loses 8 gallons of water. So, the final amount of water in the pool = 84 - 8 = 76 gallons. \boxed{76}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours filling the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. So, in the first hour, the pool gets 8 x 1 = 8 gallons of water. During the next 2 hours, the pool fills at a rate of 10 gallons of water per hour. So, in the next 2 hours, the pool gets 10 x 2 = 20 gallons of water. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour. So, in the fourth hour, the pool gets 14 x 1 = 14 gallons of water. During the fifth hour, the pool loses 8 gallons of water due to a leak. So, in the fifth hour, the pool gets 0 gallons of water. Total water collected in 5 hours = 8 + 20 + 14 = 42 gallons. Total water lost in the fifth hour = 8 gallons. So, the number of gallons of water left in the pool after 5 hours = 42 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up her pool. During the first hour, the pool fills with 8 * 1 = 8 gallons of water. During the next two hours, the pool fills with 10 * 2 = 20 gallons of water. During the fourth hour, the pool fills with 14 * 1 = 14 gallons of water. Total water filled during 4 hours = 8 + 20 + 14 = 42 gallons. During the fifth hour, the pool loses 8 gallons of water due to a leak. Total water filled during 5 hours = 42 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours to fill the pool. During the first hour, the pool fills at 8 gallons of water per hour. So, in 1 hour, 8 gallons of water fills the pool. During the next two hours, the pool fills at 10 gallons of water per hour. So, in 2 hours, 20 gallons of water fills the pool. During the fourth hour, the pool fills at 14 gallons of water per hour. So, in 1 hour, 14 gallons of water fills the pool. In total, 8 + 20 + 14 = 42 gallons of water fill the pool in the first four hours. During the fifth hour, the pool develops a leak and loses 8 gallons of water. So, the total number of gallons of water at the end of five hours = 42 - 8 = 34. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours filling the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. So, in 1 hour, the pool fills 8 gallons of water. During the next 2 hours, the pool fills at a rate of 10 gallons of water per hour. So, in 2 hours, the pool fills 10 * 2 = 20 gallons of water. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour. So, in 1 hour, the pool fills 14 gallons of water. Thus, in 4 hours, the pool fills 14 * 4 = 56 gallons of water. During the fifth hour, the pool develops a leak and loses 8 gallons of water. So, in 5 hours, the pool fills 8 + 8 + 20 + 56 - 8 = 84 gallons of water. \boxed{84}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour, so 8*1 = 8 gallons are filled in the first hour. During the next two hours, the pool fills at a rate of 10 gallons of water per hour, so 10*2 = 20 gallons are filled in the next two hours. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour, so 14*1 = 14 gallons are filled in the fourth hour. A total of 8 + 20 + 14 = 42 gallons are filled in the first four hours. During the fifth hour, the pool develops a leak and loses 8 gallons of water, so the pool contains 42 - 8 = 34 gallons at the end of five hours. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling the pool. During the first hour, the pool fills at a rate of 8 gallons per hour. Hence, in 1 hour, the pool gets filled with 8 gallons of water. During the next two hours, the pool fills at a rate of 10 gallons per hour. Hence, in 2 hours, the pool gets filled with 10 x 2 = 20 gallons of water. During the fourth hour, the pool fills at a rate of 14 gallons per hour. Hence, in 1 hour, the pool gets filled with 14 gallons of water. Total gallons of water filled in 4 hours = 8 + 20 + 14 = 42 gallons. During the fifth hour, the pool develops a leak and loses 8 gallons of water. Total gallons of water filled in 5 hours = 42 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours to fill up the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour, so 8 gallons fill the pool in 1 hour. During the next two hours, the pool fills at 10 gallons of water per hour, so 20 gallons fill the pool in 2 hours. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour, so 14 gallons fill the pool in 1 hour. So, 20 + 14 = 34 gallons fill the pool in 3 hours. At the end of 4 hours, 8 + 20 + 14 = 42 gallons fill the pool. During the fifth hour, the pool develops a leak and loses 8 gallons of water. So, at the end of 5 hours, the pool has 42 - 8 = 34 gallons of water. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends 5 hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. Hence, the amount of water filled in the first hour = 8 x 1 = 8 gallons. During the next two hours, the pool fills at 10 gallons of water per hour. Hence, the amount of water filled in the next two hours = 10 x 2 = 20 gallons. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour. Hence, the amount of water filled in the fourth hour = 14 x 1 = 14 gallons. The total amount of water filled in 4 hours = 8 + 20 + 14 = 42 gallons. During the fifth hour, the pool develops a leak and loses 8 gallons of water. Hence, the amount of water lost during the fifth hour = 8 gallons. The total amount of water filled in 5 hours = 42 + 8 = 50 gallons. \boxed{50}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour, so the amount of water filled in the first hour = 8 gallons. During the next two hours, the pool fills at 10 gallons of water per hour, so the amount of water filled in the next two hours = 10 x 2 = 20 gallons. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour, so the amount of water filled in the fourth hour = 14 gallons. During the fifth hour, the pool develops a leak and loses 8 gallons of water. Therefore, the total amount of water filled in the pool = 8 + 20 + 14 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling up the pool. During the first hour, the pool fills with 8 gallons of water per hour, hence 8 * 1 = 8 gallons are filled in the first hour. During the next two hours, the pool fills with 10 gallons of water per hour, hence 10 * 2 = 20 gallons are filled in the next two hours. During the fourth hour, the pool fills with 14 gallons of water per hour, hence 14 * 1 = 14 gallons are filled in the fourth hour. During the fifth hour, the pool loses 8 gallons of water due to the leak. Hence, the total gallons of water filled in the pool are 8 + 20 + 14 - 8 = 34 gallons. \boxed{34}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carol spends five hours filling up her pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. For the next two hours, the pool fills at 10 gallons of water per hour. For the fourth hour, the pool fills at a rate of 14 gallons of water per hour. During the fifth hour, the pool develops a leak and loses 8 gallons of water. At the end of five hours, how many gallons of water are still left in the pool? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carol spends five hours filling the pool. During the first hour, the pool fills at a rate of 8 gallons of water per hour. Hence, in 1 hour, the pool fills with 8 gallons of water. During the next two hours, the pool fills at 10 gallons of water per hour. Hence, in 2 hours, the pool fills with 10 x 2 = 20 gallons of water. During the fourth hour, the pool fills at a rate of 14 gallons of water per hour. Hence, in 1 hour, the pool fills with 14 gallons of water. Thus, in 4 hours, the pool fills with 14 x 4 = 56 gallons of water. During the fifth hour, the pool develops a leak and loses 8 gallons of water. Hence, in 5 hours, the pool fills with 8 + 20 + 56 - 8 = 76 gallons of water. \boxed{76}          </p>
+          <p class="lt-p">
+Reference Answer: 34          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+140                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+232                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+178                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+215                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+192                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+240                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+137                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+185                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+203                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+187                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+191                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+198                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+221                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+172                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+166                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+213                </td>
+                <td>
+200                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest one, i.e. 3 * 20 = 60. Hence, the cost of the most expensive lamp is $60. Frank currently has $90. If he buys the most expensive lamp, he will spend $60. This leaves him with $90 - $60 = $30 remaining. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest, so it is 3 * 20 = 60. Frank has $90. If he buys the most expensive lamp, he will spend $60. This leaves $90 - 60 = 30 remaining. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest, so its cost is 3 * 20 = 60. Frank currently has $90. If he buys the most expensive lamp, its cost is $60. Hence, the remaining money with Frank would be $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is 20 dollars. The most expensive lamp is 3 times more expensive than the cheapest lamp, i.e., 20 * 3 = 60 dollars. Frank currently has 90 dollars. If he buys the most expensive lamp, he spends 60 dollars. This leaves him with 90 - 60 = 30 dollars remaining. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest lamp, i.e. 20 * 3 = 60. Total cost of the most expensive lamp = 60. Frank currently has $90. The cost of the most expensive lamp = 60. Money available with Frank after buying the most expensive lamp = 90 - 60 = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive, which means its cost is 3 * 20 = $60. Frank currently has $90. If he buys the most expensive lamp, he will spend $60. This leaves $90 - $60 = $30 remaining with Frank. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest lamp, i.e., 3 * 20 = 60. Hence, the cost of the most expensive lamp is $60. Frank currently has $90. If he buys the most expensive lamp, he will spend $60. Hence, the remaining money with Frank is $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than $20, which is 3 * 20 = 60. The total cost of the most expensive lamp is 60 dollars. Frank currently has $90. If he buys the most expensive lamp, his expense will be 60 dollars. His remaining amount will be 90 - 60 = 30 dollars. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest, i.e., 3 * 20 = 60$. Therefore, the cost of the most expensive lamp is $60. Frank has $90. The cost of the most expensive lamp is $60. The amount Frank would have remaining after buying the most expensive lamp is $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than $20, so its cost is $20 * 3 = $60. Frank currently has $90. If he buys the most expensive lamp for $60, he would spend $60. The remaining money with Frank would be $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest lamp, so it costs 3 * 20 =$60. Frank has $90, and he buys a lamp that costs $60. The amount remaining with Frank is $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest lamp. The cost of the most expensive lamp = 3 * 20 = $60. Frank currently has $90. If he buys the most expensive lamp, the cost = $60. Remaining money = $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than $20, i.e. 3 * 20 = 60. Hence, the cost of the most expensive lamp is $60. Frank currently has $90. If he buys the most expensive lamp, the cost of the lamp is $60. Hence, the remaining amount with Frank is $90 - 60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest, i.e., 3 * 20 = $60. Hence, the cost of the most expensive lamp is $60. Frank currently has $90. If he buys the most expensive lamp for $60, he would spend $60. The remaining amount = $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp is 3 times more expensive than the cheapest, so its cost is 3 * 20 = 60. Frank currently has $90. If he buys the most expensive lamp for $60, he will have $90 - $60 = $30 remaining. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Frank wants to buy a new lamp for his bedroom. The cost of the cheapest lamp is $20, and the most expensive in the store is 3 times more expensive. How much money would Frank have remaining, if he currently has $90, and he buys the most expensive lamp available? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The cost of the cheapest lamp is $20. The most expensive lamp in the store is 3 times more expensive than the cheapest, i.e. 20 * 3 = $60. Therefore, the maximum cost of the lamp that Frank can buy is $60. Frank currently has $90. If he buys the most expensive lamp, the cost of the lamp would be $60. The remaining money would be $90 - $60 = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+91                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+74                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+92                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+76                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+92                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+73                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+81                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+92                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+74                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+100                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

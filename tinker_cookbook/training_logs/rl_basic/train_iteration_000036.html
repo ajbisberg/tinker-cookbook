@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 36</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 36  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:55:52  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the number of red marbles, which is 38/2 = 19. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Thus, x = 63 - 57 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Since he has half as many green marbles as red marbles, he has 38/2 = 19 green marbles. The remaining marbles are dark blue. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Hence, x = 63 - 38 - 19 = 6. Hence, the number of dark blue marbles is 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the red marbles which is 38/2 = 19. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Hence, x = 63 - 57 = 6. There are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Since the number of green marbles is half the number of red marbles, the number of green marbles = 38/2 = 19. The total number of marbles = 38 + 19 + x = 63, where x is the number of dark blue marbles. Therefore, x = 63 - 57 = 6. Hence, the number of dark blue marbles = 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of that of red marbles, i.e. 38/2 = 19. The rest of the 63 marbles are dark blue, i.e. 63 - (38 + 19) = 63 - 57 = 6. Hence, the number of dark blue marbles is 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Half as many green marbles means (1/2)×38 = 19 green marbles. The rest of the marbles are dark blue. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Hence, x = 63 - 57 = 6. There are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Half as many green marbles = 38 / 2 = 19. Rest of the marbles are dark blue. Total marbles = 38 + 19 + x = 63. Therefore, x = 63 - 57 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Half of 38 = 19. Hence, he has 19 green marbles. Total marbles = 38 + 19 + x = 63, where x is the number of dark blue marbles. Therefore, 63 - 38 - 19 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Since he has half as many green marbles as red marbles, he has 38/2 = 19 green marbles. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Hence, x = 63 - 57 = 6. Therefore, the number of dark blue marbles is 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the number of red marbles, which is 38/2 = 19. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Therefore, x = 63 - 57 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Let the number of green marbles be x. Then, the number of blue marbles is (63 - 38 - x) = 25 - x. It is given that the number of green marbles is half the number of red marbles. Hence, x = 38/2 = 19. The number of blue marbles is (25 - 19) = 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the number of red marbles, which is 38/2 = 19. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Therefore, x = 63 - 57 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the number of red marbles = 38/2 = 19. The total number of marbles = 38 + 19 + x (where x is the number of dark blue marbles) = 63. Hence, x = 63 - 38 - 19 = 6. Therefore, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. The number of green marbles is half of the red marbles, which is 38/2 = 19. The remaining marbles are dark blue. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. So, x = 63 - 38 - 19 = 6. Hence, the number of dark blue marbles is 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Half as many green marbles means (1/2) * 38 = 19 green marbles. The rest of the marbles (63 - 38 - 19) = 6 are dark blue. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Fred has 38 red marbles, half as many green ones, and the rest are dark blue. If he has 63 marbles, how many of them are dark blue? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Fred has 38 red marbles. Half of 38 is 19, so he has 19 green marbles. The total number of marbles is 38 + 19 + x = 63, where x is the number of dark blue marbles. Solving for x, we get x = 63 - 38 - 19 = 6. Hence, there are 6 dark blue marbles. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+108                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+89                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+88                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+79                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+84                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+59                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+93                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. 27 boxes of doughnuts are sold throughout the day. Each box holds 10 doughnuts. Hence, 27 x 10 = 270 doughnuts are sold. Hence, 300 - 270 = 30 doughnuts are left. These 30 doughnuts are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. The number of doughnuts sold = 27 x 10 = 270 doughnuts. The number of remaining doughnuts = 300 - 270 = 30 doughnuts. As the bakery gives away any remaining doughnuts at the end of the day, the number of doughnuts given away = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day, and the remaining doughnuts are given away. Therefore, the number of doughnuts left = 300 - (27 * 10) = 300 - 270 = 30. So, 30 doughnuts are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. Number of doughnuts in 27 boxes = 27 * 10 = 270. Remaining doughnuts = 300 - 270 = 30. These 30 doughnuts are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. The number of doughnuts sold = 27 x 10 = 270 doughnuts. The number of doughnuts remaining = 300 - 270 = 30 doughnuts. Since any remaining doughnuts are given away, the number of doughnuts given away = 30 doughnuts. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. 27 boxes of doughnuts are sold throughout the day, each box holding 10 doughnuts. Number of doughnuts sold = 27 * 10 = 270. Remaining doughnuts = 300 - 270 = 30. The bakery gives away 30 doughnuts at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. It has 300 doughnuts to fill into boxes of 10 doughnuts each. The bakery sold 27 boxes of doughnuts throughout the day. Hence, 300 - 270 = 30 doughnuts are left at the end of the day. These 30 doughnuts are given away. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. The number of doughnuts in 27 boxes = 27 x 10 = 270. The total number of doughnuts sold = 270. The total number of doughnuts made = 300. The number of doughnuts left after selling = 300 - 270 = 30. As the bakery gives away any leftover doughnuts, the number of doughnuts given away = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. Therefore, the number of doughnuts sold = 27 * 10 = 270. The number of doughnuts left at the end of the day = 300 - 270 = 30. As the bakery gives away any leftover doughnuts, the number of doughnuts given away at the end of the day = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. Hence, the number of doughnuts sold = 27 * 10 = 270 doughnuts. The number of doughnuts left = 300 - 270 = 30 doughnuts. The bakery gives away these 30 doughnuts at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. It sells 27 boxes of doughnuts throughout the day. Each box holds 10 doughnuts. Therefore, 27 * 10 = 270 doughnuts are sold. Hence, the remaining 300 - 270 = 30 doughnuts are left which are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. Each box of doughnuts holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. Therefore, the number of doughnuts sold = 27 x 10 = 270. The number of doughnuts remaining = 300 - 270 = 30. As the bakery gives away any leftover doughnuts, the number of doughnuts given away = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. 27 boxes of doughnuts are sold throughout the day. Each box holds 10 doughnuts. Therefore, 27 * 10 = 270 doughnuts are sold. Remaining doughnuts = 300 - 270 = 30. These 30 doughnuts are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery made 300 doughnuts and 27 boxes of doughnuts were sold throughout the day. The number of doughnuts in each box is 10. Hence, the number of doughnuts in 27 boxes = 27 × 10 = 270. The remaining 300 - 270 = 30 doughnuts were left at the end of the day. These 30 doughnuts were given away. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts for the day. The bakery sells 27 boxes of doughnuts throughout the day, and each box holds 10 doughnuts. Therefore, 27 x 10 = 270 doughnuts are sold. Hence, the remaining 300 - 270 = 30 doughnuts are left at the end of the day. Since the bakery gives away any leftover doughnuts, 30 doughnuts are given away at the end of the day. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A bakery sells boxes of doughnuts and if there are any doughnuts left at the end of the day, the bakery gives them away. Each box of doughnuts holds 10 doughnuts and all of the doughnuts that the bakery makes are put into these boxes. The bakery makes 300 doughnuts for the day and sells 27 boxes of doughnuts throughout the day. How many doughnuts are given away at the end of the day? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The bakery makes 300 doughnuts and each box holds 10 doughnuts. The bakery sells 27 boxes of doughnuts throughout the day. Therefore, the number of doughnuts sold = 27 * 10 = 270. The number of doughnuts remaining = 300 - 270 = 30. Since all the doughnuts are put into boxes and any leftover doughnuts are given away, the number of doughnuts given away = 30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 30          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+102                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+95                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+85                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+100                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+81                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+78                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+122                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+109                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+80                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+81                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+102                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+199                </td>
+                <td>
+99                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and cleared nine-tenths of the dust particles from it. Hence, he cleared 0.9 * x = 0.9x dust particles, where x is the total number of dust particles on the porch before sweeping. The number of dust particles on the porch after sweeping = 331. The number of dust particles left by Samuel&#x27;s shoes = 223. The number of dust particles on the porch after Samuel&#x27;s shoes = 331 + 223 = 554. The number of dust particles cleared by Samuel = 0.9x = 554. The number of dust particles on the porch before Samuel swept = 554/0.9 = 613.33. Hence, there were 613 dust particles on the porch before Samuel swept. \boxed{613}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch is x. After Samuel sweeps, the number of dust particles becomes 0.9x. After Samuel walks across the porch, the number of dust particles becomes 0.9x + 223. Given that the number of dust particles after Samuel walks across the porch is 331, we get 0.9x + 223 = 331. Solving for x, we get x = 181. \boxed{181}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch = O. Samuel swept the porch and cleared 9/10 of the dust particles, i.e., 9/10 * O = 0.9O dust particles were cleared. Afterward, when Samuel walked across the porch, his shoes left 223 dust particles behind. Therefore, the current number of dust particles on the porch = 331 + 223 = 554. The number of dust particles cleared by Samuel = 0.9O. The number of dust particles on the porch afterward = 554. The number of dust particles on the porch before Samuel swept = 0.9O = 554. O = 554/0.9 = 611. \boxed{611}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch = X. Samuel swept the porch and cleared nine-tenths of the dust particles, so the number of dust particles left on the porch = X * (1 - 9/10) = X * 1/10 = X/10. As Samuel walked across the porch, his shoes left 223 dust particles behind, so the total number of dust particles on the porch after walking = X/10 + 223 = 331. Therefore, X/10 = 331 - 223 = 108. X = 108 * 10 = 1080. \boxed{1080}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and cleared nine-tenths of the dust particles from it. Number of dust particles on the porch before Samuel swept = Unknown. Number of dust particles on the porch after Samuel swept = Total number of dust particles - (9/10) x Total number of dust particles = 1000 - (9/10) x 1000 = 1000 - 900 = 100. Number of dust particles on the porch after Samuel walked across it = 331. Number of dust particles cleared by Samuel = 1000 - 100 = 900. Number of dust particles left behind by Samuel = 223. Total number of dust particles on the porch after Samuel walked across it = 331 + 223 = 554. By subtracting the dust particles left behind by Samuel from the total dust particles on the porch after Samuel walked across it, we get the dust particles that were on the porch before Samuel swept. 554 - 223 = 331. Hence, there were 331 dust particles on the porch before Samuel swept. \boxed{331}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch = X. Samuel swept the porch and cleared nine-tenths of the dust particles from it. Therefore, the number of dust particles cleared = 9/10 * X. The number of dust particles on the porch after sweeping = X - 9/10 * X = 1/10 * X = X/10. Afterward, Samuel walked across the porch and left 223 dust particles behind. The number of dust particles on the porch after Samuel walked across it = 331 + 223 = 554. The initial number of dust particles on the porch = 554 * 10 = 5540. \boxed{5540}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and cleared nine-tenths of the dust particles from it. Therefore, 9/10 * x = 9/10 * x = 0.9x. Here, x is the total number of dust particles on the porch before Samuel swept. 0.9x = 9. Therefore, x = 9/0.9 = 10. After Samuel walked across the porch, there were 223 dust particles left. Hence, the total number of dust particles after Samuel swept and walked across the porch is 331. Therefore, 331 = 10 + 223. Hence, there were 10 dust particles on the porch before Samuel swept. \boxed{10}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch is unknown. After Samuel swept, he cleared 9/10th of the dust particles, which means he cleared 9/10th of unknown particles. Let the initial number of dust particles be x. 9/10*x = 9x/10. After sweeping, the number of dust particles left = x - 9x/10 = x/10. After Samuel walked across, 223 new dust particles were left behind, making the total number of dust particles = x/10 + 223 = 331. x/10 = 331 - 223 = 108. x = 108 * 10 = 1080. \boxed{1080}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The number of dust particles on the porch before Samuel swept = unknown. The number of dust particles swept by Samuel = 9/10 * total dust particles = 9/10 * x = 9x/10. The number of dust particles left on the porch after Samuel swept = x - 9x/10 = x/10. The number of dust particles left behind by Samuel&#x27;s shoes = 223. The total number of dust particles on the porch after Samuel walked across it = 331. Thus, x/10 + 223 = 331. x/10 = 331 - 223 = 108. x = 108 * 10 = 1080. \boxed{1080}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and removed 9/10 of the dust particles from it. Thus, he removed 9/10 * P = 0.9 * P dust particles, where P is the total number of dust particles on the porch before sweeping. The number of dust particles on the porch before sweeping = P = 0.1 * P + 223 = 0.1P + 223. P = 223/0.9 = 248.89. After Samuel walked across the porch, the number of dust particles = 331. The number of dust particles that his shoes left behind = 331 - 248 = 83. The number of dust particles on the porch before Samuel swept = 248 + 83 = 331. \boxed{331}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Before Samuel swept the porch, let the number of dust particles on the porch be x. After he swept, 9/10 * x dust particles were removed, leaving (1 - 9/10) * x = 1/10 * x = 0.1x dust particles on the porch. After Samuel walked across the porch, 223 more dust particles were left, making the total number of dust particles on the porch = 0.1x + 223 = 331. Solving for x, we get x = 331 - 223 = 108. \boxed{108}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and cleared nine-tenths of the dust particles from it. Let the number of dust particles on the porch before Samuel swept be x. After Samuel swept, the number of dust particles became (1 - 9/10)*x = 1/10*x = 0.1x. As he walked across the porch afterward, his shoes left 223 dust particles behind. The total number of dust particles after he walked across the porch became 0.1x + 223 = 331. Solving for x, we get x = 908. \boxed{908}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Samuel swept the porch and cleared nine-tenths of the dust particles from it. Let the total number of dust particles on the porch before sweeping be x. After sweeping, the number of dust particles = x × (1 - 9/10) = x × 1/10 = x/10. Samuel walked across the porch and left 223 dust particles behind. The total number of dust particles after walking = x/10 + 223 = 331. Substitute x/10 = 331 - 223 = 108. x = 1080. Before Samuel swept, the number of dust particles on the porch = 1080. \boxed{1080}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Initially, the number of dust particles on the porch = X. Samuel swept and cleared nine-tenths of the dust particles, i.e 9/10 X = 9X/10. The number of dust particles remaining on the porch after sweeping = X - 9X/10 = X/10. After Samuel walked across the porch, 223 dust particles were left behind. Therefore, the number of dust particles on the porch after Samuel walked = 331 + 223 = 554. The number of dust particles on the porch before Samuel swept = 554 / (1 - 1/10) = 554 / 9 = 61.4. \boxed{61}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Before Samuel swept, the number of dust particles on the porch = x. After sweeping, the number of dust particles on the porch = 9/10 * x = 0.9x. After Samuel walked across the porch, the number of dust particles on the porch = 0.9x + 223 = 331. Therefore, 0.9x = 331 - 223 = 108. x = 108 / 0.9 = 120. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Samuel swept the porch and cleared nine-tenths of the dust particles from it. As he walked across the porch afterward, his shoes left 223 dust particles behind. How many dust particles were on the porch before Samuel swept if there were 331 after he walked across it? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Before Samuel swept, the number of dust particles on the porch = Unknown. After Samuel swept, the number of dust particles on the porch = 9/10 * Total = 9/10 * P = 9/10 * D = 9/10 * P = 9/10 * D = 9/10 * X = 9/10 * D = 9/10 * D = 9/10 * D = 279. After Samuel walked across the porch, the number of dust particles on the porch = 223 + 279 = 502. Therefore, before Samuel swept, the number of dust particles on the porch = 331. \boxed{331}          </p>
+          <p class="lt-p">
+Reference Answer: 1080          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+165                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+101                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+156                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+135                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+221                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+144                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+147                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+151                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+148                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+162                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+126                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+125                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+140                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+144                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+105                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+165                </td>
+                <td>
+144                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles. Fuel consumption in cities = 60 / 30 = 2 gallons Fuel consumption on highway = 200 / 40 = 5 gallons Total fuel consumption = 2 + 5 = 7 gallons Price of 1 gallon of gas = $3.00 Total cost = 7 * $3.00 = $21.00 \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The one-way distance is 60 city miles and 200 highway miles. Gas costs $3.00 per gallon. For the city miles, the distance is 60 miles, and the mileage is 30 miles per gallon. Thus, the number of gallons required for 60 miles in the city = 60 / 30 = 2 gallons. The cost of 2 gallons of gas at $3.00 per gallon = 2 * 3 = $6.00. For the highway miles, the distance is 200 miles, and the mileage is 40 miles per gallon. Thus, the number of gallons required for 200 miles on the highway = 200 / 40 = 5 gallons. The cost of 5 gallons of gas at $3.00 per gallon = 5 * 3 = $15.00. Total cost of gas = $6.00 + $15.00 = $21.00. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, Carl has to travel one way from his house to the Grand Canyon. The distance is 60 city miles and 200 highway miles. The car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. Total distance = 60 + 200 = 260 miles. Distance traveled in cities = 60 miles. City miles per gallon = 30 miles per gallon. Number of gallons used in cities = 60 / 30 = 2 gallons. Distance traveled on highway = 200 miles. Highway miles per gallon = 40 miles per gallon. Number of gallons used on highway = 200 / 40 = 5 gallons. Total number of gallons used = 2 + 5 = 7 gallons. Gas cost per gallon = $3.00. Total gas cost = 7 * $3.00 = $21.00. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip to the Grand Canyon, Carl&#x27;s car will cover 60 city miles and 200 highway miles. City miles per gallon = 30 miles per gallon. Highway miles per gallon = 40 miles per gallon. Distance covered in cities = 60 miles. Gas consumed in cities = 60 / 30 = 2 gallons. Cost of 2 gallons at $3.00 per gallon = 2 * 3 = $6. Distance covered on highways = 200 miles. Gas consumed on highways = 200 / 40 = 5 gallons. Cost of 5 gallons at $3.00 per gallon = 5 * 3 = $15. Total gas consumed = 2 + 5 = 7 gallons. Total cost = 7 * 3 = $21. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the one-way distance, the city miles are 60 and the highway miles are 200. The car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. Hence, for 60 city miles, the required gallons are 60 / 30 = 2 gallons. For 200 highway miles, the required gallons are 200 / 40 = 5 gallons. The total required gallons are 2 + 5 = 7 gallons. The cost of 7 gallons of gas is 7 x 3.00 = 21 dollars. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the one-way distance, the city miles are 60 and the highway miles are 200. Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The gas cost is $3.00 per gallon. City miles = 60 miles Highway miles = 200 miles Miles per gallon in cities = 30 miles Gas cost per gallon = $3.00 Gallery miles in cities = 60 / 30 = 2 gallons Gallery miles on the highway = 200 / 40 = 5 gallons Total gallons used = 2 + 5 = 7 gallons Gas cost = 7 x $3.00 = $21.00 \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles. Fuel consumption in cities = 60 / 30 = 2 gallons Fuel consumption on the highway = 200 / 40 = 5 gallons Total fuel consumption = 2 + 5 = 7 gallons Price of 1 gallon of gas = $3.00 Total cost of fuel = 7 x $3.00 = $21.00 \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the one-way distance, there are 60 city miles and 200 highway miles. Carl&#x27;s car gets 30 miles per gallon in the city and 40 miles per gallon on the highway. Therefore, for 60 city miles, the fuel consumption is 60 / 30 = 2 gallons. For 200 highway miles, the fuel consumption is 200 / 40 = 5 gallons. The total fuel consumption is 2 + 5 = 7 gallons. The cost of 7 gallons of gas is 7 * 3 = 21 dollars. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles. For city miles, Carl can travel 60 miles using 60/30 = 2 gallons of gas. For highway miles, Carl can travel 200 miles using 200/40 = 5 gallons of gas. Total gas consumption = 2 + 5 = 7 gallons. The cost of 7 gallons of gas is 7 * 3 = 21 dollars. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, the distance is 60 city miles and 200 highway miles. The car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. Distance / MPG = Gallons Required 60 / 30 = 2 gallons for city driving 200 / 40 = 5 gallons for highway driving Total gallons required = 2 + 5 = 7 gallons The price of gas is $3.00 per gallon. Cost = 7 * 3 = $21. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, Carl needs to travel a total distance of 60 city miles + 200 highway miles = 260 miles. The number of gallons required for the city travel is 60 / 30 = 2 gallons. The number of gallons required for the highway travel is 200 / 40 = 5 gallons. The total number of gallons required is 2 + 5 = 7 gallons. The cost of 7 gallons of gas at $3.00 per gallon is 7 * 3 = $21.00. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the one way distance to the Grand Canyon, the city miles are 60 miles and the highway miles are 200 miles. The car gets 30 miles per gallon in the city and 40 miles per gallon on the highway. The fuel consumption for 60 city miles is 60 / 30 = 2 gallons. The fuel consumption for 200 highway miles is 200 / 40 = 5 gallons. The total fuel consumption is 2 + 5 = 7 gallons. The cost of 7 gallons of gas at $3.00 per gallon is 7 * 3 = $21. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, the distance is 60 city miles and 200 highway miles. The car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. So, for 60 city miles, the fuel consumption is 60 / 30 = 2 gallons. For 200 highway miles, the fuel consumption is 200 / 40 = 5 gallons. The total fuel consumption is 2 + 5 = 7 gallons. The cost of 7 gallons of gas is 7 * 3 = 21 dollars. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the one way distance from Carl&#x27;s house to Grand Canyon, there are 60 city miles and 200 highway miles. Carl&#x27;s car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. So, for 60 city miles, the gas consumption will be 60 / 30 = 2 gallons. For 200 highway miles, the gas consumption will be 200 / 40 = 5 gallons. Total gas consumption = 2 + 5 = 7 gallons. The cost of 7 gallons of gas = 7 * 3 = 21 dollars. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the road trip, Carl&#x27;s car will travel 60 city miles and 200 highway miles. On cities, the car gets 30 miles per gallon, and on highways, the car gets 40 miles per gallon. The distance traveled on cities is 60 miles, and the gallons consumed are 60/30 = 2 gallons. The cost for 2 gallons on cities is 2 x 3.00 = 6.00. The distance traveled on highways is 200 miles, and the gallons consumed are 200/40 = 5 gallons. The cost for 5 gallons on highways is 5 x 3.00 = 15.00. The total cost of gas is 6.00 + 15.00 = 21.00. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carl is figuring out how much he&#x27;ll need to spend on gas for his upcoming road trip to the Grand Canyon. His car gets 30 miles per gallon in cities and 40 miles per gallon on the highway. The distance from his house to the Grand Canyon, one way, is 60 city miles and 200 highway miles.  If gas costs $3.00 per gallon, how much will Carl need to spend? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carl&#x27;s car gets 30 miles per gallon in the city and 40 miles per gallon on the highway. The one-way distance from his house to the Grand Canyon is 60 city miles and 200 highway miles. Gas cost is $3.00 per gallon. City mileage: 60 miles / 30 miles per gallon = 2 gallons. Highway mileage: 200 miles / 40 miles per gallon = 5 gallons. Total gasoline required: 2 gallons + 5 gallons = 7 gallons. Gas price per gallon: $3.00. Total gas cost: 7 gallons * $3.00 = $21. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 42          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+120                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+225                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+189                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+171                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+125                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+146                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+123                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+123                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+129                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+112                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+118                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+132                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+121                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+130                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+165                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+195                </td>
+                <td>
+137                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

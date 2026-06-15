@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 20</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 20  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:44:29  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. There are 20 oranges. She has 10 pears which is twice as many as pears, so there are 10 x 2 = 20 apples. This means she has 10 pears, 20 oranges, and 20 apples. If she gives her sister 2 of each fruit, she gives 2 pears, 2 oranges, and 2 apples. This means she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 pears, 18 oranges, and 18 apples gives us a total of 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 2 x 10 = 20 apples. If Jennifer gives her sister 2 of each fruit, she gives her 2 pears, 2 oranges, and 2 apples. This means she give a total of 2 + 2 + 2 = 6 fruits to her sister. Therefore, Jennifer has 10 + 20 + 20 = 50 fruits initially. She gives 6 fruits to her sister. This means she has 50 - 6 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, i.e. 10 x 2 = 20 apples. If she gives her sister 2 of each fruit, she gives her 2 pears, 2 oranges, and 2 apples. This means she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. Therefore, she has 8 pears, 18 oranges, and 18 apples left. 8 + 18 + 18 = 8 + 20 + 18 = 8 + 38 = 46 fruits left. \boxed{46}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has ten pears, so 10 x 2 = 20 apples. 10 pears + 20 oranges + 20 apples = 10 + 20 + 20 = 50 fruits. If she gives her sister 2 of each fruit, then she gives 2 pears, 2 oranges, and 2 apples, so she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 pears + 18 oranges + 18 apples = 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has ten pears. There are 20 oranges. She has twice as many apples as pears, so she has 2 x 10 = 20 apples. If she gives her sister 2 of each fruit, she gives her sister 2 pears, 2 oranges, and 2 apples. This means Jennifer has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 + 18 + 18 = 44, so Jennifer has 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has ten pears. We have 20 oranges and twice as many apples as pears. Since there are ten pears, then there are 2 x 10 = 20 apples. If she gives her sister 2 of each fruit, then she gives her sister 2 pears, 2 oranges, and 2 apples. This means Jennifer started with 10 pears, 20 oranges, and 20 apples, and gave her sister 2 pears, 2 oranges, and 2 apples. Jennifer has 10 pears left, 20 oranges left, and 20 apples left. 10 + 20 + 20 = 50 fruits left. \boxed{50}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. There are 20 oranges. Jennifer has twice as many apples as pears, which means she has 10 x 2 = 20 apples. If Jennifer gives her sister 2 of each fruit, she gives her 2 pears, 2 oranges, and 2 apples. This means she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 10 x 2 = 20 apples. 10 + 20 + 20 = 50 fruits in total. After giving her sister 2 of each fruit, she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. He has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 2 x 10 = 20 apples. This means that Jennifer has 10 pears, 20 oranges, and 20 apples. If she gives her sister 2 of each fruit, she gives 2 pears, 2 oranges, and 2 apples, which totals to 2 + 2 + 2 = 6 fruits. After giving her sister 6 fruits, Jennifer has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. This means that Jennifer has 8 pears, 18 oranges, and 18 apples left. The total number of fruits that Jennifer has left is 8 + 18 + 18 = 44 fruits. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 10 x 2 = 20 apples. This means Jennifer has 10 pears, 20 oranges, and 20 apples. If she gives her sister 2 of each fruit, she gives her sister 2 pears, 2 oranges, and 2 apples. Jennifer is left with 10 - 2 = 8 pears, 20 - 2 = 18 oranges, and 20 - 2 = 18 apples. Therefore Jennifer has 8 pears, 18 oranges, and 18 apples left. 8 pears + 18 oranges + 18 apples = 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 10 x 2 = 20 apples. Therefore, she has 10 pears, 20 oranges, and 20 apples. If she gives her sister 2 of each fruit, she gives her 2 pears, 2 oranges, and 2 apples. Therefore, she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 pears, 18 oranges, and 18 apples is a total of 8 + 18 + 18 = 44 fruits. If she gives her sister 2 of each fruit, she has 44 - 2 - 2 - 2 = 44 - 6 = 38 fruits left. \boxed{38}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, so she has 10 x 2 = 20 apples. If she gives her sister 2 of each fruit, she gives her sister 2 pears, 2 oranges, and 2 apples. This means Jennifer has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. She has 8 pears, 18 oranges, and 18 apples left. 8 + 18 + 18 = 8 + 20 + 18 = 46 fruits left. \boxed{46}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, and since she has 10 pears, she has 2 * 10 = 20 apples. This means Jennifer has 10 pears, 20 oranges, and 20 apples. If she gives her sister 2 pears, 2 oranges, and 2 apples, she will lose 2 pears, 2 oranges, and 2 apples. This means she has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. 8 pears, 18 oranges, and 18 apples is a total of 8 + 18 + 18 = 44 fruits. If she gives her sister 2 fruits of each type, she gives her 2 pears, 2 oranges, and 2 apples, which is a total of 2 + 2 + 2 = 6 fruits. This means Jennifer has 44 - 6 = 38 fruits left. \boxed{38}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears, 20 oranges, and twice as many apples as pears. Since she has 10 pears, then she has 2 x 10 = 20 apples. So, Jennifer currently has 10 pears, 20 oranges, and 20 apples, which means she has a total of 10 + 20 + 20 = 50 fruits. If she gives her sister 2 pears, 2 oranges, and 2 apples, then she gives her sister a total of 2 + 2 + 2 = 6 fruits. This means that Jennifer has 50 - 6 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. She has 20 oranges. She has twice as many apples as pears, so she has 2 x 10 = 20 apples. If she gives her sister 2 of each fruit, she gives her sister 2 pears, 2 oranges, and 2 apples. This means she gives her sister a total of 2 + 2 + 2 = 6 fruits. After giving her sister 6 fruits, Jennifer has 10 - 2 = 8 pears left, 20 - 2 = 18 oranges left, and 20 - 2 = 18 apples left. Regarding the total number of fruits, Jennifer has 8 pears, 18 oranges, and 18 apples left which means she has 8 + 18 + 18 = 44 fruits left. \boxed{44}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jennifer has ten pears, 20 oranges, and twice as many apples as pears. If she gives her sister two of each fruit, how many fruits does she have left? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jennifer has 10 pears. 10 pears x 2 = 20 apples. 10 pears + 20 oranges + 20 apples = 10 pears + 20 oranges + 20 x 2 pears = 10 pears + 20 oranges + 40 pears = 50 pears + 20 oranges = 50 pears + 20 oranges + 2 pears + 2 oranges + 2 apples = 52 pears + 24 oranges after giving 2 of each fruit to her sister. Jennifer has 50 pears - 2 = 48 pears left. Jennifer has 24 oranges - 2 = 22 oranges left. Jennifer has 20 apples - 2 = 18 apples left. 48 pears + 22 oranges + 18 apples = 88 fruits left. \boxed{88}          </p>
+          <p class="lt-p">
+Reference Answer: 44          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+164                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+144                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+158                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+130                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+147                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+125                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+127                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+201                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+179                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+202                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+151                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+236                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+180                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+182                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since he has 2400 bottles of imported wine). Since the question states that he has half as many bottles of domestic wine as imported wine, he has half of 2400 = 2400 / 2 = 1200 bottles of domestic wine. The total number of bottles of wine in Jose&#x27;s cellar is 2400 (imported wine) + 1200 (domestic wine) = 3600 bottles of wine. The question states that Jose&#x27;s guests drink one-third of all his wine, so the guests drink 1/3 of 3600 = 3600 / 3 = 1200 bottles of wine. The number of bottles remaining in his cellar is 3600 - 1200 = 2400 bottles of wine. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar holds 2400 bottles of imported wine. Since he has half as many bottles of domestic wine as imported wine, the number of bottles of domestic wine is 2400/2 = 1200. Thus, the total number of bottles of imported wine and domestic wine is 2400 + 1200 = 3600. If the guests drink one-third of all the wine, they drink 3600/3 = 1200 bottles. Thus, 3600 - 1200 = 2400 bottles will remain in Jose&#x27;s cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since we are given that there are 2400 bottles of imported wine). We are given that he has half as many bottles of domestic wine as imported wine. Since we have 2400 bottles of imported wine, there are half of 2400 which equals 1200 bottles of domestic wine. This is a total of 2400 + 1200 = 3600 bottles of wine in the cellar. We are given that the guests drink one-third of all his wine. One-third of 3600 equals 1200. This means that 1200 bottles will be drunk at the party, which leaves 3600 - 1200 = 2400 bottles remaining in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since there are 2400 bottles of imported wine). Since the question states that there are half as many bottles of domestic wine as imported wine, then there are 2400 / 2 = 1200 bottles of domestic wine. The total number of bottles in the private cellar is 2400 (imported wine) + 1200 (domestic wine) = 3600 bottles. The question states that the guests drink one-third of all his wine, so one-third of 3600 is 3600 x 1/3 = 1200. This means that 1200 bottles of wine were consumed. The number of bottles that remain in the cellar is 3600 - 1200 = 2400 bottles. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since there are 2400 bottles of imported wine). Since it is stated that there are half as many bottles of domestic wine as imported wine, then there are 2400/2 = 1200 bottles of domestic wine. The total number of bottles of wine that Jose has in his private cellar is 2400 + 1200 = 3600 bottles. It is stated that the guests drink one-third of all his wine, so the guests drink 1/3 x 3600 = 1200 bottles of wine. The number of bottles that remain in his cellar is 3600 - 1200 = 2400 bottles. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine. Since there are 2400 bottles of imported wine, then there are 2400 / 2 = 1200 bottles of domestic wine. Altogether, there are 2400 + 1200 = 3600 bottles of wine in his cellar. If the guests drink one-third of all his wine, then one-third of 3600 = 3600 x 1/3 = 1200 bottles will be drunk. Hence, there will be 3600 - 1200 = 2400 bottles remaining in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose has 2400 bottles of imported wine. Half as many bottles of domestic wine as imported wine means half of 2400 which is 1200 bottles. 2400 bottles of imported wine plus 1200 bottles of domestic wine equals 3600 bottles of wine in total. The guests drink one-third of all his wine, which is one-third of 3600 which is 1200 bottles. 3600 bottles minus 1200 bottles means 2400 bottles will remain in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine. Since there are 2400 bottles of imported wine, and half of 2400 is 2400/2 = 1200, there are 1200 bottles of domestic wine. Now, if Jose and his guests drink one-third of all his wine, they will drink one-third of 2400 + 1200 = 3600 bottles. One-third of 3600 is 3600/3 = 1200. This means that 1200 bottles will be consumed. Since there were 2400 + 1200 = 3600 bottles before the party, and 1200 bottles will be consumed, 3600 - 1200 = 2400 bottles will remain in Jose&#x27;s cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose has 2400 bottles of imported wine. Since he has half as many bottles of domestic wine as imported wine, he has 2400 / 2 = 1200 bottles of domestic wine. Therefore, he has 2400 + 1200 = 3600 bottles of wine in his cellar. If the guests drink one-third of all his wine, they drink 3600 x 1/3 = 1200 bottles of wine. Since Jose had 3600 bottles and since 1200 bottles were drunk, 3600 - 1200 = 2400 bottles remain in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since 2400 bottles were given). We know that there are half as many bottles of domestic wine as imported wine. Therefore, there are 2400/2 = 1200 bottles of domestic wine. The total number of bottles of wine in his cellar is 2400 + 1200 = 3600 bottles. The guests drink one-third of all his wine, so they drink 3600/3 = 1200 bottles of wine. The number of bottles that will remain in his cellar is 3600 - 1200 = 2400 bottles. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose has 2400 bottles of imported wine. Since the question states that he has half as many bottles of domestic wine as imported wine, he has 2400 / 2 = 1200 bottles of domestic wine. Therefore, he has 2400 + 1200 = 3600 bottles of wine in his cellar. The question states that the guests drink one-third of all his wine, so the guests drink 3600 x 1/3 = 1200 bottles of wine. After the party, the number of bottles remaining in his cellar = 3600 - 1200 = 2400. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Joe is a collector of fine wines. He currently has 2400 bottles of imported wine and half of 2400 is 2400/2 = 1200 bottles of domestic wine. Therefore, he has 2400 + 1200 = 3600 bottles of wine in total. If the guests drink one-third of all his wine, one-third of 3600 is 3600/3 = 1200 bottles. Therefore, 3600 - 1200 = 2400 bottles will remain in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose has 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine. Since he has 2400 bottles of imported wine, half of 2400 is 2400 / 2 = 1200 bottles of domestic wine. A total of 2400 + 1200 = 3600 bottles of wine are in Jose&#x27;s cellar. The guests drink one-third of all his wine, so one-third of 3600 is 3600 / 3 = 1200 bottles of wine will be drunk by the guests. Jose has 3600 - 1200 = 2400 bottles of wine remaining in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose has 2400 bottles of imported wine. Since he has half as many bottles of domestic wine as imported wine, he has 2400 / 2 = 1200 bottles of domestic wine. 2400 bottles of imported wine plus 1200 bottles of domestic wine equals 2400 + 1200 = 3600 bottles of wine in total. If the guests drink one-third of all his wine, they drink 1/3 x 3600 = 1200 bottles of wine. 3600 bottles minus 1200 bottles equals 3600 - 1200 = 2400 bottles remaining in his cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since there are 2400 bottles of imported wine). Since the question states that there are half as many bottles of domestic wine as imported wine, then there are 2400/2 = 1200 bottles of domestic wine. Thus, there are 2400 bottles of imported wine and 1200 bottles of domestic wine, for a total of 2400 + 1200 = 3600 bottles of wine. The question states that the guests drink one-third of all his wine, so the guests drink 1/3 × 3600 = 1200 bottles of wine. Since there are 3600 bottles of wine and the guests drink 1200 bottles of wine, then 3600 - 1200 = 2400 bottles of wine will remain in Jose&#x27;s cellar. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jose is a collector of fine wines.  His private cellar currently holds 2400 bottles of imported wine and half as many bottles of domestic wine as imported wine.  If Jose holds a party and the guests drink one-third of all his wine, how many bottles will remain in his cellar? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jose&#x27;s private cellar currently holds 2400 bottles of imported wine (since there are 2400 bottles of imported wine). He has half as many bottles of domestic wine as imported wine. Therefore, there are 2400 / 2 = 1200 bottles of domestic wine. The total number of bottles of wine that Jose holds is 2400 (imported wine) + 1200 (domestic wine) = 3600 bottles. The guests drink one-third of all his wine. One-third of 3600 is 3600 x 1/3 = 1200. Therefore, 1200 bottles are drunk by the guests. The number of bottles that will remain in Jose&#x27;s cellar is 3600 - 1200 = 2400 bottles. \boxed{2400}          </p>
+          <p class="lt-p">
+Reference Answer: 2400          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+177                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+124                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+163                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+172                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+153                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+142                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+111                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+179                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+133                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+138                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+117                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+138                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+183                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+166                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 feet + 2925 feet + 1287 feet, which is equal to 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 + 2925 + 1287, which is equal to 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which gives us 4 x 5280 = 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which gives us 975 x 3 = 2925 feet. Niklaus walked 1287 feet. 21120 feet from Lionel plus 2925 feet from Esther plus 1287 feet from Niklaus gives us 21120 + 2925 + 1287 = 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles. Each mile is equal to 5280 feet, so Lionel walked 4 x 5280 = 21120 feet. Esther walked 975 yards. Each yard is equal to 3 feet, so Esther walked 975 x 3 = 2925 feet. Niklaus walked 1287 feet. The total number of feet that the friends walked is 21120 + 2925 + 1287 = 24432 feet. \boxed{24432}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles which equals 4 x 5280 feet which equals 21120 feet. Esther walked 975 yards which equals 975 x 3 feet which equals 2925 feet. Niklaus walked 1287 feet. 21120 feet + 2925 feet + 1287 feet = 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which equals 4 x 5280 feet, which equals 21120 feet. Esther walked 975 yards, which equals 975 x 3 feet, which equals 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 + 2925 + 1287, which equals 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles. Each mile is equal to 5280 feet, so Lionel walked 4 x 5280 = 21120 feet. Esther walked 975 yards. Each yard is equal to 3 feet, so Esther walked 975 x 3 = 2925 feet. Niklaus walked 1287 feet. The total number of feet that the friends walked is 21120 + 2925 + 1287 = 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 feet from Lionel + 2925 feet from Esther + 1287 feet from Niklaus, which is equal to 21120 feet + 2925 feet + 1287 feet, which is equal to 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which equals 4 x 5280 feet, which equals 21120 feet. Esther walked 975 yards, which equals 975 x 3 feet, which equals 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 + 2925 + 1287, which equals 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles. Each mile is equal to 5,280 feet, so Lionel walked 4 x 5,280 = 21,120 feet. Esther walked 975 yards. Each yard is equal to 3 feet, so Esther walked 975 x 3 = 2,925 feet. Niklaus walked 1,287 feet. Therefore, the combined feet that the friends walked is 21,120 + 2,925 + 1,287 = 25,332 feet. \boxed{25332}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles. Each mile is equal to 5,280 feet, so Lionel walked 4 x 5,280 = 21,120 feet. Esther walked 975 yards. Each yard is equal to 3 feet, so Esther walked 975 x 3 = 2,925 feet. Niklaus walked 1287 feet. 21,120 + 2,925 + 1287 = 24,332 feet were walked by the friends in total. \boxed{24,332}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles. Each mile is equal to 5280 feet, so Lionel walked 4 x 5280 = 21120 feet. Esther walked 975 yards. Each yard is equal to 3 feet, so Esther walked 975 x 3 = 2925 feet. Niklaus walked 1287 feet. The total number of feet walked by the friends is 21120 + 2925 + 1287 = 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 + 2925 + 1287, which is equal to 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which equals 4 x 5280 feet, which equals 21120 feet. Esther walked 975 yards, which equals 975 x 3 feet, which equals 2925 feet. Niklaus walked 1287 feet. The combined feet that the friends walked is 21120 feet from Lionel + 2925 feet from Esther + 1287 feet from Niklaus, which equals 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 × 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 × 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. The combined number of feet that the friends walked is 21120 + 2925 + 1287, which is equal to 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Lionel walked 4 miles. Esther walked 975 yards and Niklaus walked 1287 feet. How many combined feet did the friends walk? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Lionel walked 4 miles, which is equal to 4 x 5280 feet, which is equal to 21120 feet. Esther walked 975 yards, which is equal to 975 x 3 feet, which is equal to 2925 feet. Niklaus walked 1287 feet. 21120 feet + 2925 feet + 1287 feet = 24032 feet. \boxed{24032}          </p>
+          <p class="lt-p">
+Reference Answer: 25332          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+101                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+120                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+103                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+77                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+88                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+103                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+127                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+88                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+108                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+103                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+100                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+138                </td>
+                <td>
+89                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total. She was only able to use 35 decorations and decided to give the rest to her neighbor. 60 - 35 = 25 decorations that she gave to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes and there are 15 decorations in each box, so 4 x 15 = 60 decorations in total. Since she was only able to use 35 decorations, the remaining decorations are 60 - 35 = 25. She decided to give the 25 remaining decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total in the 4 boxes. She was only able to use 35 decorations. 60 - 35 = 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total in the 4 boxes. She was only able to use 35 decorations. 60 - 35 = 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total in the 4 boxes. She was able to use 35 decorations. 60 - 35 = 25 decorations she did not use. She gave the 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total. She was only able to use 35 decorations. 60 - 35 = 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes and there are 15 decorations in each box, so 4 x 15 = 60 decorations in total. She was only able to use 35 decorations and decided to give the rest to her neighbor. 60 - 35 = 25 decorations were given to the neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 times 15 equals 60 decorations in total in the 4 boxes. Mrs. Jackson used 35 decorations. 60 decorations minus 35 decorations equals 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 times 15 equals 60 decorations in total in the 4 boxes. Mrs. Jackson used 35 decorations. 60 decorations minus 35 decorations equals 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has four boxes. Each box has 15 decorations. 4 × 15 = 60 decorations in total. She was able to use 35 decorations, which means she has 60 - 35 = 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes and there are 15 decorations in each box, so 4 x 15 = 60 decorations in total. She was only able to use 35 decorations, so she left 60 - 35 = 25 decorations. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total in the 4 boxes. She was able to use 35 decorations, so she still has 60 - 35 = 25 decorations left. She decided to give the 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes and there are 15 decorations in each box, so 4 x 15 = 60 decorations in total. She was able to use 35 decorations, so she has 60 - 35 = 25 decorations left. She decided to give these 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 times 15 equals 60 decorations in total in the 4 boxes. Mrs. Jackson used 35 decorations. 60 minus 35 equals 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes. Each box has 15 decorations. 4 x 15 = 60 decorations in total in the 4 boxes. Mrs. Jackson used 35 decorations. 60 - 35 = 25 decorations left. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mrs. Jackson has four boxes of Christmas decorations. There are 15 decorations in each box. She was only able to use 35 decorations and decided to give the rest to her neighbor. How many decorations did she give? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mrs. Jackson has 4 boxes and there are 15 decorations in each box, so we have 4 x 15 = 60 decorations in total. She was only able to use 35 decorations, so the remaining decorations are 60 - 35 = 25. She gave 25 decorations to her neighbor. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 25          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+74                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+64                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+71                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+66                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+75                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+154                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

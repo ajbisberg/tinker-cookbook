@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 23</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 23  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:46:34  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 * 12 = 24 large ceiling lights. My wife also said she saw ten more small lights than medium ones, which means there are 12 + 10 = 22 small ceiling lights. The small ones require 1 bulb each, the medium ones require 2 bulbs each, and the large ones need 3 bulbs each. 22 small ceiling lights require 22 bulbs, 12 medium ceiling lights require 12 * 2 = 24 bulbs, and 24 large ceiling lights require 24 * 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which is 2 x 12 = 24 large ceiling lights. My wife also says she saw ten more small lights than medium ones, which is 10 + 12 = 22 small lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights require 3 bulbs each. Therefore, 22 small lights require 22 x 1 = 22 bulbs, 12 medium lights require 12 x 2 = 24 bulbs, and 24 large lights require 24 x 3 = 72 bulbs. In total, 22 + 24 + 72 = 118 bulbs should be bought. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 * 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small ceiling lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights need 3 bulbs each. Therefore, 22 small lights will require 22 * 1 = 22 bulbs, 12 medium lights will require 12 * 2 = 24 bulbs, and 24 large lights will require 24 * 3 = 72 bulbs. In total, 22 + 24 + 72 = 118 bulbs should be bought. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. We have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2 bulbs, and the large ones need 3 bulbs. My wife said she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. She also said there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. Therefore, the total number of bulbs required are 12 x 2 = 24 for medium ceiling lights, 24 x 3 = 72 for large ceiling lights, and 22 x 1 = 22 for small ceiling lights, giving a total of 24 + 72 + 22 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says she saw ten more small lights than medium ones, which means there are 10 + 12 = 22 small ceiling lights. The small ones require 1 bulb each, the medium ones require 2 bulbs each, and the large ones need 3 bulbs each. Therefore, there are 22 small ceiling lights that require 22 bulbs, 12 medium ceiling lights that require 12 x 2 = 24 bulbs, and 24 large ceiling lights that require 24 x 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: I have a new house with 12 medium ceiling lights. I have also seen small and large ceiling lights in other rooms. Small ceiling lights require 1 bulb each, medium ceiling lights require 2 bulbs each, and large ceiling lights need 3 bulbs each. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. She also said there are ten more small lights than medium lights, which means there are 12 + 10 = 22 small lights. Therefore, the total number of bulbs required is 12 x 2 = 24 for medium ceiling lights, 24 x 3 = 72 for large ceiling lights, and 22 x 1 = 22 for small ceiling lights, giving a total of 24 + 72 + 22 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 * 12 = 24 large ceiling lights. And my wife says she saw ten more small lights than medium ones, which means there are 10 + 12 = 22 small ceiling lights. The small ones require 1 bulb, the medium ones require 2 bulbs, and the large ones need 3 bulbs. For 22 small ceiling lights, we need 22 * 1 = 22 bulbs. For 12 medium ceiling lights, we need 12 * 2 = 24 bulbs. For 24 large ceiling lights, we need 24 * 3 = 72 bulbs. Total bulbs required = 22 + 24 + 72 = 118. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also said there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small ceiling lights. The small ones require 1 bulb each, the medium ones require 2 bulbs each, and the large ones need 3 bulbs each. Therefore, there are 22 small ceiling lights requiring 22 bulbs, 12 medium ceiling lights requiring 12 x 2 = 24 bulbs, and 24 large ceiling lights requiring 24 x 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small ceiling lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights require 3 bulbs each. Therefore, there are 22 small ceiling lights that need 22 bulbs, 12 medium ceiling lights that need 12 x 2 = 24 bulbs, and 24 large ceiling lights that need 24 x 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says she saw ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights require 3 bulbs each. There are 22 small lights, which require 22 x 1 = 22 bulbs. There are 24 large lights, which require 24 x 3 = 72 bulbs. There are 12 medium lights, which require 12 x 2 = 24 bulbs. Therefore, the total number of bulbs required is 22 + 72 + 24 = 118. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights need 3 bulbs each. Therefore, 22 small lights x 1 bulb = 22 bulbs for the small lights, 12 medium lights x 2 bulbs = 24 bulbs for the medium lights, and 24 large lights x 3 bulbs = 72 bulbs for the large lights. Total bulbs required = 22 + 24 + 72 = 118. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ones require 1 bulb each, the medium ones require 2 bulbs each, and the large ones need 3 bulbs each. Therefore, 22 small lights require 22 x 1 = 22 bulbs, 12 medium lights require 12 x 2 = 24 bulbs, and 24 large lights require 24 x 3 = 72 bulbs. Total bulbs required = 22 + 24 + 72 = 118. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. She also says she saw ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ones require 1 bulb each, the medium ones require 2 bulbs each, and the large ones need 3 bulbs each. Therefore, there are 22 small lights requiring 22 bulbs, 12 medium lights requiring 12 x 2 = 24 bulbs, and 24 large lights requiring 24 x 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also said she saw ten more small lights than medium ones, which means there are 10 + 12 = 22 small ceiling lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights need 3 bulbs each. Therefore, the number of bulbs required for the small ceiling lights is 22 x 1 = 22. The number of bulbs required for the medium ceiling lights is 12 x 2 = 24. The number of bulbs required for the large ceiling lights is 24 x 3 = 72. The total number of bulbs required is 22 + 24 + 72 = 118. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights require 3 bulbs each. Therefore, there are 22 small lights that require 22 bulbs, 12 medium lights that require 12 x 2 = 24 bulbs, and 24 large lights that require 24 x 3 = 72 bulbs. In total, we need 22 + 24 + 72 = 118 bulbs. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: My new house has 12 medium ceiling lights but I have seen small and large ceiling lights in other rooms. The small ones require 1 bulb, the medium ones require 2, and the large ones need 3 bulbs. How many bulbs should I buy if my wife says she saw twice as many large ceiling lights as medium ceiling lights and ten more small lights than medium ones? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: My new house has 12 medium ceiling lights. My wife says she saw twice as many large ceiling lights as medium ceiling lights, which means there are 2 x 12 = 24 large ceiling lights. My wife also says there are ten more small lights than medium ones, which means there are 12 + 10 = 22 small lights. The small ceiling lights require 1 bulb each, the medium ceiling lights require 2 bulbs each, and the large ceiling lights require 3 bulbs each. Therefore, 22 small lights require 22 x 1 = 22 bulbs, 12 medium lights require 12 x 2 = 24 bulbs, and 24 large lights require 24 x 3 = 72 bulbs. In total, 22 + 24 + 72 = 118 bulbs should be bought. \boxed{118}          </p>
+          <p class="lt-p">
+Reference Answer: 118          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+168                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+172                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+180                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+180                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+175                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+186                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+177                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+172                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+178                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+187                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+179                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+170                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+167                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+191                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+174                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+186                </td>
+                <td>
+176                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. Half of the remaining layers are sandstone. Half of 20 layers is 10 sandstone layers. 4 of the remaining 10 layers are quartz. 6 of the remaining 6 layers are shale. Half of 6 layers is 3 shale layers. The rest of the 6 layers are all different kinds of rock that make up only one layer in the canyon&#x27;s strata. 6 - 5 - 10 - 4 - 3 = 6 kinds of rock make up only one layer. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 layers of rock in its strata. 5 of the 25 layers are limestone. 12.5 of the remaining 20 layers are sandstone [half of 20 is 10, and 10 of 20 is 0.5, and 0.5 x 20 = 10]. 4 of the remaining 9.5 layers are quartz [20 - 12.5 = 7.5, and 7.5 - 5 = 2.5, and 2.5 x 4 = 10]. 4.75 of the remaining 5.5 layers are shale [20 - 12.5 - 4 = 3.5, and 3.5 x 0.5 = 1.75, and 1.75 + 2.5 = 4.25, and 5.5 - 4.25 = 1.25, and 1.25 x 0.5 = 0.625, and 0.625 + 4.25 = 4.875, and 5.5 - 4.875 = 0.625, and 0.625 x 1 =          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 layers of rock in its strata. 5 of the layers are limestone. The rest of the layers are not limestone. Half of the rest of the layers are sandstone. This means 12.5 layers are sandstone. The remaining layers are not sandstone. 25 - 5 - 12.5 = 7.5 layers. 4 of the remaining layers are quartz. This means 3.5 layers are quartz. The remaining layers are not quartz. 7.5 - 4 = 3.5 layers. Half of the rest of the layers are shale. This means 1.75 layers are shale. The remaining layers are not shale. 3.5 - 1.75 = 1.75 layers. The rest of the layers are not limestone, sandstone, quartz, or shale. The number of such layers is 25 - 5 - 12.5 - 4 - 1.75 = 1.75 layers. These layers are of different kinds of rock. \boxed{1.75}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. The rest of the layers are not limestone, and half of them are sandstone. Therefore, half of 25 - 5 = 10 sandstone layers. The remaining layers are not sandstone, and 10 of them are quartz. Therefore, 25 - 5 - 10 = 10 remaining layers, and 10 of them are quartz. The remaining layers are not quartz, and half of them are shale. Therefore, half of 10 = 5 shale layers. The remaining layers are not shale, and 10 - 5 = 5 remaining layers. The 5 remaining layers are all different kinds of rock, and only one layer of each of these 5 kinds of rock makes up only one layer in the canyon&#x27;s strata. Therefore, there are 5 kinds of rock that make up only one layer in the canyon&#x27;s strata. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. Half of the remaining layers are sandstone. Half of 20 layers is 10 layers which are sandstone. 4 of the remaining layers are quartz. 4 layers are quartz. Half of the remaining layers are shale. Half of 4 layers is 2 layers which are shale. 25 - (5 + 10 + 4 + 2) = 25 - 21 = 4. 4 layers are of different kinds of rock which make up only one layer each. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 different layers of rock in a canyon&#x27;s strata. 5 of the layers are limestone. Half of the remaining layers are sandstone. Half of the remaining layers are 25 / 2 = 12.5 ≈ 12. 4 of the remaining layers are quartz. Half of the remaining layers are 25 - (5 + 12) = 25 - 17 = 8. 8 / 2 = 4. The remaining layers are 25 - (5 + 12 + 4) = 25 - 21 = 4. Hence, the remaining layers are 4. The rest are all different kinds of rock, which means that there are 4 different kinds of rock that make up only one layer in the canyon&#x27;s strata. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 layers of rock in its strata. 5 of the layers are limestone. Half of the rest of the layers are sandstone. Half of 20 layers is 10 layers, so 10 layers are sandstone. 4 of the remaining layers are quartz. 4 layers are quartz. Half of the rest of the layers are shale. Half of 11 layers is 5.5 layers, so 5 layers are shale. The rest of the layers are all different kinds of rock. 25 - (5 + 10 + 4 + 5) = 25 - 24 = 1. 1 layer is all different kinds of rock. Therefore, there are 1 kind of rock that makes up only one layer in the canyon&#x27;s strata. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. Half of the remaining layers are sandstone. Half of 20 layers is 10 sandstone layers. 4 of the remaining layers are quartz. 4 layers are quartz. Half of the remaining layers are shale. Half of 4 layers is 2 shale layers. 2 layers are shale. The rest of the layers are all different kinds of rock that make up only one layer. 25 - (5 + 10 + 4 + 2) = 25 - 21 = 4 layers. Therefore, 4 layers are comprised of different kinds of rock that make up only one layer. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in a canyon&#x27;s strata. 5 of the layers are limestone. Half of the rest are sandstone. Half of 20 is 10, so 10 layers are sandstone. 4 of the remaining layers are quartz. 4 layers are quartz. Half of the rest are shale. Half of 5 is 2.5, so 2 layers are shale. The rest are all different kinds of rock. 25 - (5 + 10 + 4 + 2) = 25 - 21 = 4. 4 layers are all different kinds of rock that make up only one layer in the canyon&#x27;s strata. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 layers of rock in its strata. Five of the layers are limestone. Half of the remaining layers are sandstone. This means that half of (25 - 5) = half of (25 - 5) = half of (20) = 10 sandstone layers. Four of the remaining layers are quartz. This means that 4 layers are quartz. Half of the remaining layers are shale. This means that half of (25 - 5 - 10 - 4) = half of (25 - 19) = half of (6) = 3 shale layers. The rest of the layers are all different kinds of rock, which is (25 - 5 - 10 - 4 - 3) = (25 - 22) = 3 layers. Therefore, there are 5 limestone layers, 10 sandstone layers, 4 quartz layers, 3 shale layers, and 3 layers of all different kinds of rock. One layer is made up of only one kind of rock. We have 5 limestone layers, 10 sandstone layers, 4 quartz layers, 3 shale layers, and 3 layers of all different kinds of rock, which means that 5 + 10          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 different layers of rock in its strata. 5 of the layers are limestone. Half of the rest of the layers are sandstone. Half of 20 layers is 10 layers. 10 layers are sandstone. 25 - 5 - 10 = 10. 10 layers are quartz. Half of the rest of the layers are shale. Half of 10 layers is 5 layers. 5 layers are shale. 25 - 5 - 10 - 5 = 5. 5 layers of the remaining 5 layers are of different kinds of rock. The rest of the 5 layers are of different kinds of rock. Therefore, 5 layers in the canyon&#x27;s strata are made up of only one kind of rock. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In the canyon&#x27;s strata, we have 25 different layers of rock. Out of these 25 layers, 5 are limestone. Half of the remaining layers are sandstone. Half of 20 layers is 10 sandstone layers. 25 - 5 - 10 = 10. Out of the remaining 10 layers, 4 are quartz. 10 - 4 = 6. Half of 6 layers is 3 shale layers. 6 - 3 = 3. Out of the remaining 3 layers, all are different kinds of rock and make up only one layer each. Number of kinds of rock that make up only one layer = 3. \boxed{3}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 different layers of rock in its strata. 5 of the layers are limestone. Half of the remaining 20 layers (20 x 1/2 = 10) are sandstone. 4 of the remaining 10 layers (10 - 5 = 5) are quartz. Half of the remaining 5 layers (5 x 1/2 = 2.5) are shale. The rest of the 25 layers (25 - 5 - 10 - 4 - 2.5 = 3.5) are all different kinds of rock and make up only one layer each. Therefore, there are 3.5 kinds of rock that make up only one layer in the canyon&#x27;s strata. \boxed{3}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 different layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. Half of the rest (i.e. 12.5) are sandstone. However, 12.5 is not a whole number, so we will round it up to 13 sandstone layers. 4 of the remaining layers (i.e. 13) are quartz. Half of the rest (i.e. 4.5) are shale. However, 4.5 is not a whole number, so we will round it up to 5 shale layers. The rest (i.e. 25 - 5 - 13 - 4 - 5 = 25 - 27 = 8) are all different kinds of rock and make up only one layer in the canyon&#x27;s strata. Therefore, there are 8 kinds of rock that make up only one layer in the canyon&#x27;s strata. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The canyon has 25 different layers of rock in its strata. Five of the layers are limestone. Half of the remaining layers are sandstone. Half of the remaining layers is 12.5. Four of the remaining layers are quartz. The remaining layers are 12.5 - 4 = 8.5. Half of 8.5 is 4.25. The remaining layers are 8.5 - 4.25 = 4.25. The remaining layers are shale. The rest of the layers are all different kinds of rock but make up only one layer each. There are 25 - 5 - 12.5 - 4 - 4.25 - 4.25 = 25 - 26 - 4.25 = 25 - 30.25 = -5.25 layers. \boxed{-5}          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 25 different layers of rock in a canyon’s strata. Five of the layers are limestone. Half of the rest are sandstone. Four of the remaining are quartz. Half of the rest are shale. The rest are all different kinds of rock. How many kinds of rock make up only one layer in the canyon’s strata? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 layers of rock in the canyon&#x27;s strata. 5 of the layers are limestone. The rest of the layers are 25 - 5 = 20. Half of the 20 layers, which is 20/2 = 10, are sandstone. The remaining layers after allocating 5 layers to limestone and 10 layers to sandstone are 25 - 5 - 10 = 10. 4 of the remaining 10 layers are quartz. The remaining layers after allocating 5 layers to limestone, 10 layers to sandstone, and 4 layers to quartz are 25 - 5 - 10 - 4 = 6. Half of the 6 remaining layers, which is 6/2 = 3, are shale. The remaining layers after allocating 5 layers to limestone, 10 layers to sandstone, 4 layers to quartz, and 3 layers to shale are 25 - 5 - 10 - 4 - 3 = 3. The rest of the 3 layers are of different kinds of rock as they are not limestone, sandstone, quartz, or shale. Therefore, there are 3 kinds of rock that make up only one layer in the canyon&#x27;s str          </p>
+          <p class="lt-p">
+Reference Answer: 3          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+136                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+226                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+207                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+131                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+174                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+170                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+154                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+149                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+167                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+147                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+161                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+199                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+180                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years. The cost of the coat for 15 years = 300 * 15 = 4500. The second coat costs $120 and will last for five years. The cost of the coat for five years = 120 * 5 = 600. Therefore, the difference in cost between the first and second coats for 15 years = 4500 - 600 = 3900. Karen would save $3900 over 30 years by buying the more expensive coat. \boxed{3900}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years. Therefore, the yearly cost of the first coat is $300/15 = $20. The second coat costs $120 and will last for five years. Therefore, the yearly cost of the second coat is $120/5 = $24. To save money over 30 years, Karen should buy the more expensive coat which costs $300 and will last for 15 years. The yearly cost of the first coat is $20. Therefore, the total cost of the first coat for 30 years is 30 x $20 = $600. The yearly cost of the second coat is $24. Therefore, the total cost of the second coat for 30 years is 30 x $24 = $720. By buying the more expensive coat, Karen saves $720 - $600 = $120 over 30 years. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years. The cost per year for this coat is $300/15 = $20. The total cost for this coat over 30 years is $20 x 30 = $600. The second coat costs $120 and will last for 5 years. The cost per year for this coat is $120/5 = $24. The total cost for this coat over 30 years is $24 x 30 = $720. Therefore, the more expensive coat costing $300 would save $720 - $600 = $120 over 30 years compared to the cheaper coat costing $120. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year for this coat is $300/15 = $20. The second coat costs $120 and will last for five years, which means that the cost per year for this coat is $120/5 = $24. Therefore, the more expensive coat (which costs $300) is cheaper than the less expensive coat (which costs $120) over the course of 15 years. Now, to save money over 30 years, Karen should choose the more expensive coat (which costs $300) instead of the less expensive coat (which costs $120). The cost of the more expensive coat for 30 years is $300 x 30 = $9000. The cost of the less expensive coat for 30 years is $120 x 30 = $3600. Therefore, Karen saves $9000 - $3600 = $5400 by buying the more expensive cost. \boxed{5400}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and lasts for 15 years, which means that the yearly cost of the first coat is $300 / 15 = $20. The second coat costs $120 and lasts for five years, which means that the yearly cost of the second coat is $120 / 5 = $24. To save money over 30 years, Karen should buy the more expensive coat, which is the first coat costing $300. In 30 years, the total cost of the first coat will be $300 x 30 = $9000, while the total cost of the second coat will be $120 x 30 = $3600. The difference in cost between the two coats over 30 years is $9000 - $3600 = $5400. Therefore, by buying the more expensive coat, Karen will save $5400 over 30 years. \boxed{5400}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and lasts for 15 years. Therefore, the cost per year for the first coat is $300/15 = $20. The second coat costs $120 and lasts for five years. Therefore, the cost per year for the second coat is $120/5 = $24. To save money over 30 years, Karen should buy the more expensive coat which costs $20 per year. If Karen buys the more expensive coat, she will spend $20 per year for 30 years, which is $20 x 30 = $600. If Karen buys the less expensive coat, she will spend $24 per year for 30 years, which is $24 x 30 = $720. The difference in costs is $720 - $600 = $120. Therefore, Karen would save $120 over 30 years by buying the more expensive cost. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years. The total cost for the first coat over 15 years is 300 * 15 = 4500. The second coat costs $120 and will last for five years. The total cost for the second coat over five years is 120 * 5 = 600. By buying the first, more expensive coat, Karen would save 4500 - 600 = 3900 over 30 years. \boxed{3900}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year is $300/15 = $20. The second coat costs $120 and will last for five years, which means that the cost per year is $120/5 = $24. To save money over 30 years, Karen should buy the more expensive coat which costs $20 per year. If Karen buys the more expensive coat, she will spend $20 x 30 = $600 over 30 years. If Karen buys the less expensive coat, she will spend $24 x 30 = $720 over 30 years. Therefore, Karen would save $720 - $600 = $120 over 30 years by buying the more expensive cost. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and lasts for 15 years, which means that the cost per year is $300/15 = $20. The second coat costs $120 and lasts for five years, which means that the cost per year is $120/5 = $24. To save money, Karen should buy the first coat that costs $20 per year for 30 years, which is $20 x 30 = $600. The second coat costs $24 per year for 30 years, which is $24 x 30 = $720. Therefore, by buying the more expensive coat, Karen saves $720 - $600 = $120 over 30 years. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and lasts for 15 years, therefore the annual cost of the first coat is $300/15 = $20. The second coat costs $120 and lasts for five years, therefore the annual cost of the second coat is $120/5 = $24. By buying the more expensive coat, Karen will save $24 - $20 = $4 annually. Over 30 years, Karen would save 30*$4 = $120. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year is 300/15 = 20. The second coat costs $120 and will last for five years, which means that the cost per year is 120/5 = 24. To save money, Karen should buy the more expensive coat costing $300, as it will cost 20 dollars per year as compared to 24 dollars per year for the cheaper coat. Over 30 years, the cost of the first coat will be 20 x 30 = 600 dollars, and the cost of the second coat will be 24 x 30 = 720 dollars. The difference in cost is 720 - 600 = 120 dollars. Therefore, Karen would save 120 dollars over 30 years by buying the more expensive coat. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and lasts for 15 years, so the annual cost of the first coat is $300/15 = $20. The second coat costs $120 and lasts for five years, so the annual cost of the second coat is $120/5 = $24. If Karen buys the more expensive coat costing $300, she will save $24-$20 = $4 annually. For 30 years, she will save 30*$4 = $120. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year is $300 / 15 = $20. The second coat costs $120 and will last for 5 years, which means that the cost per year is $120 / 5 = $24. By buying the more expensive coat that costs $300, Karen will save $24 - $20 = $4 per year. Over 30 years, Karen will save 30 x $4 = $120. Therefore, by buying the more expensive cost, Karen will save $120 over 30 years. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year is $300/15 = $20. The second coat costs $120 and will last for 5 years, which means that the cost per year is $120/5 = $24. By choosing the more expensive coat, Karen will save $24 - $20 = $4 per year. Over 30 years, Karen would save 30 x $4 = $120. Therefore, by buying the more expensive coat, Karen would save $120 over 30 years. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: For the first coat, the cost is $300 and the lifespan is 15 years. Therefore, the average cost per year is $300/15 = $20. For the second coat, the cost is $120 and the lifespan is 5 years. Therefore, the average cost per year is $120/5 = $24. By buying the more expensive coat, Karen will save $24 - $20 = $4 per year. Over 30 years, the total savings will be 30 * $4 = $120. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Karen is considering her winter coat options. One coast costs $300 and will last for 15 years. The other coat costs $120 and will last for five years. How much money would Karen save over 30 years by buying the more expensive cost? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The first coat costs $300 and will last for 15 years, which means that the cost per year is $300/15 = $20. The total cost of owning the first coat for 30 years will be 30*$20 = $600. The second coat costs $120 and will last for five years, which means that the cost per year is $120/5 = $24. The total cost of owning the second coat for 30 years will be 30*$24 = $720. Therefore, the difference in total cost between the first and second coat for 30 years is $720 - $600 = $120. Karen would save $120 by buying the more expensive coat. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 120          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+118                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+187                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+207                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+187                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+186                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+104                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+160                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+144                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+102                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+179                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+130                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+124                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+115                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+149                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then, he gave twice as many gumballs as he had given to Todd to Alisha. Since he gave 4 gumballs to Todd, twice as many gumballs as 4 are 2 x 4 = 8 gumballs. Hence, he gave 8 gumballs to Alisha. Next, he gave 5 less than four times as many gumballs as he had given to Alisha to Bobby. Since he gave 8 gumballs to Alisha, four times as many gumballs as 8 are 4 x 8 = 32 gumballs. 5 less than 32 are 32 - 5 = 27 gumballs. Hence, he gave 27 gumballs to Bobby. Hector had 6 gumballs remaining. Therefore, the total number of gumballs that Hector purchased is 4 + 8 + 27 + 6 = 45 gumballs. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given to Todd to Alisha. Since he gave 4 gumballs to Todd, twice as many as 4 is 2 x 4 = 8 gumballs. So he gave 8 gumballs to Alisha. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he gave 8 gumballs to Alisha, 4 times 8 is 4 x 8 = 32 gumballs, and 5 less than 32 is 32 - 5 = 27 gumballs. So he gave 27 gumballs to Bobby. Add 4 gumballs (given to Todd), 8 gumballs (given to Alisha), and 27 gumballs (given to Bobby) to get 4 + 8 + 27 = 39 gumballs given away. Since Hector had 6 gumballs remaining, 39 gumballs were given away and 39 + 6 = 45 gumballs were in total. Therefore, Hector purchased          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given Todd to Alisha. Since he had given 4 gumballs to Todd, twice as many as 4 is 2 x 4 = 8 gumballs given to Alisha. He gave 8 gumballs to Alisha. Then he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times as many is 4 x 8 = 32 gumballs. 5 less than 32 is 32 - 5 = 27 gumballs given to Bobby. Hector gave 4 gumballs to Todd, 8 gumballs to Alisha, and 27 gumballs to Bobby. This means he has given 4 + 8 + 27 = 39 gumballs in total. Since Hector had 6 gumballs remaining, the total number of gumballs that Hector purchased is 39 + 6 = 45 gumballs. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many gumballs as he had given to Todd to Alisha. Since he had given 4 gumballs to Todd, twice as many as 4 are 2 x 4 = 8 gumballs. So, Hector gave 8 gumballs to Alisha. He gave 5 less than four times as many gumballs to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times as many gumballs are 4 x 8 = 32 gumballs. 5 less than 32 are 32 - 5 = 27 gumballs. So, Hector gave 27 gumballs to Bobby. Hector had 6 gumballs remaining. 4 gumballs were given to Todd, 8 gumballs were given to Alisha, and 27 gumballs were given to Bobby. So, 4 + 8 + 27 = 39 gumballs were given away. 60 - 39 = 21 gumballs were remaining. Since Hector purchased the container, he          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given Todd to Alisha. Since he had given 4 gumballs to Todd, twice as many as 4 is 2 x 4 = 8. So, he gave 8 gumballs to Alisha. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times as many as 8 is 4 x 8 = 32. 5 less than 32 is 32 - 5 = 27. So, he gave 27 gumballs to Bobby. Now, Hector had 6 gumballs remaining. Initially, he had given 4 to Todd, then 8 to Alisha, and then 27 to Bobby. So, he had given 4 + 8 + 27 = 39 gumballs. The total number of gumballs that Hector purchased is the sum of gumballs he had given (39) and the gumballs he had remaining (6), which is 39 + 6          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 to Todd, so he has 4 gumballs less. Next, he gave twice as many as he had given to Todd to Alisha. The number of gumballs he gave to Todd was 4, so twice as many as 4 is 8, therefore he gave 8 gumballs to Alisha, leaving 4 - 8 = 4 - 8 = -4 gumballs. Then he gave 5 less than four times as many to Bobby as he had given to Alisha. The number of gumballs he gave to Alisha was 8, so four times as many as 8 is 4 x 8 = 32, and 5 less than 32 is 32 - 5 = 27, therefore he gave 27 gumballs to Bobby, leaving -4 - 27 = -31 gumballs. Since Hector has 6 gumballs remaining, the total number of gumballs he purchased is 6 + 31 = 37. \boxed{37}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many gumballs as he had given to Todd (i.e. 2 x 4 = 8) to Alisha. He gave 5 less than four times as many gumballs to Bobby as he had given to Alisha (i.e. 4 x 8 = 32, 32 - 5 = 27) Hence, Todd received 4 gumballs, Alisha received 8 gumballs, and Bobby received 27 gumballs. The total number of gumballs given away by Hector is 4 + 8 + 27 = 39 gumballs. Since Hector had 6 gumballs remaining, the total number of gumballs that Hector purchased is 39 + 6 = 45 gumballs. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given to Todd to Alisha. Since he gave 4 to Todd, and he gave twice as many, he gave 4 x 2 = 8 to Alisha. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he gave 8 to Alisha, and he gave 5 less than four times as many, he gave 4 x 8 = 32 - 5 = 27 to Bobby. Hector had a total of 4 + 8 + 27 = 39 gumballs, and he had 6 gumballs remaining. Therefore, the total number of gumballs that Hector purchased was 39 - 6 = 33. \boxed{33}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 to Todd, so he has 4 gumballs remaining. Then he gave twice as many as he had given to Todd to Alisha, which is twice 4, which is 8 gumballs. So he has 4 + 8 = 12 gumballs remaining. Then he gave 5 less than four times as many to Bobby as he had given to Alisha. Four times as many to Alisha is 4 * 8 = 32, and 5 less than 32 is 32 - 5 = 27 gumballs. So he has 12 + 27 = 39 gumballs remaining. If Hector has 6 gumballs remaining, then the total number of gumballs that Hector purchased is 39 - 6 = 33. \boxed{33}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many gumballs as he had given Todd to Alisha. Since he had given 4 gumballs to Todd, twice as many gumballs as 4 are 2 x 4 = 8 gumballs. So, he gave 8 gumballs to Alisha. Next, he gave 5 less than four times as many gumballs to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times as many gumballs as 8 are 4 x 8 = 32 gumballs. 5 less than 32 is 32 - 5 = 27 gumballs. So, he gave 27 gumballs to Bobby. Hector had 6 gumballs remaining. 4 + 8 + 27 + 6 = 45 gumballs were given to Todd, Alisha, Bobby, and Hector had 6 gumballs remaining. Hence, the total number of gumballs that Hector purchased is 45 + 6 = 51 gumballs. \boxed{51          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given Todd to Alisha. Since he had given 4 gumballs to Todd, twice as many as 4 are 2 x 4 = 8 gumballs to Alisha. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times as many are 4 x 8 = 32 gumballs to Bobby. 5 less than 32 are 32 - 5 = 27 gumballs to Bobby. Adding all the gumballs given to Todd (4), Alisha (8) and Bobby (27), we get 4 + 8 + 27 = 39 gumballs. Since Hector had 6 gumballs remaining, the total number of gumballs that Hector purchased is 39 + 6 = 45 gumballs. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given to Todd to Alisha, which is 2 x 4 = 8 gumballs. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha, which is 4 x 8 - 5 = 27 - 5 = 22 gumballs. Hector had 6 gumballs remaining, which means he gave a total of 4 + 8 + 22 = 34 gumballs. Therefore, the total number of gumballs that Hector purchased is 34 + 6 = 40 gumballs. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given to Todd to Alisha. Since he gave 4 gumballs to Todd, and then gave twice as many, he gave 4 x 2 = 8 gumballs to Alisha. He then gave 5 less than four times as many gumballs to Bobby as he had given to Alisha. Since he gave 8 gumballs to Alisha, and 5 less than four times as many, he gave 8 x 4 - 5 = 31 gumballs to Bobby. This means Hector gave 4 + 8 + 31 = 43 gumballs in total. Since Hector had 6 gumballs remaining, the total number of gumballs that Hector purchased is 43 + 6 = 49. \boxed{49}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many as he had given to Todd to Alisha. Since he had given 4 gumballs to Todd, twice of 4 is 8, so he gave 8 gumballs to Alisha. He then gave 5 less than four times as many to Bobby as he had given to Alisha. Since he had given 8 gumballs to Alisha, four times of 8 is 32, and 5 less than 32 is 27, so he gave 27 gumballs to Bobby. Total gumballs given away by Hector = 4 + 8 + 27 = 39. Since Hector had 6 gumballs remaining, total gumballs purchased by Hector = 39 + 6 = 45. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector gave 4 gumballs to Todd. Next, he gave twice as many as he had given to Todd to Alisha. Since he gave 4 to Todd, twice of 4 is 8. Therefore, he gave 8 gumballs to Alisha. Next, he gave 5 less than four times as many to Bobby as he had given to Alisha. Since he gave 8 to Alisha, four times of 8 is 32. 5 less than 32 is 27. Therefore, he gave 27 gumballs to Bobby. This means that Hector gave 4 + 8 + 27 = 39 gumballs to Todd, Alisha, and Bobby. Since Hector had 6 gumballs remaining, the total number of gumballs that Hector purchased is 39 + 6 = 45. \boxed{45}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hector purchased a container of gumballs.  He gave 4 to Todd, then he gave twice as many as he had given Todd to Alisha, and then he gave 5 less than four times as many to Bobby as he had given to Alisha.  If Hector had 6 gumballs remaining, what is the total number of gumballs that Hector purchased? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Hector purchased a container of gumballs. He gave 4 gumballs to Todd. Then he gave twice as many gumballs as he had given to Todd to Alisha. Therefore, he gave 4 x 2 = 8 gumballs to Alisha. He gave 5 less than four times as many gumballs to Bobby as he had given to Alisha. Therefore, he gave 4 x 4 = 16 gumballs to Bobby, and 16 - 5 = 11 gumballs to Bobby. Hector gave 4 + 8 + 11 = 23 gumballs to Todd, Alisha, and Bobby. This leaves 6 gumballs remaining. Therefore, the total number of gumballs that Hector purchased was 23 + 6 = 29. \boxed{29}          </p>
+          <p class="lt-p">
+Reference Answer: 45          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+227                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+249                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+234                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+193                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+189                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+187                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+227                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+159                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+197                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+191                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+188                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+180                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

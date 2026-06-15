@@ -1,0 +1,2646 @@
+### repo: C:\Users\ajbis\OneDrive - Cal Poly\teaching\W26\tinker\tinker-cookbook @ 2599b4b4d075d6d4b8b614083c045ae3e207f032
+modules: tinker_cookbook
+-- repo-wide (vs HEAD, staged+unstaged) --
+diff --git a/tinker_cookbook/chat_app/chat-command.ps1 b/tinker_cookbook/chat_app/chat-command.ps1
+deleted file mode 100644
+index 6259dc6..0000000
+--- a/tinker_cookbook/chat_app/chat-command.ps1
++++ /dev/null
+@@ -1,4 +0,0 @@
+-$Env:TINKER_API_KEY = (Get-Content -Raw "api-key.txt").Trim()
+-$Env:KML_DUPLICATE_LIB_OK = "TRUE"
+-python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-  base_model=moonshotai/Kimi-K2-Thinking
+diff --git a/tinker_cookbook/chat_app/tinker_chat_cli.py b/tinker_cookbook/chat_app/tinker_chat_cli.py
+index d57dfdb..cd43944 100644
+--- a/tinker_cookbook/chat_app/tinker_chat_cli.py
++++ b/tinker_cookbook/chat_app/tinker_chat_cli.py
+@@ -84,6 +84,20 @@ class ChatSession:
+                 prompt=model_input, num_samples=1, sampling_params=sampling_params
+             )
+ 
++            # Best-effort stop diagnostics
++            try:
++                seq = response.sequences[0]
++                token_count = len(seq.tokens) if hasattr(seq, "tokens") else None
++                finish_reason = getattr(seq, "finish_reason", None)
++                stop_reason = getattr(seq, "stop_reason", None)
++                matched_stop = getattr(seq, "matched_stop", None)
++                print(
++                    f"\n🧪 diagnostics: tokens={token_count}, "
++                    f"stop_reason={stop_reason}"
++                )
++            except Exception:
++                pass
++
+             # Parse the response
+             parsed_message, _ = self.renderer.parse_response(response.sequences[0].tokens)
+             content = parsed_message["content"]
+diff --git a/tinker_cookbook/recipes/prompt_distillation/create_data.py b/tinker_cookbook/recipes/prompt_distillation/create_data.py
+index 0aae108..611fc6f 100644
+--- a/tinker_cookbook/recipes/prompt_distillation/create_data.py
++++ b/tinker_cookbook/recipes/prompt_distillation/create_data.py
+@@ -98,7 +98,7 @@ def setup_clients():
+ 
+ async def create_data_async(cfg: Config, sampling_client: Any, tokenizer: Any, renderer: Any):
+     # read sentences from multilingual.txt file
+-    with open("tinker_cookbook/example_data/multilingual.txt", "r") as f:
++    with open("tinker_cookbook/example_data/multilingual.txt", "r", encoding="utf-8") as f:
+         sentences = f.readlines()
+     sentences = [sentence.strip() for sentence in sentences]
+ 
+@@ -132,7 +132,7 @@ async def create_data_async(cfg: Config, sampling_client: Any, tokenizer: Any, r
+         questions.append(question)
+ 
+     # save the input and final answer to a file
+-    with open(cfg.output_file, "w") as f:
++    with open(cfg.output_file, "w", encoding="utf-8") as f:
+         for question, answer in zip(questions, answers):
+             if answer is None:
+                 continue
+diff --git a/tinker_cookbook/recipes/prompt_distillation/train.py b/tinker_cookbook/recipes/prompt_distillation/train.py
+index bad0125..9b39775 100644
+--- a/tinker_cookbook/recipes/prompt_distillation/train.py
++++ b/tinker_cookbook/recipes/prompt_distillation/train.py
+@@ -18,7 +18,7 @@ from tinker_cookbook.utils.lr_scheduling import LRSchedule
+ @chz.chz
+ class CLIConfig:
+     # Required parameters
+-    file_path: str = "/tmp/tinker-datasets/prompt_distillation_lang.jsonl"
++    file_path: str = "tinker_cookbook/training_data/prompt_distillation_lang.jsonl"
+     log_path: str | None = None
+     model_name: str = "Qwen/Qwen3-30B-A3B"
+     load_checkpoint_path: str | None = None
+@@ -41,7 +41,7 @@ class CLIConfig:
+     # Dataset-specific parameters
+     renderer_name: str | None = None
+     train_on_what: TrainOnWhat = TrainOnWhat.ALL_ASSISTANT_MESSAGES
+-    max_length: int = 32768
++    max_length: int = 256
+     batch_size: int = 128
+ 
+     # Logging parameters
+@@ -60,7 +60,7 @@ def cli_main(cli_config: CLIConfig):
+     if cli_config.log_path is not None:
+         log_path = cli_config.log_path
+     else:
+-        log_path = f"/tmp/tinker-cookbook/prompt_distillation/{run_name}"
++        log_path = f"tinker_cookbook/training_logs/prompt_distillation/{run_name}"
+ 
+     if cli_config.wandb_name is not None:
+         wandb_name = cli_config.wandb_name
+diff --git a/tinker_cookbook/recipes/sl_basic.py b/tinker_cookbook/recipes/sl_basic.py
+index 5774248..395640f 100644
+--- a/tinker_cookbook/recipes/sl_basic.py
++++ b/tinker_cookbook/recipes/sl_basic.py
+@@ -28,7 +28,7 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
+         # tinker_cookbook/example_data/conversations.jsonl
+     return chz.Blueprint(train.Config).apply(
+         {
+-            "log_path": "/tmp/tinker-examples/sl_basic",
++            "log_path": "..\training_logs\sl_basic_NoRobots",
+             "model_name": model_name,
+             "dataset_builder": dataset,
+             "learning_rate": 2e-4,
+diff --git a/tinker_cookbook/rl/data_processing.py b/tinker_cookbook/rl/data_processing.py
+index 86cf6e1..2a8e38b 100644
+--- a/tinker_cookbook/rl/data_processing.py
++++ b/tinker_cookbook/rl/data_processing.py
+@@ -1,207 +1 @@
+-"""
+-Data processing functions for RL training.
+-
+-Contains functions for computing advantages, converting trajectories to training data,
+-and assembling training batches.
+-"""
+-
+-import logging
+-from typing import List
+-
+-import tinker
+-import torch
+-from tinker import TensorData
+-from tinker_cookbook.rl.types import Trajectory, TrajectoryGroup
+-from tinker_cookbook.supervised.common import (
+-    create_rightshifted_model_input_and_leftshifted_targets,
+-)
+-from tinker_cookbook.utils.misc_utils import all_same, safezip
+-
+-logger = logging.getLogger(__name__)
+-
+-
+-def compute_advantages(trajectory_groups_P: List[TrajectoryGroup]) -> List[torch.Tensor]:
+-    """Compute advantages for each trajectory, centered within groups."""
+-    advantages_P: list[torch.Tensor] = []
+-
+-    for traj_group in trajectory_groups_P:
+-        rewards_G = torch.tensor(traj_group.get_total_rewards())
+-        # Center advantages within the group
+-        advantages_G = rewards_G - rewards_G.mean()
+-        advantages_P.append(advantages_G)
+-
+-    return advantages_P
+-
+-
+-FlatObElem = int | tinker.ModelInputChunk
+-FlatOb = list[FlatObElem]
+-
+-
+-def _is_prefix(seq1: FlatOb, seq2: FlatOb) -> bool:
+-    """
+-    Check if seq1 is a prefix of seq2.
+-    """
+-    return len(seq1) <= len(seq2) and seq2[: len(seq1)] == seq1
+-
+-
+-def _flat_ob_token_len(flat_ob: FlatOb) -> int:
+-    out = 0
+-    for elem in flat_ob:
+-        if isinstance(elem, int):
+-            out += 1
+-        else:
+-            out += elem.length
+-    return out
+-
+-
+-def _flat_ob_to_model_input(flat_ob: FlatOb) -> tinker.ModelInput:
+-    out: list[tinker.ModelInputChunk] = []
+-    current_text_chunk: list[int] = []
+-
+-    def flush_text_chunk():
+-        if current_text_chunk:
+-            out.append(tinker.EncodedTextChunk(tokens=current_text_chunk))
+-            current_text_chunk.clear()
+-
+-    for elem in flat_ob:
+-        if isinstance(elem, int):
+-            current_text_chunk.append(elem)
+-        else:
+-            flush_text_chunk()
+-            out.append(elem)
+-    flush_text_chunk()
+-    return tinker.ModelInput(chunks=out)
+-
+-
+-def _flatten_chunks(chunks: list[tinker.ModelInputChunk]) -> FlatOb:
+-    out: FlatOb = []
+-    for chunk in chunks:
+-        if isinstance(chunk, tinker.EncodedTextChunk):
+-            out.extend(chunk.tokens)
+-        else:
+-            out.append(chunk)
+-    return out
+-
+-
+-def trajectory_to_data(traj: Trajectory, traj_advantage: float) -> list[tinker.Datum]:
+-    """
+-    Return one or more Datum objects corresponding to the trajectory.
+-    If the sequence grows by appending, i.e., each successive observation contains
+-    the previous observation+action as a prefix, then we can return a single Datum.
+-    However, if we get a sequence that's not an extension of the previous sequence,
+-    then that results in a new Datum.
+-
+-    For example, let O1 denote a chunk of observation tokens, and let A1 denote an action.
+-
+-    Then let's say ob_ac_pairs is as follows.
+-
+-    (O1, A1)
+-    (O1+A1+O2, A2)
+-    (O3, A3)
+-
+-    Then we will merge the first two observation-action pairs into a single Datum,
+-    and the last observation-action pair into a separate Datum.
+-    """
+-
+-    class SequenceAccumulator:
+-        full_sequence: list[FlatObElem] = []
+-        sampled_logprobs: list[float] = []
+-        advantages: list[float] = []
+-        mask: list[float] = []
+-
+-        @classmethod
+-        def clear(cls):
+-            cls.full_sequence = []
+-            cls.sampled_logprobs = []
+-            cls.advantages = []
+-            cls.mask = []
+-
+-    def make_datum_from_state():
+-        all_tokens_T = _flat_ob_to_model_input(SequenceAccumulator.full_sequence)
+-        input_tokens_T, target_tokens_T = create_rightshifted_model_input_and_leftshifted_targets(
+-            list(all_tokens_T.chunks)
+-        )
+-        sampled_logprobs_T = SequenceAccumulator.sampled_logprobs[1:]
+-        advantages_T = SequenceAccumulator.advantages[1:]
+-        mask_T = SequenceAccumulator.mask[1:]
+-        assert (
+-            input_tokens_T.length
+-            == len(target_tokens_T)
+-            == len(sampled_logprobs_T)
+-            == len(advantages_T)
+-            == len(mask_T)
+-        )
+-        return tinker.Datum(
+-            model_input=input_tokens_T,
+-            loss_fn_inputs={
+-                "target_tokens": TensorData.from_torch(torch.tensor(target_tokens_T)),
+-                "logprobs": TensorData.from_torch(torch.tensor(sampled_logprobs_T)),
+-                "advantages": TensorData.from_torch(torch.tensor(advantages_T)),
+-                "mask": TensorData.from_torch(torch.tensor(mask_T)),
+-            },
+-        )
+-
+-    data: list[tinker.Datum] = []
+-    for transition in traj.transitions:
+-        ob = transition.ob
+-        ob_flat = _flatten_chunks(ob.chunks)
+-        ac_with_logprobs = transition.ac
+-        if len(SequenceAccumulator.full_sequence) == 0:
+-            delta_ob_flat = ob_flat
+-        elif _is_prefix(SequenceAccumulator.full_sequence, ob_flat):
+-            delta_ob_flat = ob_flat[len(SequenceAccumulator.full_sequence) :]
+-        else:
+-            data.append(make_datum_from_state())
+-            SequenceAccumulator.clear()
+-            delta_ob_flat = ob_flat
+-        delta_ob_len = _flat_ob_token_len(delta_ob_flat)
+-        SequenceAccumulator.full_sequence.extend(delta_ob_flat)
+-        SequenceAccumulator.full_sequence.extend(ac_with_logprobs.tokens)
+-        SequenceAccumulator.sampled_logprobs.extend(
+-            [0.0] * delta_ob_len + ac_with_logprobs.logprobs
+-        )
+-        SequenceAccumulator.advantages.extend(
+-            [0] * delta_ob_len + [traj_advantage] * len(ac_with_logprobs.tokens)
+-        )
+-        SequenceAccumulator.mask.extend([0.0] * delta_ob_len + [1.0] * len(ac_with_logprobs.tokens))
+-
+-    if SequenceAccumulator.full_sequence:
+-        data.append(make_datum_from_state())
+-
+-    return data
+-
+-
+-def assemble_training_data(
+-    trajectory_groups_P: List[TrajectoryGroup],
+-    advantages_P: List[torch.Tensor],
+-) -> tuple[List[tinker.Datum], List[dict[str, int]]]:
+-    """Convert trajectories to training data format."""
+-    data_D: list[tinker.Datum] = []
+-    metadata_D: list[dict[str, int]] = []
+-
+-    for i_group, (traj_group, advantages_G) in enumerate(
+-        safezip(trajectory_groups_P, advantages_P)
+-    ):
+-        for i_traj, (traj, traj_advantage) in enumerate(
+-            safezip(traj_group.trajectories_G, advantages_G)
+-        ):
+-            # Build the full sequence from the trajectory
+-            new_data = trajectory_to_data(traj, float(traj_advantage))
+-            data_D.extend(new_data)
+-            metadata_D.extend([dict(group_idx=i_group, traj_idx=i_traj) for _ in new_data])
+-
+-    return data_D, metadata_D
+-
+-
+-def remove_constant_reward_groups(
+-    trajectory_groups_P: List[TrajectoryGroup],
+-) -> List[TrajectoryGroup]:
+-    new_groups: list[TrajectoryGroup] = []
+-    for group in trajectory_groups_P:
+-        if not all_same(group.get_total_rewards()):
+-            new_groups.append(group)
+-    if not new_groups:
+-        logger.warning("All rewards are uniform. There will be no gradient")
+-        return trajectory_groups_P[0:1]  # return singleton list in case empty
+-        # list will cause problems
+-    return new_groups
++from tinker_cookbook.sandbox.rl.data_processing import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/metric_util.py b/tinker_cookbook/rl/metric_util.py
+index b71d071..a89549a 100644
+--- a/tinker_cookbook/rl/metric_util.py
++++ b/tinker_cookbook/rl/metric_util.py
+@@ -1,136 +1 @@
+-import asyncio
+-import itertools
+-from collections import defaultdict
+-from typing import Dict, List
+-
+-import numpy as np
+-import tinker
+-from tinker_cookbook.completers import TinkerTokenCompleter
+-from tinker_cookbook.eval.evaluators import SamplingClientEvaluator
+-from tinker_cookbook.rl.rollouts import do_group_rollout
+-from tinker_cookbook.rl.types import EnvGroupBuilder, RLDataset, TrajectoryGroup
+-from tinker_cookbook.utils.misc_utils import all_same, dict_mean
+-from tinker_cookbook.utils import logtree
+-from tinker_cookbook.completers import TokenCompleter
+-
+-
+-def _compute_by_group_metrics(trajectory_groups_P: List[TrajectoryGroup], good_thresh: float = 0.5):
+-    n_groups = len(trajectory_groups_P)
+-    n_mixed = n_good = n_bad = 0
+-    for tg in trajectory_groups_P:
+-        grp_rewards = tg.get_total_rewards()
+-        if all_same(grp_rewards):
+-            if grp_rewards[0] >= good_thresh:
+-                n_good += 1
+-            else:
+-                n_bad += 1
+-        else:
+-            n_mixed += 1
+-    return {
+-        "by_group/frac_mixed": n_mixed / n_groups,
+-        "by_group/frac_all_good": n_good / n_groups,
+-        "by_group/frac_all_bad": n_bad / n_groups,
+-    }
+-
+-
+-def compute_trajectory_metrics(
+-    trajectory_groups_P: List[TrajectoryGroup], taglist_P: List[list[str]]
+-) -> Dict[str, float]:
+-    tag2trajgroups = defaultdict(list)
+-    for taglist, trajectory_group in zip(taglist_P, trajectory_groups_P):
+-        for tag in taglist:
+-            tag2trajgroups[tag].append(trajectory_group)
+-    out = {}
+-    have_nontrivial_tags = any(
+-        len(trajgroups) < len(trajectory_groups_P) for trajgroups in tag2trajgroups.values()
+-    )  # check if any tag gives us a strict subset of the full trajectory groups
+-    if have_nontrivial_tags:
+-        for tag, trajectory_groups in tag2trajgroups.items():
+-            prefixed_metrics = {
+-                f"env/{tag}/{k}": v
+-                for k, v in _compute_trajectory_metrics(trajectory_groups).items()
+-            }
+-            out.update(prefixed_metrics)
+-    out.update(
+-        {f"env/all/{k}": v for k, v in _compute_trajectory_metrics(trajectory_groups_P).items()}
+-    )
+-    return out
+-
+-
+-def _compute_trajectory_metrics(trajectory_groups_P: List[TrajectoryGroup]) -> Dict[str, float]:
+-    """Compute metrics for the trajectory groups."""
+-    flat_trajs_PG = [traj for tg in trajectory_groups_P for traj in tg.trajectories_G]
+-    ac_tokens_by_turn = [
+-        len(transition.ac.tokens) for traj in flat_trajs_PG for transition in traj.transitions
+-    ]
+-    ob_tokens_by_turn = [
+-        transition.ob.length for traj in flat_trajs_PG for transition in traj.transitions
+-    ]
+-    turns_by_trajectory = [len(traj.transitions) for traj in flat_trajs_PG]
+-    # Compute metrics
+-    metrics = {
+-        "ac_tokens_per_turn": sum(ac_tokens_by_turn) / sum(turns_by_trajectory),
+-        "ob_tokens_per_turn": sum(ob_tokens_by_turn) / sum(turns_by_trajectory),
+-        "turns_per_episode": sum(turns_by_trajectory) / len(flat_trajs_PG),
+-        "total_episodes": len(flat_trajs_PG),
+-        "total_turns": sum(turns_by_trajectory),
+-        "total_ac_tokens": sum(ac_tokens_by_turn),
+-        "total_ob_tokens": sum(ob_tokens_by_turn),
+-    }
+-    metrics["reward/total"] = np.mean(
+-        [reward for tg in trajectory_groups_P for reward in tg.get_total_rewards()]
+-    ).item()
+-    # Per-transition metrics
+-    transition_metrics = [
+-        transition.metrics
+-        for tg in trajectory_groups_P
+-        for traj in tg.trajectories_G
+-        for transition in traj.transitions
+-    ]
+-    traj_metrics = [metrics for tg in trajectory_groups_P for metrics in tg.metrics_G]
+-    metrics.update(dict_mean(transition_metrics + traj_metrics))
+-    # combine traj_metrics and transition_metrics in case there's some key
+-    # (like format error) that appears in the per-step metrics for some envs
+-    # but the compute_group_rewards metric for other envs.
+-    metrics.update(_compute_by_group_metrics(trajectory_groups_P))
+-    return metrics
+-
+-
+-def dataset_to_env_group_builders(dataset: RLDataset) -> list[EnvGroupBuilder]:
+-    """
+-    Get the whole dataset as a list of env group builders.
+-    """
+-    return list(itertools.chain(*[dataset.get_batch(i) for i in range(len(dataset))]))
+-
+-
+-class RLTestSetEvaluator(SamplingClientEvaluator):
+-    def __init__(
+-        self,
+-        dataset: RLDataset,
+-        max_tokens: int,
+-        name: str = "test",
+-        num_groups_to_log: int = 4,
+-    ):
+-        self.env_group_builders_P = dataset_to_env_group_builders(dataset)
+-        self.max_tokens = max_tokens
+-        self.name = name
+-        self.num_groups_to_log = num_groups_to_log
+-
+-    async def eval_token_completer(self, policy: TokenCompleter) -> dict[str, float]:
+-        async def run_group_rollout(builder, i):
+-            enable_logging = i < self.num_groups_to_log
+-            with logtree.optional_enable_logging(enable=enable_logging):
+-                return await do_group_rollout(builder, policy)
+-
+-        trajectory_groups_P = await asyncio.gather(
+-            *[run_group_rollout(builder, i) for i, builder in enumerate(self.env_group_builders_P)]
+-        )
+-        taglist_P = [builder.logging_tags() for builder in self.env_group_builders_P]
+-        metrics = compute_trajectory_metrics(trajectory_groups_P, taglist_P)
+-
+-        metrics = {f"{self.name}/{k}": v for k, v in metrics.items()}
+-        return metrics
+-
+-    async def __call__(self, sampling_client: tinker.SamplingClient) -> dict[str, float]:
+-        policy = TinkerTokenCompleter(sampling_client, max_tokens=self.max_tokens)
+-        return await self.eval_token_completer(policy)
++from tinker_cookbook.sandbox.rl.metric_util import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/metrics.py b/tinker_cookbook/rl/metrics.py
+index f0673fe..aac23b7 100644
+--- a/tinker_cookbook/rl/metrics.py
++++ b/tinker_cookbook/rl/metrics.py
+@@ -1,169 +1 @@
+-"""
+-Metrics and KL computation functions for RL training.
+-
+-Contains functions for computing KL divergences, incorporating KL penalties,
+-and computing training metrics.
+-"""
+-
+-import asyncio
+-from typing import Any, Dict, List, cast
+-
+-import numpy as np
+-import tinker
+-import torch
+-from tinker_cookbook.utils.misc_utils import safezip
+-from tinker_cookbook.utils.trace import scope
+-
+-
+-def compute_kl_sample_train(
+-    data_D: List[tinker.Datum], training_logprobs_D: List[torch.Tensor]
+-) -> Dict[str, float]:
+-    """Compute KL divergence metrics between sampling and training logprobs."""
+-    all_diffs: list[torch.Tensor] = []
+-    all_sampling_logprobs: list[torch.Tensor] = []
+-
+-    for datum, training_logprobs in safezip(data_D, training_logprobs_D):
+-        # Get logprobs from sampling
+-        sampling_logprobs = datum.loss_fn_inputs["logprobs"].to_torch()
+-        action_mask = datum.loss_fn_inputs["mask"].to_torch() > 0
+-        # Extract only action token logprobs
+-        sampling_logprobs_actions = sampling_logprobs[action_mask]
+-        training_logprobs_actions = training_logprobs[action_mask]
+-
+-        if len(sampling_logprobs_actions) > 0:
+-            logprob_diff = sampling_logprobs_actions - training_logprobs_actions
+-            all_diffs.append(logprob_diff)
+-            all_sampling_logprobs.append(sampling_logprobs_actions)
+-
+-    assert all_diffs
+-    flat_diffs = torch.cat(all_diffs)
+-    kl_sample_train_v1 = flat_diffs.mean().item()
+-    kl_sample_train_v2 = 0.5 * (flat_diffs**2).mean().item()
+-
+-    flat_sampling_logprobs = torch.cat(all_sampling_logprobs)
+-    entropy_sample = -flat_sampling_logprobs.mean().item()
+-    return {
+-        "optim/kl_sample_train_v1": kl_sample_train_v1,
+-        "optim/kl_sample_train_v2": kl_sample_train_v2,
+-        "optim/entropy": entropy_sample,
+-    }
+-
+-
+-@scope
+-async def compute_post_kl(
+-    data_D: List[tinker.Datum], post_sampling_client: tinker.SamplingClient
+-) -> Dict[str, float]:
+-    """Compute post-update KL divergence metrics."""
+-    # Compute logprobs at all data items
+-    # This is a bit ugly, but we first reconstruct the original sequence from before we did the
+-    # shifting to get the inputs and targets.
+-    full_sequence_inputs_D = [
+-        datum.model_input.append_int(cast(int, datum.loss_fn_inputs["target_tokens"].data[-1]))
+-        for datum in data_D
+-    ]
+-    new_logprobs_D = await asyncio.gather(
+-        *[
+-            post_sampling_client.compute_logprobs_async(sequence_input)
+-            for sequence_input in full_sequence_inputs_D
+-        ]
+-    )
+-
+-    prev_logprobs_D = [datum.loss_fn_inputs["logprobs"].to_torch() for datum in data_D]
+-    action_masks = [datum.loss_fn_inputs["mask"].to_torch() > 0 for datum in data_D]
+-    flat_diffs = [
+-        (prev_logprobs - torch.tensor(new_logprobs[1:]))[action_mask]
+-        for new_logprobs, prev_logprobs, action_mask in safezip(
+-            new_logprobs_D, prev_logprobs_D, action_masks
+-        )
+-    ]
+-    flat_diffs = torch.cat(flat_diffs)
+-    kl_post_v1 = flat_diffs.mean().item()
+-    kl_post_v2 = 0.5 * (flat_diffs**2).mean().item()
+-
+-    return {"kl_pre_post_v1": kl_post_v1, "kl_pre_post_v2": kl_post_v2}
+-
+-
+-@scope
+-async def incorporate_kl_penalty(
+-    data_D: List[tinker.Datum],
+-    base_sampling_client: tinker.SamplingClient,
+-    kl_penalty_coef: float,
+-    kl_discount_factor: float,
+-) -> Dict[str, float]:
+-    """
+-    Compute KL against base model. Adjust advantages in-place by logp_base - logp_current - avg_kl,
+-    where avg_kl is the average of logp_base - logp_current (which is -KL[current, base])
+-    """
+-    # Compute logprobs at all data items
+-    full_sequence_inputs_D = [
+-        datum.model_input.append_int(cast(int, datum.loss_fn_inputs["target_tokens"].data[-1]))
+-        for datum in data_D
+-    ]
+-    base_logprobs_D = await asyncio.gather(
+-        *[
+-            base_sampling_client.compute_logprobs_async(sequence_input)
+-            for sequence_input in full_sequence_inputs_D
+-        ]
+-    )
+-    # compute the logprob differences, zeroed out when the mask == 0
+-    sampled_logprobs_D = [datum.loss_fn_inputs["logprobs"].to_torch() for datum in data_D]
+-    float_masks = [datum.loss_fn_inputs["mask"].to_torch().float() for datum in data_D]
+-    logprob_diffs = [
+-        (sampled_logprobs - torch.tensor(base_logprobs[1:])) * mask
+-        for base_logprobs, sampled_logprobs, mask in safezip(
+-            base_logprobs_D, sampled_logprobs_D, float_masks
+-        )
+-    ]
+-    avg_logp_diff = sum([diff.sum() for diff in logprob_diffs]) / sum(
+-        [mask.sum() for mask in float_masks]
+-    )
+-    for i, datum in enumerate(data_D):
+-        kl_advantages = kl_penalty_coef * float_masks[i] * (avg_logp_diff - logprob_diffs[i])
+-        if kl_discount_factor > 0:
+-            kl_advantages = torch.tensor(
+-                discounted_future_sum_vectorized(kl_advantages.numpy(), kl_discount_factor)
+-            )
+-        datum.loss_fn_inputs["advantages"] = tinker.TensorData.from_torch(
+-            datum.loss_fn_inputs["advantages"].to_torch() + kl_advantages
+-        )
+-
+-    return {"kl_policy_base": float(avg_logp_diff)}
+-
+-
+-def discounted_future_sum_vectorized(x: np.ndarray, gamma: float) -> np.ndarray:
+-    """
+-    Compute discounted sum of future values for each position using a vectorized approach.
+-
+-    Args:
+-        x (np.ndarray): 1D array of rewards.
+-        gamma (float): Discount factor.
+-
+-    Returns:
+-        np.ndarray: discounted sum of future values.
+-    """
+-    # Reverse x so lfilter processes from end to start
+-    import scipy.signal
+-
+-    return scipy.signal.lfilter([1], [1, -gamma], x[::-1], axis=0)[::-1].astype(x.dtype)  # type: ignore
+-
+-
+-def compute_sampling_client_metrics(
+-    wrapped_trajectory_groups: List[Any],  # WrappedTrajectoryGroup
+-) -> dict[str, Any]:
+-    """Compute metrics about sampling clients used to generate trajectory groups."""
+-    sampling_client_steps = [
+-        wrapped_trajectory_group.sampling_client_step
+-        for wrapped_trajectory_group in wrapped_trajectory_groups
+-    ]
+-    sample_times = [
+-        wrapped_trajectory_group.metrics["time/trajectory_group_worker_loop/total"]
+-        for wrapped_trajectory_group in wrapped_trajectory_groups
+-    ]
+-    metrics = {}
+-    metrics["sampling_client/step_max"] = max(sampling_client_steps)
+-    metrics["sampling_client/step_min"] = min(sampling_client_steps)
+-    metrics["sampling_client/step_mean"] = sum(sampling_client_steps) / len(sampling_client_steps)
+-    metrics["time/sampling_time_max"] = max(sample_times)
+-    metrics["time/sampling_time_min"] = min(sample_times)
+-    metrics["time/sampling_time_mean"] = sum(sample_times) / len(sample_times)
+-    return metrics
++from tinker_cookbook.sandbox.rl.metrics import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/play_w_env.py b/tinker_cookbook/rl/play_w_env.py
+deleted file mode 100644
+index e9ceab6..0000000
+--- a/tinker_cookbook/rl/play_w_env.py
++++ /dev/null
+@@ -1,112 +0,0 @@
+-"""
+-To help you debug your environment, you can use the play_env function to play as the policy by typing in your responses in an environment interactively.
+-
+-Options:
+-- multiline=True: Enable multi-line input mode (terminate with two blank lines)
+-
+-We include an example of playing the Twenty Questions environment in the main function.
+-You can run it with:
+-
+-```bash
+-python -m tinker_cookbook.rl.play_w_env
+-```
+-"""
+-
+-import asyncio
+-import tinker
+-from termcolor import colored
+-from tinker_cookbook.completers import (
+-    StopCondition,
+-    TokenCompleter,
+-    TokensWithLogprobs,
+-)
+-from tinker_cookbook.tokenizer_utils import Tokenizer
+-from tinker_cookbook.rl.rollouts import do_single_rollout
+-from tinker_cookbook.rl.types import Env, Trajectory
+-
+-
+-async def get_async_input(prompt: str, multiline: bool = False) -> str:
+-    loop = asyncio.get_event_loop()
+-    if not multiline:
+-        return await loop.run_in_executor(None, input, prompt)
+-
+-    # Multiline mode: collect lines until two consecutive blank lines
+-    print(prompt + " (enter two blank lines when done)")
+-    lines = []
+-    prev_line = None
+-    while True:
+-        line = await loop.run_in_executor(None, input, "")
+-        if line == "" and prev_line == "":
+-            # Remove the first blank line from the list
+-            if lines and lines[-1] == "":
+-                lines.pop()
+-            break
+-        lines.append(line)
+-        prev_line = line
+-    return "\n".join(lines)
+-
+-
+-class ManualPolicy(TokenCompleter):
+-    def __init__(self, tokenizer: Tokenizer, multiline: bool = True, show_observation: bool = True):
+-        self.tokenizer = tokenizer
+-        self.step_count = 0
+-        self.multiline = multiline
+-        self.show_observation = show_observation
+-
+-    async def __call__(self, ob: tinker.ModelInput, stop: StopCondition) -> TokensWithLogprobs:
+-        if self.show_observation:
+-            observation_str = self.tokenizer.decode(ob.to_ints())
+-            print(colored(f"\n--- Step {self.step_count} ---", "green"))
+-            print(colored("Observation:", "blue"))
+-            print(observation_str)
+-            print(colored("-" * 60, "green"))
+-
+-        prompt_text = "Your action:" if self.multiline else "Your action: "
+-        action_str = await get_async_input(colored(prompt_text, "yellow"), multiline=self.multiline)
+-        action_tokens = self.tokenizer.encode(action_str, add_special_tokens=False)
+-        self.step_count += 1
+-        return TokensWithLogprobs(tokens=action_tokens, maybe_logprobs=None)
+-
+-
+-def print_trajectory_summary(trajectory: Trajectory):
+-    """Print a summary of the completed trajectory."""
+-    print(colored("\n=== Game Summary ===", "cyan", attrs=["bold"]))
+-    total_reward = sum(t.reward for t in trajectory.transitions)
+-    print(f"Total steps: {len(trajectory.transitions)}")
+-    print(f"Total reward: {total_reward}")
+-
+-    if trajectory.transitions:
+-        print("\nReward per step:")
+-        for i, transition in enumerate(trajectory.transitions):
+-            if transition.reward != 0:
+-                print(f"  Step {i}: reward = {transition.reward}")
+-
+-    print(colored("===================", "cyan", attrs=["bold"]))
+-
+-
+-async def play_env(
+-    env: Env, tokenizer: Tokenizer, multiline: bool = True, show_observation: bool = True
+-):
+-    """Play a single-player environment interactively."""
+-    print(colored("Starting interactive environment session...", "cyan", attrs=["bold"]))
+-    print("Type your actions when prompted. The episode will end when the episode is done.")
+-
+-    policy = ManualPolicy(tokenizer, multiline=multiline, show_observation=show_observation)
+-    trajectory = await do_single_rollout(policy, env)
+-
+-    print_trajectory_summary(trajectory)
+-    return trajectory
+-
+-
+-async def main():
+-    from tinker_cookbook.recipes.multiplayer_rl.twenty_questions.env import (
+-        construct_minimal_20q_env,
+-    )
+-
+-    answer = "apple"
+-    env = construct_minimal_20q_env(answer)
+-    await play_env(env, env.renderer.tokenizer)
+-
+-
+-if __name__ == "__main__":
+-    asyncio.run(main())
+diff --git a/tinker_cookbook/rl/preference_envs.py b/tinker_cookbook/rl/preference_envs.py
+index 8da8600..7dc0113 100644
+--- a/tinker_cookbook/rl/preference_envs.py
++++ b/tinker_cookbook/rl/preference_envs.py
+@@ -1,283 +1 @@
+-import logging
+-from dataclasses import dataclass
+-from enum import StrEnum
+-from typing import Callable, Sequence
+-
+-import chz
+-import tinker
+-from tinker_cookbook import renderers
+-from tinker_cookbook.completers import StopCondition
+-from tinker_cookbook.preference.preference_datasets import (
+-    ComparisonDatasetBuilder,
+-)
+-from tinker_cookbook.preference.types import (
+-    Comparison,
+-    LabeledComparison,
+-    PreferenceModel,
+-)
+-from tinker_cookbook.rl.types import (
+-    Action,
+-    Env,
+-    EnvGroupBuilder,
+-    Metrics,
+-    Observation,
+-    RLDataset,
+-    RLDatasetBuilder,
+-    StepResult,
+-    Trajectory,
+-)
+-from tinker_cookbook.tokenizer_utils import get_tokenizer
+-from tinker_cookbook.utils import logtree
+-from tinker_cookbook.utils.logtree_formatters import ConversationFormatter
+-from tinker_cookbook.utils.misc_utils import safezip
+-
+-logger = logging.getLogger(__name__)
+-
+-
+-class PreferenceEnv(Env):
+-    def __init__(
+-        self,
+-        convo_prefix: list[renderers.Message],
+-        policy_renderer: renderers.Renderer,
+-    ):
+-        self.convo_prefix = convo_prefix
+-        self.policy_renderer = policy_renderer
+-
+-    @property
+-    def stop_condition(self) -> StopCondition:
+-        return self.policy_renderer.get_stop_sequences()
+-
+-    async def initial_observation(self) -> tuple[Observation, StopCondition]:
+-        return self.policy_renderer.build_generation_prompt(self.convo_prefix), self.stop_condition
+-
+-    async def step(self, action: Action) -> StepResult:
+-        """Compute the reward for a given action.
+-
+-        Args:
+-            tokens: The tokens to compute the reward for.
+-
+-        Returns:
+-            A tuple containing:
+-                - reward (float): The reward for the given action.
+-                - metrics (Dict[str, float]): Additional metrics to track.
+-        """
+-        return StepResult(
+-            reward=0,
+-            episode_done=True,
+-            next_observation=tinker.ModelInput.empty(),
+-            next_stop_condition=self.stop_condition,
+-            metrics={},
+-        )
+-
+-
+-class TournamentPattern(StrEnum):
+-    ALL_PAIRS_BOTH_WAYS = "all_pairs_both_ways"
+-    ALL_PAIRS_ONE_WAY = "all_pairs_one_way"
+-
+-
+-def get_pairs_chunked(n: int, pattern: TournamentPattern, chunk_size: int) -> list[tuple[int, int]]:
+-    """
+-    Get pairs of indices of matchups of n players. If chunk_size < n, then we divide the players
+-    into groups of at most chunk_size and get the matchup indices within each group.
+-    """
+-    out = []
+-    for chunk_start in range(0, n, chunk_size):
+-        chunk_end = min(chunk_start + chunk_size, n)
+-        pairs = get_pairs(chunk_end - chunk_start, pattern)
+-        for i, j in pairs:
+-            out.append((chunk_start + i, chunk_start + j))
+-    return out
+-
+-
+-def get_pairs(n: int, pattern: TournamentPattern) -> list[tuple[int, int]]:
+-    if pattern == TournamentPattern.ALL_PAIRS_BOTH_WAYS:
+-        return [(i, j) for i in range(n) for j in range(n) if i != j]
+-    elif pattern == TournamentPattern.ALL_PAIRS_ONE_WAY:
+-        return [(i, j) for i in range(n) for j in range(i + 1, n)]
+-    else:
+-        raise ValueError(f"Invalid tournament pattern: {pattern}")
+-
+-
+-@dataclass(frozen=True)
+-class PairwisePreferenceGroupBuilder(EnvGroupBuilder):
+-    convo_prefix: list[renderers.Message]
+-    policy_renderer: renderers.Renderer
+-    tournament_pattern: TournamentPattern
+-    preference_model: PreferenceModel
+-    num_envs: int
+-    content_preprocessor: Callable[[str], str] | None = None  # e.g. strip out <thinking> tags
+-    matchup_group_size: int = 4  # divide group into smaller groups of this size for matchups
+-    eval_target_completion_A: list[renderers.Message] | None = None
+-
+-    async def make_envs(self) -> Sequence[Env]:
+-        return [
+-            PreferenceEnv(self.convo_prefix, self.policy_renderer) for _ in range(self.num_envs)
+-        ]
+-
+-    def _preprocess_message(self, message: renderers.Message) -> renderers.Message:
+-        if self.content_preprocessor is not None:
+-            content = renderers.get_text_content(message)
+-            message = {**message, "content": self.content_preprocessor(content)}
+-        return message
+-
+-    def get_response_message(self, trajectory: Trajectory) -> tuple[list[renderers.Message], bool]:
+-        response, is_valid = self.policy_renderer.parse_response(
+-            trajectory.transitions[0].ac.tokens
+-        )
+-        return [response], is_valid
+-
+-    def comparison_reward_for_second_messages(
+-        self, message_i: list[renderers.Message], message_j: list[renderers.Message]
+-    ) -> Comparison:
+-        comparison = Comparison(
+-            prompt_conversation=self.convo_prefix,
+-            completion_A=[self._preprocess_message(m) for m in message_i],
+-            completion_B=[self._preprocess_message(m) for m in message_j],
+-        )
+-        return comparison
+-
+-    @logtree.scope_header_decorator
+-    async def compute_group_rewards(
+-        self,
+-        trajectory_group: list[Trajectory],
+-        env_group: Sequence[Env],
+-    ) -> list[tuple[float, Metrics]]:
+-        assert all(len(trajectory.transitions) == 1 for trajectory in trajectory_group)
+-        # Get response from each trajectory
+-        response_tuples = [self.get_response_message(trajectory) for trajectory in trajectory_group]
+-        response_messages, is_valid_list = safezip(*response_tuples)
+-
+-        # Log prompt
+-        with logtree.scope_header("Prompt"):
+-            logtree.log_formatter(ConversationFormatter(messages=self.convo_prefix))
+-
+-        # Log trajectories
+-        for idx, (messages, is_valid) in enumerate(
+-            zip(response_messages, is_valid_list, strict=True)
+-        ):
+-            with logtree.scope_header(f"Completion {idx}"):
+-                logtree.log_formatter(ConversationFormatter(messages=messages))
+-                logtree.log_text(f"Valid format: {is_valid}")
+-
+-        # if the matching group size is 3 and len(response_messages) is 6
+-        # then it will return something like
+-        # [(0, 1), (0, 2), (1, 2), (3, 4), (3, 5), (4, 5)]
+-        # so we don't end up with O(n^2) comparisons
+-        comparison_indices_pairs = get_pairs_chunked(
+-            len(response_messages), self.tournament_pattern, self.matchup_group_size
+-        )
+-
+-        logtree.log_text(
+-            f"Got {len(trajectory_group)} trajectories, doing {len(comparison_indices_pairs)} pairwise matchups."
+-        )
+-
+-        j_comparisons = [
+-            self.comparison_reward_for_second_messages(
+-                message_i=response_messages[i], message_j=response_messages[j]
+-            )
+-            for i, j in comparison_indices_pairs
+-        ]
+-
+-        # Log each pairwise comparison with its reward
+-        with logtree.scope_header("Pairwise Comparisons"):
+-            j_rewards = []
+-
+-            # Compute all rewards first
+-            for comparison in j_comparisons:
+-                reward = await self.preference_model(comparison)
+-                j_rewards.append(reward)
+-
+-            # Log summary of all matchups
+-            for idx, ((i, j), reward) in enumerate(
+-                zip(comparison_indices_pairs, j_rewards, strict=True)
+-            ):
+-                logtree.log_text(f"Matchup {idx}: ({i} vs {j}) — Reward: {reward:.2f}")
+-
+-        win_minus_loss_list = [0.0 for _ in range(len(response_messages))]
+-        matchup_count = [0 for _ in range(len(response_messages))]
+-        for (i, j), j_reward in safezip(comparison_indices_pairs, j_rewards):
+-            win_minus_loss_list[j] += j_reward
+-            win_minus_loss_list[i] -= j_reward
+-            matchup_count[j] += 1
+-            matchup_count[i] += 1
+-        format_coef = 1.0
+-
+-        return [
+-            (
+-                win_minus_loss / matchup_count + format_coef * (float(is_valid) - 1.0),
+-                {"win_minus_loss": win_minus_loss / matchup_count, "format": is_valid},
+-            )
+-            for win_minus_loss, is_valid, matchup_count in safezip(
+-                win_minus_loss_list, is_valid_list, matchup_count
+-            )
+-        ]
+-
+-    def logging_tags(self) -> list[str]:
+-        return ["pair_pref"]
+-
+-
+-class PairwisePreferenceDataset(RLDataset):
+-    def __init__(
+-        self,
+-        comparison_builder: ComparisonDatasetBuilder,
+-        renderer: renderers.Renderer,
+-        batch_size: int,
+-        preference_model: PreferenceModel,
+-        tournament_pattern: TournamentPattern = TournamentPattern.ALL_PAIRS_BOTH_WAYS,
+-        group_size: int = 4,
+-        content_preprocessor: Callable[[str], str] | None = None,
+-    ):
+-        self.comparison_builder = comparison_builder
+-        self.renderer = renderer
+-        self.batch_size = batch_size
+-        self.preference_model = preference_model
+-        self.train_dataset, _ = self.comparison_builder.get_train_and_test_datasets()
+-        self.tournament_pattern = tournament_pattern
+-        self.group_size = group_size
+-        self.content_preprocessor = content_preprocessor
+-
+-    def get_batch(self, index: int) -> list[EnvGroupBuilder]:
+-        rows = self.train_dataset.select(
+-            range(index * self.batch_size, (index + 1) * self.batch_size)
+-        )
+-        lcs = [self.comparison_builder.example_to_labeled_comparison(row) for row in rows]  # type: ignore
+-        return [self._labeled_comparison_to_env_group(lc) for lc in lcs if lc is not None]
+-
+-    def _labeled_comparison_to_env_group(self, lc: LabeledComparison) -> EnvGroupBuilder:
+-        return PairwisePreferenceGroupBuilder(
+-            convo_prefix=lc.comparison.prompt_conversation,
+-            policy_renderer=self.renderer,
+-            preference_model=self.preference_model,
+-            tournament_pattern=self.tournament_pattern,
+-            num_envs=self.group_size,
+-            content_preprocessor=self.content_preprocessor,
+-        )
+-
+-    def __len__(self) -> int:
+-        return len(self.train_dataset) // self.batch_size
+-
+-
+-@chz.chz
+-class PairwisePreferenceRLDatasetBuilder(RLDatasetBuilder):
+-    comparison_builder: ComparisonDatasetBuilder
+-    batch_size: int
+-    policy_renderer_name: str
+-    policy_model_name: str
+-    tournament_pattern: TournamentPattern = TournamentPattern.ALL_PAIRS_BOTH_WAYS
+-    group_size: int
+-    content_preprocessor: Callable[[str], str] | None = None
+-    preference_model_builder: Callable[[], PreferenceModel]
+-
+-    async def __call__(self) -> tuple[PairwisePreferenceDataset, None]:
+-        policy_renderer = renderers.get_renderer(
+-            self.policy_renderer_name, get_tokenizer(self.policy_model_name)
+-        )
+-        return PairwisePreferenceDataset(
+-            comparison_builder=self.comparison_builder,
+-            renderer=policy_renderer,
+-            batch_size=self.batch_size,
+-            preference_model=self.preference_model_builder(),
+-            tournament_pattern=self.tournament_pattern,
+-            group_size=self.group_size,
+-            content_preprocessor=self.content_preprocessor,
+-        ), None
++from tinker_cookbook.sandbox.rl.preference_envs import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/problem_env.py b/tinker_cookbook/rl/problem_env.py
+index 5d80cd6..1379d12 100644
+--- a/tinker_cookbook/rl/problem_env.py
++++ b/tinker_cookbook/rl/problem_env.py
+@@ -1,103 +1 @@
+-import logging
+-from abc import abstractmethod
+-from dataclasses import dataclass
+-from typing import Callable, Sequence
+-
+-import tinker
+-from tinker_cookbook import renderers
+-from tinker_cookbook.completers import StopCondition
+-from tinker_cookbook.rl.types import (
+-    Action,
+-    Env,
+-    EnvGroupBuilder,
+-    Metrics,
+-    Observation,
+-    StepResult,
+-    Trajectory,
+-)
+-from tinker_cookbook.utils import logtree
+-
+-logger = logging.getLogger(__name__)
+-
+-
+-class ProblemEnv(Env):
+-    def __init__(
+-        self,
+-        renderer: renderers.Renderer,
+-        convo_prefix: list[renderers.Message] | None = None,
+-        format_coef: float = 0.1,
+-    ):
+-        self.renderer = renderer
+-        self.convo_prefix = convo_prefix or []
+-        self.format_coef = format_coef
+-
+-    @property
+-    def stop_condition(self) -> StopCondition:
+-        return self.renderer.get_stop_sequences()
+-
+-    @abstractmethod
+-    def get_question(self) -> str:
+-        pass
+-
+-    @abstractmethod
+-    def check_answer(self, sample_str: str) -> bool:
+-        pass
+-
+-    @abstractmethod
+-    def check_format(self, sample_str: str) -> bool:
+-        pass
+-
+-    @abstractmethod
+-    def get_reference_answer(self) -> str:
+-        """Return the reference answer for logging purposes."""
+-        pass
+-
+-    async def initial_observation(self) -> tuple[Observation, StopCondition]:
+-        convo = self.convo_prefix + [
+-            {"role": "user", "content": self.get_question()},
+-        ]
+-        return self.renderer.build_generation_prompt(convo), self.stop_condition
+-
+-    async def step(self, action: Action) -> StepResult:
+-        message, parse_success = self.renderer.parse_response(action)
+-        content = renderers.get_text_content(message)
+-        correct_format = float(parse_success) and float(self.check_format(content))
+-        correct_answer = float(self.check_answer(content))
+-        total_reward = self.format_coef * (correct_format - 1) + correct_answer
+-
+-        # Log the attempt
+-        logtree.log_text(f"Problem: {self.get_question()}")
+-        logtree.log_text(f"Response: {message['content']}")
+-        logtree.log_text(f"Reference Answer: {self.get_reference_answer()}")
+-        logtree.log_text(
+-            f"Format Valid: {'✓' if correct_format else '✗'}, Correct: {'✓' if correct_answer else '✗'}, Reward: {total_reward:.2f}"
+-        )
+-
+-        return StepResult(
+-            reward=total_reward,
+-            episode_done=True,
+-            next_observation=tinker.ModelInput.empty(),
+-            next_stop_condition=self.stop_condition,
+-            metrics={
+-                "format": correct_format,
+-                "correct": correct_answer,
+-            },
+-        )
+-
+-
+-@dataclass(frozen=True)
+-class ProblemGroupBuilder(EnvGroupBuilder):
+-    env_thunk: Callable[[], ProblemEnv]
+-    num_envs: int
+-    dataset_name: str = "problems"
+-
+-    async def make_envs(self) -> Sequence[Env]:
+-        return [self.env_thunk() for _ in range(self.num_envs)]
+-
+-    async def compute_group_rewards(
+-        self, trajectory_group: list[Trajectory], env_group: Sequence[Env]
+-    ) -> list[tuple[float, Metrics]]:
+-        return [(0.0, {}) for _ in range(len(trajectory_group))]
+-
+-    def logging_tags(self) -> list[str]:
+-        return [self.dataset_name]
++from tinker_cookbook.sandbox.rl.problem_env import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/rollouts.py b/tinker_cookbook/rl/rollouts.py
+index ac593c8..2a19c9f 100644
+--- a/tinker_cookbook/rl/rollouts.py
++++ b/tinker_cookbook/rl/rollouts.py
+@@ -1,115 +1 @@
+-import asyncio
+-from typing import Any, Sequence
+-
+-from tinker_cookbook.completers import TokenCompleter
+-from tinker_cookbook.rl.types import (
+-    Env,
+-    EnvGroupBuilder,
+-    Trajectory,
+-    TrajectoryGroup,
+-    Transition,
+-)
+-from tinker_cookbook.utils import logtree
+-
+-# Max characters for log values in table cells before truncation
+-LOG_VALUE_MAX_LEN = 100
+-
+-
+-def _truncate_log_value(value: Any, max_len: int = LOG_VALUE_MAX_LEN) -> tuple[str, bool]:
+-    """Truncate a log value if it's too long. Returns (display_value, was_truncated)."""
+-    str_value = str(value)
+-    if len(str_value) > max_len:
+-        return str_value[:max_len] + "...", True
+-    return str_value, False
+-
+-
+-@logtree.scope_header_decorator
+-async def do_single_rollout(policy: TokenCompleter, env: Env) -> Trajectory:
+-    transitions = []
+-    ob, stop_condition = await env.initial_observation()
+-    while True:
+-        ac_with_logprobs = await policy(ob, stop_condition)
+-        step_result = await env.step(ac_with_logprobs.tokens)
+-        transition = Transition(
+-            ob=ob,
+-            ac=ac_with_logprobs,
+-            reward=step_result.reward,
+-            episode_done=step_result.episode_done,
+-            metrics=step_result.metrics,
+-            logs=step_result.logs,
+-        )
+-        transitions.append(transition)
+-        ob = step_result.next_observation
+-        stop_condition = step_result.next_stop_condition
+-        if step_result.episode_done:
+-            break
+-    return Trajectory(transitions=transitions, final_ob=ob)
+-
+-
+-@logtree.scope_header_decorator
+-async def do_group_rollout(
+-    env_group_builder: EnvGroupBuilder, policy: TokenCompleter
+-) -> TrajectoryGroup:
+-    envs_G: Sequence[Env] = await env_group_builder.make_envs()
+-    trajectories_G = await asyncio.gather(*[do_single_rollout(policy, env) for env in envs_G])
+-    rewards_and_metrics_G = await env_group_builder.compute_group_rewards(trajectories_G, envs_G)
+-    rewards_G, metrics_G = zip(*rewards_and_metrics_G, strict=True)
+-
+-    # Log trajectory tables with final rewards
+-    with logtree.scope_header("Trajectory Summary"):
+-        for i, (traj, final_reward) in enumerate(zip(trajectories_G, rewards_G, strict=True)):
+-            # Pre-scan to collect all log keys across all transitions (preserving order, deduped)
+-            all_log_keys = list(dict.fromkeys(key for t in traj.transitions for key in t.logs))
+-
+-            rows = []
+-            truncated_values: list[tuple[int, str, str]] = []  # (step, key, full_value)
+-            step_reward_sum = 0.0
+-            for t_idx, t in enumerate(traj.transitions):
+-                step_reward_sum += t.reward
+-                row: dict[str, Any] = {
+-                    "step": t_idx,
+-                    "ob_len": t.ob.length,
+-                    "ac_len": len(t.ac.tokens),
+-                    "reward": f"{t.reward:.3f}",
+-                }
+-                # Add log fields (user is responsible for avoiding collision with core columns)
+-                for key in all_log_keys:
+-                    if key in t.logs:
+-                        display_val, was_truncated = _truncate_log_value(t.logs[key])
+-                        row[key] = display_val
+-                        if was_truncated:
+-                            truncated_values.append((t_idx, key, str(t.logs[key])))
+-                    else:
+-                        row[key] = "-"
+-                rows.append(row)
+-            # Add final row with final observation and computed reward
+-            rows.append(
+-                {
+-                    "step": "final",
+-                    "ob_len": traj.final_ob.length,
+-                    "ac_len": "-",
+-                    "reward": f"{final_reward:.3f}",
+-                    **{key: "-" for key in all_log_keys},
+-                }
+-            )
+-            # Add total reward row
+-            rows.append(
+-                {
+-                    "step": "total",
+-                    "ob_len": "-",
+-                    "ac_len": "-",
+-                    "reward": f"{step_reward_sum + final_reward:.3f}",
+-                    **{key: "-" for key in all_log_keys},
+-                }
+-            )
+-            logtree.table(rows, caption=f"Trajectory {i}")
+-
+-            # Show full content for any truncated values in collapsible blocks
+-            for step_idx, key, full_value in truncated_values:
+-                logtree.details(
+-                    full_value,
+-                    summary=f"Step {step_idx} - {key} (full, {len(full_value)} chars)",
+-                    pre=True,
+-                )
+-
+-    return TrajectoryGroup(trajectories_G, list(rewards_G), list(metrics_G))
++from tinker_cookbook.sandbox.rl.rollouts import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/train.py b/tinker_cookbook/rl/train.py
+index 4acecb8..ddbacfb 100644
+--- a/tinker_cookbook/rl/train.py
++++ b/tinker_cookbook/rl/train.py
+@@ -1,1185 +1 @@
+-"""
+-Implements RL on general MDPs
+-"""
+-
+-import asyncio
+-import io
+-import logging
+-import os
+-import time
+-from contextlib import contextmanager
+-from typing import Any, Callable, Coroutine, Iterable, Iterator, List, Sequence, TypeVar
+-
+-import chz
+-import numpy as np
+-import tinker
+-import torch
+-from tinker.types import LossFnType
+-from tqdm import tqdm
+-
+-from tinker_cookbook import checkpoint_utils
+-from tinker_cookbook.completers import TinkerTokenCompleter
+-from tinker_cookbook.display import colorize_example
+-from tinker_cookbook.eval.evaluators import SamplingClientEvaluator, SamplingClientEvaluatorBuilder
+-from tinker_cookbook.rl.data_processing import (
+-    assemble_training_data,
+-    compute_advantages,
+-    remove_constant_reward_groups,
+-)
+-from tinker_cookbook.rl.metric_util import RLTestSetEvaluator, compute_trajectory_metrics
+-from tinker_cookbook.rl.metrics import (
+-    compute_kl_sample_train,
+-    compute_post_kl,
+-    compute_sampling_client_metrics,
+-    incorporate_kl_penalty,
+-)
+-from tinker_cookbook.rl.rollouts import do_group_rollout
+-from tinker_cookbook.rl.types import (
+-    EnvGroupBuilder,
+-    RLDataset,
+-    RLDatasetBuilder,
+-    TrajectoryGroup,
+-)
+-from tinker_cookbook.tokenizer_utils import Tokenizer
+-from tinker_cookbook.utils import logtree, ml_log
+-from tinker_cookbook.utils.misc_utils import all_same, safezip, split_list, timed
+-from tinker_cookbook.utils.trace import scope, trace_init, update_scope_context
+-
+-logger = logging.getLogger(__name__)
+-
+-T = TypeVar("T")
+-
+-
+-async def gather_with_progress(
+-    coroutines: Iterable[Coroutine[Any, Any, T]],
+-    desc: str,
+-) -> list[T]:
+-    """
+-    Run coroutines concurrently with a progress bar that updates as each completes.
+-
+-    This preserves the order of results (like asyncio.gather) while providing
+-    real-time progress feedback as individual coroutines complete.
+-    """
+-    coroutine_list = list(coroutines)
+-    pbar = tqdm(total=len(coroutine_list), desc=desc)
+-
+-    async def track(coro: Coroutine[Any, Any, T]) -> T:
+-        result = await coro
+-        pbar.update(1)
+-        return result
+-
+-    try:
+-        results = await asyncio.gather(*[track(coro) for coro in coroutine_list])
+-    finally:
+-        pbar.close()
+-
+-    return results
+-
+-
+-def _get_evaluator_name(evaluator: SamplingClientEvaluator) -> str:
+-    return (
+-        evaluator.name
+-        if isinstance(evaluator, RLTestSetEvaluator) and evaluator.name is not None
+-        else ""
+-    )
+-
+-
+-@contextmanager
+-def _get_logtree_scope(
+-    log_path: str | None, num_groups_to_log: int, f_name: str, scope_name: str
+-) -> Iterator[None]:
+-    """
+-    Creates a context manager; all log inside this context will be logged under the section `scope_name`.
+-    It will create a file with the path of log_path/f_name.html
+-    If num_groups_to_log is 0, it will disable logging (but note that this function does not actually implement the logic for logging itself!)
+-    """
+-    if log_path is not None and num_groups_to_log > 0:
+-        logtree_path = os.path.join(log_path, f"{f_name}.html")
+-        with logtree.init_trace(scope_name, path=logtree_path):
+-            yield
+-    else:
+-        yield
+-
+-
+-@scope
+-def _select_representative_inds(scores: list[float], num_inds: int) -> list[int]:
+-    assert num_inds <= len(scores)
+-    sorted_inds = np.argsort(scores)
+-    uniform_inds = np.linspace(0, len(sorted_inds) - 1, num_inds).astype(int)
+-    return [int(sorted_inds[i]) for i in uniform_inds]
+-
+-
+-@scope
+-def print_group(traj_group: TrajectoryGroup, tokenizer: Tokenizer):
+-    """
+-    Print a subset of the trajectory group to the console.
+-    """
+-    # Cut down the number of trajectories to print
+-    max_trajs_to_print = 4
+-    if len(traj_group.trajectories_G) > max_trajs_to_print:
+-        inds = _select_representative_inds(traj_group.get_total_rewards(), max_trajs_to_print)
+-        traj_group = TrajectoryGroup(
+-            trajectories_G=[traj_group.trajectories_G[i] for i in inds],
+-            final_rewards_G=[traj_group.final_rewards_G[i] for i in inds],
+-            metrics_G=[traj_group.metrics_G[i] for i in inds],
+-        )
+-
+-    rewards = traj_group.get_total_rewards()
+-    advantages_G = compute_advantages([traj_group])
+-    data_D, metadata_D = assemble_training_data([traj_group], advantages_G)
+-
+-    buf = io.StringIO()
+-
+-    @scope
+-    def bprint(s: str):
+-        print(s, file=buf)
+-
+-    bprint("\n====== Trajectory Group ======")
+-    last_metadata = None
+-    for datum, metadata in safezip(data_D, metadata_D):
+-        idx = metadata["traj_idx"]
+-        if metadata != last_metadata:
+-            bprint(f"****** trajectory idx={idx}, reward={rewards[idx]:.3g} ******")
+-            # Print trajectory-level metrics
+-            if traj_group.metrics_G[idx]:
+-                bprint("Trajectory metrics:")
+-                for key, value in traj_group.metrics_G[idx].items():
+-                    bprint(f"  {key}: {value}")
+-            # Print per-transition metrics
+-            transition_metrics = [
+-                transition.metrics
+-                for transition in traj_group.trajectories_G[idx].transitions
+-                if transition.metrics
+-            ]
+-            if transition_metrics:
+-                bprint("Per-step metrics:")
+-                for i, metrics in enumerate(transition_metrics):
+-                    bprint(f"  Step {i}:")
+-                    for key, value in metrics.items():
+-                        bprint(f"    {key}: {value}")
+-        bprint("---- datum ----")
+-        bprint(colorize_example(datum, tokenizer, key="advantages"))
+-        last_metadata = metadata
+-    bprint("====== End Trajectory Group ======")
+-    logger.info(buf.getvalue().rstrip())
+-
+-
+-def _remove_mask(datum: tinker.Datum) -> tinker.Datum:
+-    return tinker.Datum(
+-        model_input=datum.model_input,
+-        loss_fn_inputs={k: v for k, v in datum.loss_fn_inputs.items() if k != "mask"},
+-    )
+-
+-
+-def _training_logprobs_from_fwd_bwd(
+-    fwd_bwd_result: tinker.ForwardBackwardOutput,
+-) -> list[torch.Tensor]:
+-    return [output["logprobs"].to_torch() for output in fwd_bwd_result.loss_fn_outputs]
+-
+-
+-@scope
+-async def train_step(
+-    data_D: List[tinker.Datum],
+-    training_client: tinker.TrainingClient,
+-    learning_rate: float,
+-    num_substeps: int,
+-    loss_fn: LossFnType,
+-    loss_fn_config: dict[str, Any] | None = None,
+-    metrics: dict[str, Any] | None = None,
+-) -> List[torch.Tensor]:
+-    """Train the model on collected trajectories.
+-
+-    Pipelines forward_backward and optim_step so they land on the same clock cycle.
+-    """
+-    batches = split_list(data_D, min(num_substeps, len(data_D)))
+-    if not batches:
+-        return []
+-
+-    adam_params = tinker.AdamParams(learning_rate=learning_rate, beta1=0.9, beta2=0.95, eps=1e-8)
+-    training_logprobs_D: list[torch.Tensor] = []
+-    optim_result: tinker.OptimStepResponse | None = None
+-
+-    # Enqueue first batch
+-    fwd_bwd_future = await training_client.forward_backward_async(
+-        [_remove_mask(d) for d in batches[0]], loss_fn=loss_fn, loss_fn_config=loss_fn_config
+-    )
+-    optim_future = await training_client.optim_step_async(adam_params)
+-
+-    for i in range(len(batches)):
+-        # Enqueue next batch before consuming current results (to stay on same clock cycle)
+-        if i + 1 < len(batches):
+-            next_fwd_bwd_future = await training_client.forward_backward_async(
+-                [_remove_mask(d) for d in batches[i + 1]],
+-                loss_fn=loss_fn,
+-                loss_fn_config=loss_fn_config,
+-            )
+-            next_optim_future = await training_client.optim_step_async(adam_params)
+-        else:
+-            next_fwd_bwd_future = None
+-            next_optim_future = None
+-        # Consume current results
+-        fwd_bwd_result = await fwd_bwd_future.result_async()
+-        training_logprobs_D.extend(_training_logprobs_from_fwd_bwd(fwd_bwd_result))
+-        optim_result = await optim_future.result_async()
+-        # Move to next iteration
+-        if next_fwd_bwd_future is not None and next_optim_future is not None:
+-            fwd_bwd_future = next_fwd_bwd_future
+-            optim_future = next_optim_future
+-
+-    if metrics is not None and optim_result is not None and optim_result.metrics:
+-        metrics.update(optim_result.metrics)
+-
+-    return training_logprobs_D
+-
+-
+-@chz.chz
+-class StreamMinibatchConfig:
+-    """
+-    Configuration for training with minibatch streaming.
+-    Once we have accumulated enough trajectories for a minibatch, we will
+-    immediately train on them, instead of waiting for the full batch of
+-    trajectories to be ready.
+-    """
+-
+-    # Total number of trajectory groups across all minibatches and substeps
+-    groups_per_batch: int
+-    # For each substep, we will divide up the number of trajectory groups
+-    # into this many minibatches.
+-    # We will do num_minibatches forward_backward() passes and one optim_step()
+-    # per substep.
+-    num_minibatches: int
+-
+-
+-@chz.chz
+-class AsyncConfig:
+-    """Configuration for async RL training"""
+-
+-    # If samples are generated from a sample more than this many steps ago,
+-    # we will skip training on them.
+-    max_steps_off_policy: int
+-    # We will ensure all batches have at least this many groups, even
+-    # as we discard stale samples
+-    groups_per_batch: int
+-
+-
+-@chz.chz
+-class Config:
+-    learning_rate: float
+-    dataset_builder: RLDatasetBuilder  # also determines batch size
+-    model_name: str
+-    max_tokens: int
+-    temperature: float = 1.0  # Changing sampling temperature is not generally recommended; does not currently play well with KL penalty
+-    compute_post_kl: bool = False
+-    evaluator_builders: list[SamplingClientEvaluatorBuilder] = chz.field(default_factory=list)
+-    lora_rank: int = 32
+-
+-    kl_penalty_coef: float = 0.0
+-    kl_discount_factor: float = 0.0
+-
+-    # Loss function and configuration.
+-    # See https://tinker-docs.thinkingmachines.ai/losses
+-    loss_fn: LossFnType = "importance_sampling"
+-    loss_fn_config: dict[str, Any] | None = None
+-
+-    # Number of optimizer steps per training iteration.
+-    # Useful for very large batch sizes.
+-    num_substeps: int = 1
+-
+-    wandb_project: str | None = None
+-    wandb_name: str | None = None
+-
+-    log_path: str = chz.field(munger=lambda _, s: os.path.expanduser(s))
+-    base_url: str | None = None
+-    enable_trace: bool = False
+-
+-    remove_constant_reward_groups: bool = False
+-    eval_every: int = 20  # 0 = disabled
+-    save_every: int = 20  # 0 = disabled
+-    load_checkpoint_path: str | None = None
+-
+-    async_config: AsyncConfig | None = None
+-    stream_minibatch_config: StreamMinibatchConfig | None = None
+-
+-    # Logtree configuration
+-    num_groups_to_log: int = 4  # Number of groups to log per iteration (0 = disable logging)
+-
+-
+-@scope
+-async def run_single_evaluation(evaluator, cfg, i_batch, sampling_client):
+-    ev_name = _get_evaluator_name(evaluator)
+-    with _get_logtree_scope(
+-        log_path=cfg.log_path,
+-        num_groups_to_log=cfg.num_groups_to_log,
+-        f_name=f"eval_{ev_name}_iteration_{i_batch:06d}",
+-        scope_name=f"Running evaluation {ev_name} {i_batch}",
+-    ):
+-        eval_metrics = await evaluator(sampling_client)
+-        return eval_metrics
+-
+-
+-@scope
+-async def run_evaluations_parallel(
+-    evaluators: list[SamplingClientEvaluator],
+-    sampling_client: tinker.SamplingClient,
+-    cfg: Config,
+-    i_batch: int,
+-) -> dict[str, Any]:
+-    """Run all evaluators in parallel and return aggregated metrics."""
+-
+-    # Create tasks for all evaluators with names for better traceability
+-    tasks = []
+-    for i, evaluator in enumerate(evaluators):
+-        ev_name = _get_evaluator_name(evaluator)
+-        task = asyncio.create_task(
+-            run_single_evaluation(evaluator, cfg, i_batch, sampling_client),
+-            name=f"eval_{ev_name or i}_iteration_{i_batch:06d}",
+-        )
+-        tasks.append(task)
+-
+-    # Wait for all to complete
+-    results = await asyncio.gather(*tasks)
+-
+-    # Merge all metrics
+-    metrics = {}
+-    for result in results:
+-        metrics.update(result)
+-
+-    return metrics
+-
+-
+-@scope
+-async def do_sync_training_with_stream_minibatch(
+-    start_batch: int,
+-    end_batch: int,
+-    num_batches: int,
+-    cfg: Config,
+-    training_client: tinker.TrainingClient,
+-    service_client: tinker.ServiceClient,
+-    evaluators: list[SamplingClientEvaluator],
+-    dataset: RLDataset,
+-    ml_logger: ml_log.Logger,
+-    tokenizer: Tokenizer,
+-):
+-    """
+-    Implements fully synchronous on-policy training with minibatch streaming.
+-    Once we have accumulated enough trajectories for a minibatch, we will
+-    immediately train on them, instead of waiting for the full batch of
+-    trajectories to be ready. This allows us to overlap sampling and training.
+-    """
+-    # Initial sampling client
+-    sampling_client, _ = await save_checkpoint_and_get_sampling_client(
+-        training_client, start_batch, cfg.log_path, cfg.save_every, start_batch
+-    )
+-
+-    for i_batch in range(start_batch, end_batch):
+-        metrics = {
+-            "progress/batch": i_batch,
+-            "optim/lr": cfg.learning_rate,
+-            "progress/done_frac": (i_batch + 1) / num_batches,
+-        }
+-        t_start = time.time()
+-
+-        # Run evaluations
+-        if (cfg.eval_every > 0 and i_batch % cfg.eval_every == 0) or i_batch == end_batch - 1:
+-            with timed("run_evals", metrics):
+-                eval_metrics = await run_evaluations_parallel(
+-                    evaluators, sampling_client, cfg, i_batch
+-                )
+-                metrics.update(eval_metrics)
+-
+-        with _get_logtree_scope(
+-            cfg.log_path,
+-            cfg.num_groups_to_log,
+-            f"train_iteration_{i_batch:06d}",
+-            f"RL Iteration {i_batch}",
+-        ):
+-            # Samplers will produce trajectory groups asynchronously,
+-            # and the trainer will consume them as soon as they are ready
+-            trajectory_groups_queue = asyncio.Queue[WrappedTrajectoryGroup | None]()
+-            env_group_builders_P = dataset.get_batch(i_batch)
+-
+-            @scope
+-            async def trajectory_group_worker_task(
+-                builder: EnvGroupBuilder, enable_logging: bool
+-            ) -> None:
+-                metrics = {}
+-                t_start = time.time()
+-                trajectory_group = await do_group_rollout_and_filter_constant_reward(
+-                    sampling_client,
+-                    builder,
+-                    max_tokens=cfg.max_tokens,
+-                    temperature=cfg.temperature,
+-                    do_remove_constant_reward_groups=cfg.remove_constant_reward_groups,
+-                    enable_logging=enable_logging,
+-                )
+-                metrics["time/trajectory_group_worker_loop/total"] = time.time() - t_start
+-                if trajectory_group is not None:
+-                    trajectory_groups_queue.put_nowait(
+-                        WrappedTrajectoryGroup(
+-                            trajectory_group=trajectory_group,
+-                            env_group_builder=builder,
+-                            sampling_client_step=i_batch,
+-                            metrics=metrics,
+-                        )
+-                    )
+-                else:
+-                    trajectory_groups_queue.put_nowait(None)
+-
+-            # Sample all trajectories asynchronously. If we have multiple minibatches,
+-            # then sampling can overlap with training.
+-            for i, builder in enumerate(env_group_builders_P):
+-                asyncio.create_task(
+-                    trajectory_group_worker_task(builder, enable_logging=i < cfg.num_groups_to_log),
+-                    name=f"trajectory_group_worker_task_{i}",
+-                )
+-
+-            # Run multiple optimizer substeps per training iteration
+-            (
+-                sampling_client,
+-                full_batch_metrics,
+-            ) = await do_train_step_streaming_and_get_sampling_client(
+-                cfg,
+-                i_batch,
+-                trajectory_groups_queue,
+-                training_client,
+-                service_client,
+-                tokenizer,
+-            )
+-
+-        # Log metrics
+-        metrics.update(full_batch_metrics)
+-        metrics["time/total"] = time.time() - t_start
+-        ml_logger.log_metrics(metrics, step=i_batch)
+-
+-
+-@chz.chz
+-class WrappedTrajectoryGroup:
+-    """
+-    A wrapper around a trajectory group that includes metadata about how it was generated.
+-    Used when we need to overlap sampling and training.
+-    """
+-
+-    trajectory_group: TrajectoryGroup
+-    # The env group builder that produced the trajectory group.
+-    # Pass this along in case the sampler is too stale, and we need to
+-    # requeue this group.
+-    env_group_builder: EnvGroupBuilder
+-    # The step that produced this trajectory group.
+-    sampling_client_step: int
+-    metrics: dict[str, Any] = chz.field(default_factory=dict)
+-
+-
+-@scope
+-async def do_async_training(
+-    start_batch: int,
+-    end_batch: int,
+-    num_batches: int,
+-    cfg: Config,
+-    training_client: tinker.TrainingClient,
+-    service_client: tinker.ServiceClient,
+-    evaluators: list[SamplingClientEvaluator],
+-    dataset: RLDataset,
+-    ml_logger: ml_log.Logger,
+-    tokenizer: Tokenizer,
+-):
+-    """Implements async off-policy training, capped at K steps off policy."""
+-    assert cfg.async_config is not None
+-
+-    shutdown_event = asyncio.Event()
+-    # We will have groups_per_batch worker generating rollouts, so cap the
+-    # queue size to be groups_per_batch.
+-    env_group_builders_queue = asyncio.Queue[EnvGroupBuilder | None](
+-        maxsize=cfg.async_config.groups_per_batch
+-    )
+-    trajectory_groups_queue = asyncio.Queue[WrappedTrajectoryGroup | None]()
+-
+-    # Initial sampling client to use
+-    path_dict = await checkpoint_utils.save_checkpoint_async(
+-        training_client=training_client,
+-        name=f"{start_batch:06d}",
+-        log_path=cfg.log_path,
+-        loop_state={"batch": start_batch},
+-        kind="both",
+-    )
+-
+-    # This will be updated by the training loop
+-    sampling_client = training_client.create_sampling_client(path_dict["sampler_path"])
+-    sampling_client_step = start_batch
+-    sampling_client_updated_event = asyncio.Event()
+-    sampling_client_updated_event.set()
+-
+-    @scope
+-    def shutdown_loops():
+-        """Trigger all loops to shutdown"""
+-        shutdown_event.set()
+-        assert cfg.async_config is not None
+-        for _ in range(cfg.async_config.groups_per_batch):
+-            env_group_builders_queue.put_nowait(None)
+-        sampling_client_updated_event.set()
+-
+-    @scope
+-    async def dataloader_loop():
+-        """Gets the next set of env builders to run"""
+-        i_batch = start_batch
+-        while not shutdown_event.is_set() and i_batch < end_batch:
+-            env_group_builders_P = dataset.get_batch(i_batch)
+-            for env_group_builder in env_group_builders_P:
+-                await env_group_builders_queue.put(env_group_builder)
+-            i_batch += 1
+-
+-    @scope
+-    async def trajectory_group_worker_loop():
+-        """Generates trajectories for a single env builder"""
+-        while not shutdown_event.is_set():
+-            env_group_builder = await env_group_builders_queue.get()
+-            if env_group_builder is None:
+-                break
+-
+-            metrics = {}
+-            t_start = time.time()
+-            # Save a reference to the sampling client step in case it changes
+-            # while we're running the rollout
+-            sampling_client_step_copy = sampling_client_step
+-            trajectory_group = await do_group_rollout_and_filter_constant_reward(
+-                sampling_client,
+-                env_group_builder,
+-                max_tokens=cfg.max_tokens,
+-                temperature=cfg.temperature,
+-                do_remove_constant_reward_groups=cfg.remove_constant_reward_groups,
+-            )
+-            if trajectory_group is None:
+-                trajectory_groups_queue.put_nowait(None)
+-            else:
+-                metrics["time/trajectory_group_worker_loop/total"] = time.time() - t_start
+-                trajectory_groups_queue.put_nowait(
+-                    WrappedTrajectoryGroup(
+-                        trajectory_group=trajectory_group,
+-                        env_group_builder=env_group_builder,
+-                        sampling_client_step=sampling_client_step_copy,
+-                        metrics=metrics,
+-                    )
+-                )
+-
+-    @scope
+-    async def training_loop():
+-        """
+-        Waits for a sufficient number of valid trajectories to be accumulated and trains on them.
+-        Will discard trajectories that are too stale.
+-        """
+-        assert cfg.async_config is not None
+-
+-        i_batch = start_batch
+-        wrapped_trajectory_groups = []
+-        while i_batch < end_batch:
+-            wrapped_trajectory_group = await trajectory_groups_queue.get()
+-            if wrapped_trajectory_group is None:
+-                continue
+-
+-            @scope
+-            def filter_stale_trajectory_group(
+-                wrapped_trajectory_group: WrappedTrajectoryGroup | None,
+-            ) -> bool:
+-                """Returns False if the trajectory group is too stale or not valid"""
+-                if wrapped_trajectory_group is None:
+-                    return False
+-
+-                # If the samples are too stale, requeue the data so that it will be used eventually.
+-                # Requeue on a separate coroutine to avoid blocking the training loop
+-                assert cfg.async_config is not None
+-                if (
+-                    i_batch - wrapped_trajectory_group.sampling_client_step
+-                    > cfg.async_config.max_steps_off_policy
+-                ):
+-                    logger.info(f"[training_loop] Step {i_batch}: Samples are too stale, skipping")
+-                    asyncio.create_task(
+-                        env_group_builders_queue.put(wrapped_trajectory_group.env_group_builder),
+-                        name="requeue_stale_sample_task",
+-                    )
+-                    return False
+-                return True
+-
+-            metrics = {
+-                "training_client/step": i_batch,
+-                "optim/lr": cfg.learning_rate,
+-                "progress/done_frac": (i_batch + 1) / num_batches,
+-            }
+-            t_start = time.time()
+-
+-            nonlocal sampling_client
+-            nonlocal sampling_client_step
+-            if cfg.stream_minibatch_config is not None:
+-                await trajectory_groups_queue.put(wrapped_trajectory_group)
+-                (
+-                    sampling_client,
+-                    train_step_metrics,
+-                ) = await do_train_step_streaming_and_get_sampling_client(
+-                    cfg,
+-                    i_batch,
+-                    trajectory_groups_queue,
+-                    training_client,
+-                    service_client,
+-                    tokenizer,
+-                    filter_stale_trajectory_group,
+-                )
+-            else:
+-                if not filter_stale_trajectory_group(wrapped_trajectory_group):
+-                    continue
+-
+-                # Dynamic sampling: Wait for enough trajectories to accumulate to
+-                # ensure all batch sizes are the same size. This avoids needing to adjust
+-                # the learning rate for different batch sizes.
+-                wrapped_trajectory_groups.append(wrapped_trajectory_group)
+-                if len(wrapped_trajectory_groups) < cfg.async_config.groups_per_batch:
+-                    continue
+-                logger.info(
+-                    f"[training_loop] Step {i_batch}: Will train on batch, num groups: {len(wrapped_trajectory_groups)}"
+-                )
+-
+-                # Compute sampling client metrics, as samples may have been generated with
+-                # different sampler versions
+-                metrics.update(compute_sampling_client_metrics(wrapped_trajectory_groups))
+-
+-                # TODO: For proper checkpointing, we also need to save dataloader state and
+-                # all queued trajectory groups that haven't been trained on yet
+-                sampling_client, train_step_metrics = await do_train_step_and_get_sampling_client(
+-                    cfg,
+-                    i_batch,
+-                    training_client,
+-                    service_client,
+-                    tokenizer,
+-                    [g.env_group_builder for g in wrapped_trajectory_groups],
+-                    [g.trajectory_group for g in wrapped_trajectory_groups],
+-                )
+-            sampling_client_step = i_batch + 1
+-            sampling_client_updated_event.set()
+-
+-            # Log metrics
+-            metrics.update(train_step_metrics)
+-            metrics["time/training_loop/total"] = time.time() - t_start
+-            ml_logger.log_metrics(metrics, step=i_batch)
+-            i_batch += 1
+-            wrapped_trajectory_groups = []
+-
+-        shutdown_loops()
+-
+-    @scope
+-    async def evaluation_loop():
+-        """Runs evals periodically"""
+-        if len(evaluators) == 0 or cfg.eval_every == 0:
+-            return
+-
+-        while not shutdown_event.is_set():
+-            await sampling_client_updated_event.wait()
+-            sampling_client_updated_event.clear()
+-
+-            metrics = {}
+-            t_start = time.time()
+-            # Save a reference to the original values in case it changes
+-            # while we're running the evals
+-            sampling_client_eval_step = sampling_client_step
+-            sampling_client_eval = sampling_client
+-            if cfg.eval_every > 0 and sampling_client_eval_step % cfg.eval_every == 0:
+-                with timed("run_evals", metrics):
+-                    for evaluator in evaluators:
+-                        eval_metrics = await evaluator(sampling_client_eval)
+-                        metrics.update({f"test/{k}": v for k, v in eval_metrics.items()})
+-                metrics["time/evaluation_loop/total"] = time.time() - t_start
+-                ml_logger.log_metrics(metrics, step=sampling_client_eval_step)
+-
+-    await asyncio.gather(
+-        asyncio.create_task(dataloader_loop(), name="dataloader_loop"),
+-        *[
+-            asyncio.create_task(
+-                trajectory_group_worker_loop(), name=f"trajectory_group_worker_loop_{i}"
+-            )
+-            for i in range(cfg.async_config.groups_per_batch)
+-        ],
+-        asyncio.create_task(training_loop(), name="training_loop"),
+-        asyncio.create_task(evaluation_loop(), name="evaluation_loop"),
+-    )
+-
+-
+-@scope
+-async def do_group_rollout_and_filter_constant_reward(
+-    sampling_client: tinker.SamplingClient,
+-    env_group_builder: EnvGroupBuilder,
+-    max_tokens: int,
+-    temperature: float,
+-    do_remove_constant_reward_groups: bool,
+-    enable_logging: bool = True,
+-) -> TrajectoryGroup | None:
+-    policy = TinkerTokenCompleter(sampling_client, max_tokens=max_tokens, temperature=temperature)
+-
+-    with logtree.optional_enable_logging(enable_logging):
+-        trajectory_group = await do_group_rollout(env_group_builder, policy)
+-
+-    # Remove if all trajectories have the same reward
+-    if do_remove_constant_reward_groups and all_same(trajectory_group.get_total_rewards()):
+-        return None
+-    else:
+-        return trajectory_group
+-
+-
+-@scope
+-async def save_checkpoint_and_get_sampling_client(
+-    training_client: tinker.TrainingClient,
+-    i_batch: int,
+-    log_path: str,
+-    save_every: int,
+-    start_batch: int = 0,
+-) -> tuple[tinker.SamplingClient, dict[str, Any]]:
+-    metrics = {}
+-    with timed("save_checkpoint", metrics):
+-        if save_every > 0 and i_batch > start_batch and i_batch % save_every == 0:
+-            path_dict = await checkpoint_utils.save_checkpoint_async(
+-                training_client=training_client,
+-                name=f"{i_batch:06d}",
+-                log_path=log_path,
+-                loop_state={"batch": i_batch},
+-                kind="both",
+-            )
+-            return training_client.create_sampling_client(path_dict["sampler_path"]), metrics
+-        else:
+-            return await training_client.save_weights_and_get_sampling_client_async(), metrics
+-
+-
+-@scope
+-async def prepare_minibatch(
+-    env_group_builders_P: Sequence[EnvGroupBuilder],
+-    trajectory_groups_P: list[TrajectoryGroup],
+-    tokenizer: Tokenizer,
+-    service_client: tinker.ServiceClient,
+-    model_name: str,
+-    kl_penalty_coef: float,
+-    kl_discount_factor: float,
+-) -> tuple[list[tinker.Datum], dict[str, Any]]:
+-    """Converts the trajectories into a minibatch, and provides metrics about the minibatch"""
+-
+-    # Compute trajectory metrics
+-    metrics = {}
+-    taglist_P = [env_group_builder.logging_tags() for env_group_builder in env_group_builders_P]
+-    metrics.update(compute_trajectory_metrics(trajectory_groups_P, taglist_P))
+-
+-    # Print up to two trajectory groups
+-    for traj_group in trajectory_groups_P[:2]:
+-        print_group(traj_group, tokenizer)
+-
+-    # Assemble training data
+-    with timed("assemble_training_data", metrics):
+-        advantages_P = compute_advantages(trajectory_groups_P)
+-        data_D, _metadata_D = assemble_training_data(trajectory_groups_P, advantages_P)
+-
+-    # Incorporate KL penalty if configured
+-    if kl_penalty_coef > 0:
+-        with timed("kl_vs_base", metrics):
+-            kl_penalty_metrics = await incorporate_kl_penalty(
+-                data_D,
+-                service_client.create_sampling_client(base_model=model_name),
+-                # ^^^ TODO: replace with the model we load, if relevant
+-                kl_penalty_coef,
+-                kl_discount_factor,
+-            )
+-        metrics.update(kl_penalty_metrics)
+-
+-    return data_D, metrics
+-
+-
+-@scope
+-async def compute_full_batch_metrics_and_get_sampling_client(
+-    training_client: tinker.TrainingClient,
+-    i_batch: int,
+-    data_D: list[tinker.Datum],
+-    training_logprobs_D: list[torch.Tensor],
+-    log_path: str,
+-    save_every: int,
+-    do_compute_post_kl: bool,
+-) -> tuple[tinker.SamplingClient, dict[str, Any]]:
+-    """
+-    At the end of the iteration, this will compute metrics for the full batch
+-    and return the latest sampling client.
+-
+-    The reason we return a sampling client is that if do_compute_post_kl is True,
+-    we need to create a sampling client from the post-update policy.
+-    """
+-    metrics = {}
+-
+-    # Compute KL metrics
+-    with timed("compute_kl_sample_train", metrics):
+-        kl_sample_train_metrics = compute_kl_sample_train(data_D, training_logprobs_D)
+-        metrics.update(kl_sample_train_metrics)
+-
+-    # Get a sampling client using the new weights
+-    sampling_client, checkpoint_metrics = await save_checkpoint_and_get_sampling_client(
+-        training_client, i_batch, log_path, save_every
+-    )
+-    metrics.update(checkpoint_metrics)
+-
+-    # Compute post-KL metrics if configured
+-    if do_compute_post_kl:
+-        with timed("compute_post_kl", metrics):
+-            post_kl_metrics = await compute_post_kl(data_D, sampling_client)
+-            metrics.update(post_kl_metrics)
+-
+-    return sampling_client, metrics
+-
+-
+-@scope
+-async def do_train_step_streaming_and_get_sampling_client(
+-    cfg: Config,
+-    i_batch: int,
+-    trajectory_groups_queue: asyncio.Queue[WrappedTrajectoryGroup | None],
+-    training_client: tinker.TrainingClient,
+-    service_client: tinker.ServiceClient,
+-    tokenizer: Tokenizer,
+-    trajectory_group_filter: Callable[[WrappedTrajectoryGroup | None], bool] = lambda _: True,
+-) -> tuple[tinker.SamplingClient, dict[str, Any]]:
+-    """
+-    As soon as we have enough trajectories for a minibatch, we will train on them.
+-    This allows us to overlap sampling and training.
+-    """
+-    assert cfg.stream_minibatch_config is not None
+-    assert cfg.stream_minibatch_config.groups_per_batch % cfg.num_substeps == 0, (
+-        f"{cfg.stream_minibatch_config.groups_per_batch=} must be divisible by {cfg.num_substeps=}"
+-    )
+-    # Number of groups across all minibatches in each optimizer substep
+-    groups_per_substep = cfg.stream_minibatch_config.groups_per_batch // cfg.num_substeps
+-    assert groups_per_substep % cfg.stream_minibatch_config.num_minibatches == 0, (
+-        f"{groups_per_substep} must be divisible by {cfg.stream_minibatch_config.num_minibatches=}"
+-    )
+-    # Number of groups per minibatch in each optimizer substep
+-    groups_per_minibatch = groups_per_substep // cfg.stream_minibatch_config.num_minibatches
+-
+-    update_scope_context({"step": i_batch})
+-
+-    metrics = {}
+-
+-    # Run multiple optimizer substeps per training iteration
+-    all_data_D = []
+-    all_training_logprobs_D = []
+-    all_wrapped_trajectory_groups = []
+-    for i_substep in range(cfg.num_substeps):
+-        # Run multiple minibatches per substep
+-        # Once we have enough trajectories for a minibatch, train on them
+-        wrapped_trajectory_groups = []
+-        forward_backward_futures: list[tinker.APIFuture[tinker.ForwardBackwardOutput]] = []
+-        i_minibatch = 0
+-        while i_minibatch < cfg.stream_minibatch_config.num_minibatches:
+-            wrapped_trajectory_group = await trajectory_groups_queue.get()
+-            if not trajectory_group_filter(wrapped_trajectory_group):
+-                continue
+-            wrapped_trajectory_groups.append(wrapped_trajectory_group)
+-
+-            if len(wrapped_trajectory_groups) < groups_per_minibatch:
+-                continue
+-            logger.info(
+-                f"[stream_minibatch] Step {i_batch}, Substep {i_substep}/{cfg.num_substeps}, Minibatch {i_minibatch}/{cfg.stream_minibatch_config.num_minibatches}: Will train on minibatch, num groups: {len(wrapped_trajectory_groups)}"
+-            )
+-
+-            # Note: we may have removed trajectory groups that have the same reward.
+-            # To have the same results as the sync implementation, we will
+-            # remove these and train on a smaller batch.
+-            wrapped_trajectory_groups = [g for g in wrapped_trajectory_groups if g is not None]
+-            if len(wrapped_trajectory_groups) == 0:
+-                i_minibatch += 1
+-                continue
+-
+-            data_D, prepare_minibatch_metrics = await prepare_minibatch(
+-                [g.env_group_builder for g in wrapped_trajectory_groups],
+-                [g.trajectory_group for g in wrapped_trajectory_groups],
+-                tokenizer,
+-                service_client,
+-                model_name=cfg.model_name,
+-                kl_penalty_coef=cfg.kl_penalty_coef,
+-                kl_discount_factor=cfg.kl_discount_factor,
+-            )
+-            metrics.update(prepare_minibatch_metrics)
+-
+-            # Enqueue forward-backward (we'll await results after all minibatches are enqueued)
+-            with timed(f"train/fwd_bwd_substep_{i_substep}_mb_{i_minibatch}_enqueue", metrics):
+-                forward_backward_futures.append(
+-                    await training_client.forward_backward_async(
+-                        [_remove_mask(d) for d in data_D],
+-                        loss_fn=cfg.loss_fn,
+-                        loss_fn_config=cfg.loss_fn_config,
+-                    )
+-                )
+-            all_data_D.extend(data_D)
+-            all_wrapped_trajectory_groups.extend(wrapped_trajectory_groups)
+-            i_minibatch += 1
+-            wrapped_trajectory_groups = []
+-
+-        # Enqueue optim_step before awaiting results (so they land on same clock cycle)
+-        adam_params = tinker.AdamParams(
+-            learning_rate=cfg.learning_rate, beta1=0.9, beta2=0.95, eps=1e-8
+-        )
+-        with timed(f"train/optim_substep_{i_substep}_enqueue", metrics):
+-            optim_future = await training_client.optim_step_async(adam_params)
+-
+-        # Now consume all forward-backward results
+-        for i_mb, fwd_bwd_future in enumerate(forward_backward_futures):
+-            with timed(f"train/fwd_bwd_substep_{i_substep}_mb_{i_mb}_consume", metrics):
+-                fwd_bwd_result = await fwd_bwd_future.result_async()
+-                all_training_logprobs_D.extend(_training_logprobs_from_fwd_bwd(fwd_bwd_result))
+-
+-        with timed(f"train/optim_substep_{i_substep}_consume", metrics):
+-            optim_result = await optim_future.result_async()
+-
+-        if optim_result.metrics:
+-            metrics.update(optim_result.metrics)
+-
+-    # Aggregate metrics across the entire batch
+-    metrics.update(compute_sampling_client_metrics(all_wrapped_trajectory_groups))
+-    metrics.update(
+-        compute_trajectory_metrics(
+-            [g.trajectory_group for g in all_wrapped_trajectory_groups],
+-            [g.env_group_builder.logging_tags() for g in all_wrapped_trajectory_groups],
+-        )
+-    )
+-    (
+-        sampling_client,
+-        full_batch_metrics,
+-    ) = await compute_full_batch_metrics_and_get_sampling_client(
+-        training_client,
+-        # NOTE: saving the checkpoint as the i + 1 step
+-        i_batch + 1,
+-        all_data_D,
+-        all_training_logprobs_D,
+-        cfg.log_path,
+-        cfg.save_every,
+-        cfg.compute_post_kl,
+-    )
+-    metrics.update(full_batch_metrics)
+-    return sampling_client, metrics
+-
+-
+-@scope
+-async def do_train_step_and_get_sampling_client(
+-    cfg: Config,
+-    i_batch: int,
+-    training_client: tinker.TrainingClient,
+-    service_client: tinker.ServiceClient,
+-    tokenizer: Tokenizer,
+-    env_group_builders_P: Sequence[EnvGroupBuilder],
+-    trajectory_groups_P: list[TrajectoryGroup],
+-) -> tuple[tinker.SamplingClient, dict[str, Any]]:
+-    update_scope_context({"step": i_batch})
+-
+-    metrics = {}
+-    data_D, prepare_minibatch_metrics = await prepare_minibatch(
+-        env_group_builders_P,
+-        trajectory_groups_P,
+-        tokenizer,
+-        service_client,
+-        model_name=cfg.model_name,
+-        kl_penalty_coef=cfg.kl_penalty_coef,
+-        kl_discount_factor=cfg.kl_discount_factor,
+-    )
+-    metrics.update(prepare_minibatch_metrics)
+-
+-    with timed("train", metrics):
+-        training_logprobs_D = await train_step(
+-            data_D=data_D,
+-            training_client=training_client,
+-            learning_rate=cfg.learning_rate,
+-            num_substeps=cfg.num_substeps,
+-            loss_fn=cfg.loss_fn,
+-            loss_fn_config=cfg.loss_fn_config,
+-            metrics=metrics,
+-        )
+-
+-    sampling_client, full_batch_metrics = await compute_full_batch_metrics_and_get_sampling_client(
+-        training_client,
+-        # NOTE: saving the checkpoint as the i + 1 step
+-        i_batch + 1,
+-        data_D,
+-        training_logprobs_D,
+-        cfg.log_path,
+-        cfg.save_every,
+-        cfg.compute_post_kl,
+-    )
+-    metrics.update(full_batch_metrics)
+-
+-    return sampling_client, metrics
+-
+-
+-@scope
+-async def do_sync_training(
+-    start_batch: int,
+-    end_batch: int,
+-    num_batches: int,
+-    cfg: Config,
+-    training_client: tinker.TrainingClient,
+-    service_client: tinker.ServiceClient,
+-    evaluators: list[SamplingClientEvaluator],
+-    dataset: RLDataset,
+-    ml_logger: ml_log.Logger,
+-    tokenizer: Tokenizer,
+-):
+-    """Implements fully synchronous on-policy training"""
+-    # Initial sampling client
+-    sampling_client, _ = await save_checkpoint_and_get_sampling_client(
+-        training_client, start_batch, cfg.log_path, cfg.save_every, start_batch
+-    )
+-
+-    for i_batch in range(start_batch, end_batch):
+-        metrics = {
+-            "progress/batch": i_batch,
+-            "optim/lr": cfg.learning_rate,
+-            "progress/done_frac": (i_batch + 1) / num_batches,
+-        }
+-        t_start = time.time()
+-
+-        # Run evaluations
+-        if cfg.eval_every > 0 and i_batch % cfg.eval_every == 0:
+-            with timed("run_evals", metrics):
+-                eval_metrics = await run_evaluations_parallel(
+-                    evaluators, sampling_client, cfg, i_batch
+-                )
+-                metrics.update(eval_metrics)
+-
+-        # Get batch and sample trajectories
+-        env_group_builders_P = dataset.get_batch(i_batch)
+-
+-        # Initialize logtree trace for this iteration if logging is enabled
+-        with _get_logtree_scope(
+-            log_path=cfg.log_path,
+-            num_groups_to_log=cfg.num_groups_to_log,
+-            f_name=f"train_iteration_{i_batch:06d}",
+-            scope_name=f"RL Iteration {i_batch}",
+-        ):
+-            # Note: do_remove_constant_reward_groups=False here because we remove
+-            # constant reward groups after all rollouts are collected (below)
+-            trajectory_groups_P = await gather_with_progress(
+-                (
+-                    do_group_rollout_and_filter_constant_reward(
+-                        sampling_client,
+-                        builder,
+-                        max_tokens=cfg.max_tokens,
+-                        temperature=cfg.temperature,
+-                        do_remove_constant_reward_groups=False,
+-                        enable_logging=i < cfg.num_groups_to_log,
+-                    )
+-                    for i, builder in enumerate(env_group_builders_P)
+-                ),
+-                desc=f"Sampling batch {i_batch}",
+-            )
+-
+-        if cfg.remove_constant_reward_groups:
+-            trajectory_groups_P = remove_constant_reward_groups(trajectory_groups_P)
+-
+-        # Train step
+-        sampling_client, train_step_metrics = await do_train_step_and_get_sampling_client(
+-            cfg,
+-            i_batch,
+-            training_client,
+-            service_client,
+-            tokenizer,
+-            env_group_builders_P,
+-            trajectory_groups_P,
+-        )
+-
+-        # Log metrics
+-        metrics.update(train_step_metrics)
+-        metrics["time/total"] = time.time() - t_start
+-        ml_logger.log_metrics(metrics, step=i_batch)
+-
+-
+-@scope
+-async def main(
+-    cfg: Config,
+-):
+-    """Main training loop for MDP RL."""
+-    ml_logger = ml_log.setup_logging(
+-        log_dir=cfg.log_path,
+-        wandb_project=cfg.wandb_project,
+-        config=cfg,
+-        wandb_name=cfg.wandb_name,
+-    )
+-    if cfg.enable_trace:
+-        # Get and rename the current (main) task
+-        current_task = asyncio.current_task()
+-        if current_task is not None:
+-            current_task.set_name("main")
+-        trace_events_path = os.path.join(cfg.log_path, "trace_events.jsonl")
+-        logger.info(f"Tracing is enabled. Trace events will be saved to {trace_events_path}")
+-        logger.info(
+-            f"Run `python tinker_cookbook/utils/trace.py {trace_events_path} trace.json` and visualize in chrome://tracing or https://ui.perfetto.dev/"
+-        )
+-        trace_init(output_file=trace_events_path)
+-
+-    logging.getLogger("httpx").setLevel(logging.WARNING)
+-    logging.getLogger("pylatexenc").setLevel(logging.WARNING)
+-
+-    resume_info = checkpoint_utils.get_last_checkpoint(cfg.log_path)
+-    if resume_info:
+-        start_batch = resume_info["batch"]
+-    else:
+-        start_batch = 0
+-
+-    service_client = tinker.ServiceClient(base_url=cfg.base_url)
+-    if resume_info:
+-        # Resuming interrupted training - load optimizer state for proper continuation
+-        training_client = (
+-            await service_client.create_training_client_from_state_with_optimizer_async(
+-                resume_info["state_path"]
+-            )
+-        )
+-        logger.info(f"Resumed training from {resume_info['state_path']}")
+-    elif cfg.load_checkpoint_path:
+-        # Starting fresh from a checkpoint - load weights only (fresh optimizer)
+-        training_client = await service_client.create_training_client_from_state_async(
+-            cfg.load_checkpoint_path
+-        )
+-        logger.info(f"Loaded weights from {cfg.load_checkpoint_path}")
+-    else:
+-        training_client = await service_client.create_lora_training_client_async(
+-            cfg.model_name, rank=cfg.lora_rank
+-        )
+-
+-    # Get tokenizer from training client
+-    tokenizer = training_client.get_tokenizer()
+-
+-    # Create dataset from thunk
+-    dataset, maybe_test_dataset = await cfg.dataset_builder()
+-    evaluators = [evaluator() for evaluator in cfg.evaluator_builders]
+-    if maybe_test_dataset is not None:
+-        evaluators.append(RLTestSetEvaluator(maybe_test_dataset, max_tokens=cfg.max_tokens))
+-
+-    num_batches = len(dataset)
+-    logger.info(f"Will train on {num_batches} batches")
+-
+-    # Training loop
+-    if cfg.async_config is not None:
+-        training_func = do_async_training
+-    elif cfg.stream_minibatch_config is not None:
+-        training_func = do_sync_training_with_stream_minibatch
+-    else:
+-        training_func = do_sync_training
+-    await training_func(
+-        start_batch=start_batch,
+-        end_batch=num_batches,
+-        num_batches=num_batches,
+-        cfg=cfg,
+-        training_client=training_client,
+-        service_client=service_client,
+-        evaluators=evaluators,
+-        dataset=dataset,
+-        ml_logger=ml_logger,
+-        tokenizer=tokenizer,
+-    )
+-
+-    # Save final checkpoint
+-    if start_batch < num_batches:
+-        _ = await checkpoint_utils.save_checkpoint_async(
+-            training_client=training_client,
+-            name="final",
+-            log_path=cfg.log_path,
+-            kind="both",
+-            loop_state={"batch": num_batches},
+-        )
+-    else:
+-        logger.info("Training was already complete; nothing to do")
+-
+-    # Cleanup
+-    ml_logger.close()
+-    logger.info("Training completed successfully")
++from tinker_cookbook.sandbox.rl.train import *  # noqa: F401,F403
+diff --git a/tinker_cookbook/rl/types.py b/tinker_cookbook/rl/types.py
+index 49e2acd..4cea764 100644
+--- a/tinker_cookbook/rl/types.py
++++ b/tinker_cookbook/rl/types.py
+@@ -1,178 +1 @@
+-"""
+-Basic interfaces and types for reinforcement learning.
+-"""
+-
+-from abc import ABC, abstractmethod
+-from dataclasses import dataclass, field
+-from typing import Sequence, TypeAlias
+-
+-import chz
+-import tinker
+-from tinker_cookbook.completers import StopCondition, TokensWithLogprobs
+-from tinker_cookbook.utils.misc_utils import safezip
+-
+-Action: TypeAlias = list[int]
+-Observation: TypeAlias = tinker.ModelInput
+-Logprobs: TypeAlias = list[float]
+-Metrics: TypeAlias = dict[str, float | int]
+-Logs: TypeAlias = dict[str, str | int | float]
+-
+-
+-@dataclass
+-class StepResult:
+-    """Result returned by Env.step()."""
+-
+-    reward: float
+-    """Immediate reward for this step."""
+-    episode_done: bool
+-    """Whether the episode has ended."""
+-    next_observation: Observation
+-    """Observation for the next step (or final observation if episode_done)."""
+-    next_stop_condition: StopCondition
+-    """Stop condition for the next generation."""
+-    metrics: Metrics = field(default_factory=dict)
+-    """Numeric values aggregated and reported in training logs (e.g., timing, counts)."""
+-    logs: Logs = field(default_factory=dict)
+-    """Diagnostic info for display/debugging tools (not aggregated like metrics)."""
+-
+-
+-@dataclass
+-class Transition:
+-    """A single (observation, action, reward) tuple from a trajectory."""
+-
+-    ob: Observation
+-    """Observation the agent saw before taking the action."""
+-    ac: TokensWithLogprobs
+-    """Action taken (tokens and their log-probabilities)."""
+-    reward: float
+-    """Immediate reward received after taking the action."""
+-    episode_done: bool
+-    """Whether this transition ended the episode."""
+-    metrics: Metrics = field(default_factory=dict)
+-    """Numeric values aggregated and reported in training logs."""
+-    logs: Logs = field(default_factory=dict)
+-    """Diagnostic info for display/debugging tools (not aggregated like metrics)."""
+-
+-
+-class Env(ABC):
+-    """
+-    Stateful environment that a single agent interacts with.
+-    Discard after running for one episode.
+-    """
+-
+-    @abstractmethod
+-    async def initial_observation(self) -> tuple[Observation, StopCondition]:
+-        pass
+-
+-    @abstractmethod
+-    async def step(self, action: Action) -> StepResult:
+-        pass
+-
+-
+-@dataclass(frozen=True)
+-class Trajectory:
+-    """
+-    A sequence of observations and actions, resulting from running a single agent in a single
+-    environment.
+-    """
+-
+-    transitions: list[Transition]
+-    final_ob: Observation
+-
+-
+-class EnvGroupBuilder(ABC):
+-    """
+-    Builds a group of environments. The group will be used in the following way:
+-
+-    - Algorithms like GRPO will center rewards across the group.
+-    - The reward function (compute_group_rewards) has access to the trajectories from the
+-      whole group, even though many reward functions will evaluate each one independently.
+-
+-      - For example, this enables us to use pairwise reward models that look at a pair of
+-        trajectories at a time. With such a reward model, we effectively have a multi-agent
+-        environment, where the agents are playing a zero-sum game.
+-
+-    Groups can be used in two ways, in practice:
+-
+-    - To define a multi-agent environment
+-    - As a part of the *algorithm* (e.g. GRPO), when dealing with single-agent tasks.
+-    """
+-
+-    @abstractmethod
+-    async def make_envs(self) -> Sequence[Env]:
+-        pass
+-
+-    async def compute_group_rewards(
+-        self, trajectory_group: list[Trajectory], env_group: Sequence[Env]
+-    ) -> list[tuple[float, Metrics]]:
+-        """
+-        This computes a final reward for each trajectory that depends on the whole group.
+-        Note that there are also per-timestep rewards returned by the Env.step() method.
+-        The total reward is the sum of the per-timestep rewards plus the final group reward
+-        computed here. Defining a group reward is optional -- by default, the group reward
+-        is 0 and we only use the per-timestep rewards.
+-        """
+-        return [(0.0, {}) for _ in trajectory_group]
+-
+-    def logging_tags(self) -> list[str]:
+-        """
+-        This is just used for logging. We often want to aggregate metrics (like rewards
+-        or episode lengths) per-environment, or across a group of related environments.
+-
+-        Most commonly, you'd return a short name for the environment, such as ['gsm'] for
+-        grade school math. You also might want a few tags at different levels of granularity,
+-        e.g., ['gsm', 'math', 'rlvr']
+-        """
+-        return []
+-
+-
+-@dataclass
+-class TrajectoryGroup:
+-    """
+-    A group of trajectories, resulting from instantiating a group of environments using an
+-    EnvGroupBuilder, doing a rollout for each environment, and computing the rewards.
+-    """
+-
+-    trajectories_G: list[Trajectory]
+-    final_rewards_G: list[float]  # computed by the EnvGroupBuilder, looking at whole group
+-    metrics_G: list[Metrics]
+-
+-    def get_total_rewards(self) -> list[float]:
+-        """
+-        Get the total reward (i.e., the return) of each trajectory (episode) in the group.
+-        The total reward is the sum of the per-timestep rewards plus the final group reward
+-        computed by the EnvGroupBuilder.
+-        """
+-        return [
+-            sum(transition.reward for transition in trajectory.transitions) + final_reward
+-            for trajectory, final_reward in safezip(self.trajectories_G, self.final_rewards_G)
+-        ]
+-
+-
+-class RLDataset(ABC):
+-    """
+-    A dataset that produces batches of EnvGroups. This is the kind of dataset used by
+-    training algorithms.
+-    """
+-
+-    @abstractmethod
+-    def get_batch(self, index: int) -> Sequence[EnvGroupBuilder]:
+-        pass
+-
+-    @abstractmethod
+-    def __len__(self) -> int:
+-        pass
+-
+-
+-@chz.chz
+-class RLDatasetBuilder:
+-    """
+-    Abstract class for building RL datasets.
+-    """
+-
+-    @abstractmethod
+-    async def __call__(self) -> tuple[RLDataset, RLDataset | None]:
+-        """
+-        Return RLDataset (for training) and an optional RL dataset for testing
+-        """
+-        pass
++from tinker_cookbook.sandbox.rl.types import *  # noqa: F401,F403

@@ -28,7 +28,7 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
         # tinker_cookbook/example_data/conversations.jsonl
     return chz.Blueprint(train.Config).apply(
         {
-            "log_path": "/tmp/tinker-examples/sl_basic",
+            "log_path": "..\training_logs\sl_basic_NoRobots",
             "model_name": model_name,
             "dataset_builder": dataset,
             "learning_rate": 2e-4,

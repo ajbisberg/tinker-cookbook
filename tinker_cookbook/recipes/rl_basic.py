@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 
 import chz
 import sys
@@ -6,10 +7,11 @@ from tinker_cookbook import cli_utils, model_info
 from tinker_cookbook.recipes.math_rl.math_env import Gsm8kDatasetBuilder
 from tinker_cookbook.rl import train
 
-
 def build_config_blueprint() -> chz.Blueprint[train.Config]:
     model_name = "meta-llama/Llama-3.1-8B"
     renderer_name = model_info.get_recommended_renderer_name(model_name)
+    log_path = str((Path(__file__).resolve().parent.parent / "training_logs" / "rl_basic"))
+    # https://huggingface.co/datasets/openai/gsm8k
     builder = Gsm8kDatasetBuilder(
         batch_size=128,
         group_size=16,
@@ -20,11 +22,11 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
     return chz.Blueprint(train.Config).apply(
         {
             "model_name": model_name,
-            "log_path": "/tmp/tinker-examples/rl_basic",
+            "log_path": log_path,
             "dataset_builder": builder,
             "learning_rate": 4e-5,
             "max_tokens": 256,
-            "eval_every": 0,
+            "eval_every": 5,
         }
     )
 

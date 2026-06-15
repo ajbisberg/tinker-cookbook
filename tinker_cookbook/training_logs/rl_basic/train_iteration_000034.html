@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 34</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 34  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:54:00  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each costing $10. The total cost of meals is 3 * $10 = $30. They then had a scoop of ice cream each. Let the cost of a scoop of ice cream be x. Total cost of 3 scoops of ice cream is 3 * x. Given that $45 was enough to pay for everything, we have 30 + 3x = 45. Solving for x, we get 3x = 45 - 30 = 15. x = 15 / 3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each costing $10. The total cost of meals = 3 * 10 = 30. After this, they had a scoop of ice cream each. Let the cost of a scoop of ice cream be x. Total cost of 3 scoops of ice cream = 3 * x. Given that Elisa had $45 and it was enough to pay for everything, 30 + 3x = 45. 3x = 45 - 30. 3x = 15. x = 15/3. x = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her 2 friends ordered 3 meals, each meal costs $10. Therefore, the total cost of 3 meals = 3 x $10 = $30. Each of them had a scoop of ice cream. Therefore, 3 scoops were ordered. Let the cost of a scoop of ice cream be x. Given that $45 is enough to pay for everything, 30 + 3x = 45 3x = 45 - 30 x = 15 Therefore, the cost of a scoop of ice cream is $15. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered a meal each that cost $10. Total cost of 3 meals = 3 * 10 = 30. After the meal, they had a scoop of the same kind of ice cream. Let the cost of a scoop of ice cream be x. Total cost of 3 scoops = 3 * x. The $45 Elisa had was enough to pay for everything, which means 30 + 3x = 45. 3x = 45 - 30 = 15. x = 15/3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her 2 friends ordered 3 meals, each meal costing $10. Therefore, the total cost of 3 meals = 3 * 10 = $30. After having meals, they each had a scoop of ice cream. Therefore, 3 scoops of ice cream were ordered. Let the cost of 1 scoop of ice cream be x. The total cost of 3 scoops of ice cream = 3 * x. The total cost of meals and ice creams = 30 + 3x. Given that Elisa had $45 and it was enough to pay for everything, 30 + 3x = 45. 3x = 15. x = 5. The cost of 1 scoop of ice cream = $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each meal costing $10. The total cost of 3 meals = 3 * 10 = 30. After having dinner, they each had a scoop of ice cream. Therefore, 3 scoops of ice cream were ordered. Let the cost of a scoop of ice cream be x. The total cost of 3 scoops of ice cream = 3 * x. Given that Elisa had $45 and it was enough to pay for everything, 30 + 3x = 45. 3x = 45 - 30 = 15. x = 15/3 = 5. Therefore, the cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each costing $10. The total cost of 3 meals = 3 * $10 = $30. Each of them had a scoop of ice cream. The total cost of 3 scoops of ice cream = 3 * x (where x is the cost of a scoop). Given that the $45 Elisa had was enough to pay for everything. 30 + 3x = 45 3x = 45 - 30 3x = 15 x = 15 / 3 x = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each worth $10. The total cost of 3 meals = 3 * 10 = 30. After this, they had a scoop of the same kind of ice cream. Let the cost of a scoop of ice cream be x. The total cost of 3 scoops = 3 * x. Given that Elisa had $45 and it was enough to pay for everything, 30 + 3x = 45. 3x = 45 - 30. 3x = 15. x = 15 / 3. x = 5. The cost of a scoop of ice cream = 5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. This means the total bill for 3 people = 3 * $10 = $30. Afterwards, they each had a scoop of the same kind of ice cream. Therefore, the total bill for 3 scoops of ice cream = 3 * x (where x is the cost of a scoop of ice cream). Given that $45 was enough to pay for everything, we have 30 + 3x = 45. Therefore, 3x = 45 - 30 = 15. Hence, x = 15/3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each costing $10. The total cost of meals = 3 * $10 = $30. Each of them had a scoop of ice cream. So, the total number of ice creams = 3. Let the cost of a scoop of ice cream be x. The total cost of 3 scoops of ice cream = 3 * x. Given that $45 was enough to pay for everything, we have 30 + 3x = 45. Solving for x, we get 3x = 45 - 30 = 15. x = 15/3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her 2 friends ordered 3 meals, each meal costing $10. Total cost of 3 meals = 3 * 10 = 30. Each of them had a scoop of ice cream. Total number of scoops = 3. Let the cost of a scoop of ice cream be x. 45 is enough to pay for everything, which includes the cost of 3 meals and 3 scoops of ice cream. 30 + 3x = 45 3x = 45 - 30 3x = 15 x = 15 / 3 x = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends each ordered a meal worth $10. The total cost of meals of 3 people = 3 * 10 = 30. After the meals, they each had a scoop of the same kind of ice cream. The total cost of 3 scoops of ice cream = 3 * x (where x is the cost of 1 scoop). Given that $45 was enough to pay for everything, 30 + 3*x = 45. 3*x = 45 - 30 = 15. x = 15/3 = 5. The cost of 1 scoop of ice cream = 5$. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered meals worth $10 each. Total meal cost = 3 * 10 = 30. After the meal, they each had a scoop of the same kind of ice cream. Total ice cream cost = 3 * X (where X is the cost of a scoop of ice cream). Given that Elisa had $45 and it was enough to pay for everything, 45 = 30 + 3*X 45 = 30 + 3X 15 = 3X X = 15/3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered 3 meals, each costing $10. The total cost of 3 meals = 3 * 10 = 30. They had a scoop of the same kind of ice cream each. The total cost of 3 scoops of ice cream = 3 * X. Given that the $45 Elisa had was enough to pay for everything, 30 + 3 * X = 45. 3 * X = 45 - 30 = 15. X = 15 / 3 = 5. The cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered meals worth $10 each. The total bill for 3 meals = 3 * 10 = $30. After this, they had a scoop of ice cream each. Let the cost of a scoop of ice cream be x. Total cost of 3 scoops of ice cream = 3 * x. Given that Elisa had $45 and it was enough to pay for everything, 30 + 3x = 45. 3x = 45 - 30. 3x = 15. x = 15/3. x = 5. Hence, the cost of a scoop of ice cream is $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Elisa and her two friends went out to dinner. Each of them ordered a meal worth $10. Afterwards, they each had a scoop of the same kind of ice cream. If the $45 Elisa had was enough to pay for everything, what was the cost of a scoop of ice cream? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Elisa and her two friends ordered meals worth $10 each. Total cost of 3 meals = 3 x $10 = $30. Cost of ice cream for 3 people = $45 - $30 = $15. Cost of 1 scoop of ice cream = $15 / 3 = $5. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+142                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+145                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+122                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+166                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+158                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+149                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+155                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+154                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+146                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+141                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+133                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+146                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+170                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read = 2 x 2 x 20 + 2 = 82 pages. Total pages read by Jairus and Arniel = 20 + 82 = 102 pages. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read = 2 * 2 * 20 + 2 = 80 + 2 = 82. Total number of pages read = 20 + 82 = 102. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Let the number of pages Jairus read be x = 20. Then, the number of pages Arniel read = 2 + 2 * 2x = 2 + 2 * 40 = 2 + 80 = 82. Total pages read = 20 + 82 = 102. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Let the number of pages Jairus read be x = 20. Then, the number of pages Arniel read = 2 + 2 * 2x = 2 + 2 * 40 = 82. Total number of pages read by Jairus and Arniel = 20 + 82 = 102. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read = 2 * 2 * 20 + 2 = 82 pages. Total pages read by Jairus and Arniel = 20 + 82 = 102 pages. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Since Jairus read 20 pages, Arniel will read 2 more than twice 20 i.e., 2 + 2 * 2 * 20 = 2 + 80 = 82 pages. Therefore, the total number of pages read by Jairus and Arniel = 20 + 82 = 102 pages. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Number of pages read by Arniel = 2 + 2 * 20 = 2 + 40 = 42. Total number of pages read by Jairus and Arniel = 20 + 42 = 62. \boxed{62}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number of pages Jairus read. Let the number of pages Jairus read be x = 20. Number of pages Arniel read = 2 + 2 * 20 = 44. Total number of pages read = 20 + 44 = 64. \boxed{64}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Let the number of pages Jairus read be x = 20. Arniel read 2 + 2 * 2x = 2 + 2 * 40 = 84 pages. Total number of pages read by Jairus and Arniel = 20 + 84 = 104 pages. \boxed{104}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Let the number of pages read by Jairus = 20. Let the number of pages read by Arniel = 2 * 2 * 20 = 80. Total number of pages read by Jairus and Arniel = 20 + 80 = 100. \boxed{100}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages, Arniel read 2 more than twice the number pages Jairus read. Let the number of pages Jairus read be x = 20. Arniel reads 2 + 2 * 20 = 2 + 40 = 42 pages. Total pages read = 20 + 42 = 62. \boxed{62}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Let the number of pages read by Jairus = 20. Let the number of pages read by Arniel = 2 × 2 × 20 = 80. Total number of pages read = 20 + 80 = 100. \boxed{100}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. Given that Jairus read 20 pages, Arniel will read 2 more than twice 20 i.e., 2 + 2 * 2 * 20 = 2 + 80 = 82 pages. Total pages read by Jairus and Arniel = 20 + 82 = 102 pages. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read = 2 x 2 x 20 + 2 = 82 pages. Total pages read by both = 20 + 82 = 102 pages. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read. i.e., Arniel read 2 + 2 * 20 = 2 + 40 = 42 pages. Total number of pages read by Jairus and Arniel = 20 + 42 = 62 pages. \boxed{62}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jairus read 20 pages of the newspaper. Arniel read 2 more than twice the number of pages Jairus read. How many pages have they read altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jairus read 20 pages. Arniel read 2 more than twice the number pages Jairus read = 2 + 2 * 20 = 2 + 40 = 42. Total number of pages read by Jairus and Arniel = 20 + 42 = 62. \boxed{62}          </p>
+          <p class="lt-p">
+Reference Answer: 62          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+70                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+68                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+99                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+103                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+70                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+105                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+83                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+92                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+84                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+101                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+64                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+146                </td>
+                <td>
+73                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total number of flowers = 96. Given, number of green flowers = 9. Number of red flowers = 3 times the number of green flowers = 3 * 9 = 27. Number of blue flowers = 50% of 96 = 48. We know that, Total number of flowers = 96. Number of green flowers = 9. Number of red flowers = 27. Number of blue flowers = 48. Number of yellow flowers = 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 96 flowers in total. Given, there are 9 green flowers. Red flowers are three times more than green flowers, i.e. 9 * 3 = 27 red flowers. Blue flowers make up to 50% of the total flower count, i.e. 96 * 50/100 = 48 blue flowers. Adding the green, red, and blue flowers, we get 9 + 27 + 48 = 84 flowers. Since the total flower count is 96, the remaining 96 - 84 = 12 flowers are yellow. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers = 96. The number of green flowers = 9. The number number of red flowers = 3 * 9 = 27. The number of blue flowers = 50% of 96 = 48. The number of yellow flowers = 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 96 flowers in total. Given, there are 9 green flowers. Red flowers are three times more than green flowers, hence red flowers = 9 x 3 = 27. The total number of flowers is 96, blue flowers make up 50% of 96 = 48. Therefore, green flowers = 9, red flowers = 27, blue flowers = 48. The total number = 96, green flowers + red flowers + blue flowers + yellow flowers = 96. 9 + 27 + 48 + yellow flowers = 96. Yellow flowers = 96 - (9 + 27 + 48) = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total number of flowers = 96. Given that there are 9 green flowers. Red flowers are three times the count of green flowers = 9 x 3 = 27 red flowers. Blue flowers make up to 50% of the total flower count = 96 x 50/100 = 48 blue flowers. Green flowers = 9, red flowers = 27, blue flowers = 48. Total flowers - Green flowers - Red flowers - Blue flowers = 96 - 9 - 27 - 48 = 12 yellow flowers. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers is 96. The number of green flowers is 9. The three times more red flowers than green flowers means red flowers = 3 * 9 = 27. The blue flowers make up 50% of the total flower count. Therefore, blue flowers = 50% * 96 = 48. The remaining flowers are yellow flowers. Yellow flowers = 96 - 9 - 27 - 48 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total number of flowers = 96. Given that there are 9 green flowers. Hence, the number of red flowers = 3 * number of green flowers = 3 * 9 = 27. Given that the blue flowers make up to 50% of the total flower count. Hence, the number of blue flowers = 0.5 * 96 = 48. The number of yellow flowers = 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total number of flowers = 96. Given that there are 9 green flowers, and there are three times more red flowers than green flowers. So, red flowers = 3 x 9 = 27. Total number = 9 + 27 = 36. Given that blue flowers make up to 50% of the total flower count. Blue flowers = 50% of 96 = 48. Total = 36 + 48 = 84. Since, total flowers = 96, yellow flowers = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers = 96 The number of green flowers = 9 The number number of red flowers = 3 × 9 = 27 The number of blue flowers = 50% of 96 = 48 The number of yellow flowers = 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers is given as 96. There are 9 green flowers. Red flowers are three times the number of green flowers, so the number of red flowers = 9 * 3 = 27. The number of blue flowers = 50% of 96 = 48. Sum of number of green, red, and blue flowers = 9 + 27 + 48 = 84. The number of yellow flowers = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers = 96. Given that the number of green flowers = 9, and the number of red flowers = 3 * 9 = 27. The total number of flowers = 9 + 27 + blue flowers + yellow flowers. It is given that the blue flowers make up 50% of the total flower count. Hence, the number of blue flowers = 0.5 * 96 = 48. The total number of flowers = 9 + 27 + 48 + yellow flowers = 84 + yellow flowers. The total number of flowers = 96. Hence, 96 = 84 + yellow flowers. yellow flowers = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers are 96. Given, there are 9 green flowers. Red flowers are three times more than green flowers. So, red flowers are 3 * 9 = 27. The blue flowers make up 50% of the total flower count. So, blue flowers are 0.5 * 96 = 48. The remaining flowers are yellow flowers. Yellow flowers are 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers = 96. The number of green flowers = 9. The number of red flowers = 3 times the number of green flowers = 3 * 9 = 27. The number of blue flowers = 50% of 96 = 50/100 * 96 = 48. Sum of green, red, and blue flowers = 9 + 27 + 48 = 84. Therefore, the number of yellow flowers = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers = 96. Given, the number of green flowers = 9. The number of red flowers = 3 * number of green flowers = 3 * 9 = 27. The number of blue flowers = 50% of 96 = 50/100 * 96 = 48. The number of yellow flowers = 96 - (9+27+48) = 96 - 84 = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The total number of flowers is 96. Given, there are 9 green flowers. Red flowers are three times more than green flowers. Therefore, red flowers = 9 x 3 = 27. Blue flowers are 50% of the total flower count. Therefore, blue flowers = 96 x 50/100 = 48. Given, green flowers = 9, red flowers = 27, blue flowers = 48. Hence, yellow flowers = 96 - (9 + 27 + 48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: In a school garden, there are flowers in different colors. In total there are 96 flowers of four colors: green, red, blue, and yellow. There are 9 green flowers and three times more red flowers. Blue flowers make up to 50% of the total flower count. How many yellow flowers are there? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 96 flowers in total. Given, there are 9 green flowers. Red flowers are three times more than green flowers, i.e. 9 x 3 = 27 red flowers. The number of blue flowers is 50% of 96, i.e. 0.5 x 96 = 48 blue flowers. Therefore, the number of green flowers = 9, red flowers = 27, blue flowers = 48. The total number of flowers = 96. The number of yellow flowers = 96 - (9+27+48) = 12. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 12          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+120                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+126                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+79                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+152                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+120                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+107                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+122                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+75                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+107                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+154                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+100                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+118                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+175                </td>
+                <td>
+129                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature of the warehouse rose by 8 degrees per hour when the power went out. This means that the temperature increased from the initial temperature (say T1) to a final temperature (say T2) as follows: T2 = T1 + 8*x, where x is the time in hours for which the power was out. Given that the power was out for 3 hours, the temperature rose by 8*3 = 24 degrees. This means that the final temperature after 3 hours, T2 = T1 + 24. The air conditioner is activated and lowers the temperature at a rate of 4 degrees per hour. To bring the temperature from T2 to 43 degrees, the air conditioner needs to lower the temperature from T2 to T3 as follows: T3 = T2 - 4*y, where y is the time in hours for which the air conditioner runs. We have T3 = T2 - 4*y = (T1 + 24) - 4*y. Given that T3 = 43, we get 43 = (T1 + 24) - 4*y. Solving for y, we get y = (T1 + 24 - 43)/-4 =          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour when the power was off. Therefore, after 3 hours, the temperature rose by 8 * 3 = 24 degrees, and the temperature became 24 degrees higher than the initial temperature. Let the initial temperature be T. Then, T + 24 = 43. Solving this equation, we get T = 19. The air conditioner lowers the temperature at the rate of 4 degrees F per hour. Therefore, to decrease the temperature from 43 degrees F to 19 degrees F, it will take (43 - 19)/ 4 = 12 hours. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour for 3 hours, so the temperature rose by 8 * 3 = 24 degrees during these 3 hours. Hence, the temperature is now 24 degrees higher than the set temperature of 43 degrees F. The temperature now is 43 + 24 = 67 degrees F. The air conditioner will lower the temperature at the rate of 4 degrees F per hour. Let the time required to reach 43 degrees F be t hours. During t hours, the temperature will decrease by 4 * t = 4t degrees F. The initial temperature is 67 degrees F, and the final temperature is 43 degrees F. So, the temperature decreases by 67 - 43 = 24 degrees F. 24 = 4t, t = 24/4 = 6 hours. It will take 6 hours for the air conditioner to restore the warehouse to 43 degrees F. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The fruits and vegetables are very sensitive to temperature, so they must be kept cold. The power went off for three hours, during which the temperature rose by 8 degrees per hour. This means that in three hours, the temperature rose by 8*3 = 24 degrees. Hence, the initial temperature after three hours is the original temperature (let&#x27;s assume it is 45 degrees as we need the temperature to be lowered) + 24 degrees = 45 + 24 = 69 degrees. Now, the air conditioner is activated which lowers the temperature at the rate of 4 degrees F per hour. To lower the temperature from 69 degrees to 43 degrees, the time required is (69 - 43)/4 = 26/4 = 6.5 hours. Hence, the total time required is 3 hours (for temperature to rise from 45 degrees to 69 degrees) + 6.5 hours (for temperature to fall from 69 degrees to 43 degrees) = 9.5 hours. \boxed{9.5}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature in the warehouse rose by 8 degrees per hour for 3 hours. So, the temperature in the warehouse became 43 + 3 * 8 = 83 degrees F. Now, the air conditioner lowers the temperature at the rate of 4 degrees F per hour. So, the temperature decreases by 4 degrees F per hour. To make the temperature 43 degrees F, we need to decrease the temperature by 83 - 43 = 40 degrees F. 40 degrees F is decreased at the rate of 4 degrees F per hour. Therefore, it will take 40 / 4 = 10 hours for the air conditioner to restore the warehouse to 43 degrees F. \boxed{10}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour for three hours, so the temperature rose by 8 x 3 = 24 degrees during those three hours. Initially, the temperature was cold enough, let&#x27;s assume it was 20 degrees F. After three hours, the temperature became 20 + 24 = 44 degrees F. Now, the air conditioner lowers the temperature at the rate of 4 degrees F per hour. To bring the temperature down to 43 degrees F, we need to reduce the temperature by 44 - 43 = 1 degree F. The time taken to reduce 1 degree F will be 1 / 4 = 0.25 hours. Therefore, the total time taken to reach 43 degrees F will be 0.25 hours. \boxed{0.25}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour for 3 hours. So, the temperature rose by 8 x 3 = 24 degrees, and the temperature increased from the initial temperature to 24 degrees more. Let the initial temperature be T. Then, T + 24 = 43. So, T = 19. The air conditioner lowers the temperature at the rate of 4 degrees F per hour. To reduce the temperature from 43 degrees F to 19 degrees F, it will take (43 - 19)/4 = 12/4 = 3 hours. Hence, it will take 3 hours for the air conditioner to restore the warehouse to 43 degrees F. \boxed{3}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour for three hours. Hence, the temperature rose by 8 x 3 = 24 degrees during the 3 hours when the power was off. Initially, the temperature was T. After three hours when the power was off, the temperature became T + 24 degrees. Now, the power is back on, and the air conditioner lowers the temperature at the rate of 4 degrees per hour. Let t be the time, in hours, it will take for the air conditioner to lower the temperature to 43 degrees. During this time, the temperature decreases by 4 degrees per hour. Hence, the temperature becomes T + 24 - 4t = 43. Solving for t, we get t = (T + 24 - 43)/-4 = (T - 19)/-4 = (T - 19)/-4 = 19 - T/4. Since the initial temperature is unknown, we cannot provide the exact time. However, we can provide an upper bound on the time required. The minimum initial temperature would be 43 degrees, and in this case, the temperature becomes 43 + 24 = 67 degrees when the power is off for 3 hours. When          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The power went out and the air conditioner was turned off for three hours. During this three hours, the temperature rose by 8 degrees per hour. So, the temperature rose by 8 x 3 = 24 degrees. Initially, the temperature was unknown. Let&#x27;s assume the initial temperature was T initially. So, the temperature after three hours is T + 24 degrees. Now, the power is back on and the air conditioner is turned on to lower the temperature at the rate of 4 degrees per hour. To bring the temperature back to 43 degrees F, we need to lower the temperature by 24 + (T - 43) degrees. This lowering happens at a rate of 4 degrees per hour. So, the time required to lower the temperature by 24 + (T - 43) degrees is (24 + (T - 43)) / 4 = (24 + T - 43) / 4 = (24 + T - 43) / 4 = (T - 19) / 4. \boxed{4.25}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Roy’s warehouse stores produce that are sensitive to temperature. The temperature rose by 8 degrees per hour when the power went out. When the power came back on, the air conditioner lowered the temperature at a rate of 4 degrees per hour. We need to find the amount of time it will take for the air conditioner to restore the warehouse to 43 degrees F. Let the initial temperature be T1 = T + 8 * 3 = T + 24 (where T is the initial temperature before the power went out). The rate of cooling is 4 degrees per hour. The final temperature is 43 degrees F. The temperature changes from T1 to 43 degrees F. Using the formula T2 = T1 + R * t (where T2 is the final temperature, T1 is the initial temperature, R is the rate of cooling, and t is the time taken), we get 43 = T1 + 4 * t. Substituting T1 = T + 24, we get 43 = T + 24 + 4 * t. Solving for t, we get 43 = T + 24 + 4 * t. 19 = 24 + 4 * t. -5 = 4          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The power went off and the temperature rose by 8 degrees per hour for 3 hours. So, the temperature increased by 8 x 3 = 24 degrees during these 3 hours. The initial temperature is unknown, but let&#x27;s assume it was 20 degrees F. So, the temperature after 3 hours is 20 + 24 = 44 degrees F. Now, the power is restored and the air conditioner lowers the temperature at the rate of 4 degrees F per hour. To restore the temperature to 43 degrees F, we need the temperature to reduce by 44 - 43 = 1 degree F. This will take 1/4 = 0.25 hours. \boxed{0.25}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature initially was T1 = 0 degrees F. After three hours, the temperature rose by 8 degrees per hour for 3 hours, which gives T2 = 0 + 8 * 3 = 24 degrees F. Now, the air conditioner is turned on, and it lowers the temperature at the rate of 4 degrees F per hour. The temperature at any time t is T3 = 24 - 4t. For the temperature to become 43 degrees F, we equate T3 = 43, which gives 24 - 4t = 43. Solving for t, we get t = 4.25 hours. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The power went out and the air conditioner was turned off for 3 hours. During this time, the temperature rose by 8 degrees per hour. Therefore, the temperature increased by 8 x 3 = 24 degrees during these 3 hours. Thus, the temperature rose from an initial temperature of T to T + 24 = 43. We get T = 19 degrees. The air conditioner will lower the temperature at a rate of 4 degrees F per hour. Therefore, to bring the temperature from 19 degrees to 43 degrees, it will take a time of (43 - 19) / 4 = 12 hours. \boxed{12}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour. Hence, the temperature rose by 8 × 3 = 24 degrees during the three hours when the power was off. When the power came back on, the air conditioner lowered the temperature at the rate of 4 degrees F per hour. To restore the warehouse to 43 degrees F, the temperature needs to decrease by 43 – (43 - 24) = 7 degrees. This can be achieved in 7 / 4 = 1.75 hours. Hence, a total of 3 + 1.75 = 4.75 hours is required to restore the warehouse to 43 degrees F. \boxed{4}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The temperature rose by 8 degrees per hour when the air conditioner was turned off for three hours. The temperature rose by 8 x 3 = 24 degrees in three hours. The initial temperature was unknown, but let&#x27;s assume it was 40 degrees F. The final temperature after three hours when the air conditioner was turned off is 40 + 24 = 64 degrees F. When the power came back on, the air conditioner lowered the temperature at a rate of 4 degrees F per hour. To bring the temperature back to 43 degrees F, the temperature needs to be lowered by 64 - 43 = 21 degrees F. The time required to lower the temperature by 21 degrees F at a rate of 4 degrees F per hour is 21 / 4 = 5.25 hours. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Roy owns a refrigerated warehouse where he stores produce before selling it at the farmer’s market.  The fruits and vegetables he stores are very sensitive to temperature, and he must keep them all cold or they will spoil.  One day, the power went out and the air conditioner was turned off for three hours, during which time the temperature rose by 8 degrees per hour.  If Roy gets the power back on, it will activate the air conditioner to lower the temperature at the rate of 4 degrees F per hour.  What is the amount of time, in hours, it will take for the air conditioner to restore the warehouse to 43 degrees F? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Roy&#x27;s warehouse stores fruits and vegetables that are sensitive to temperature. The temperature in the warehouse rose by 8 degrees per hour when the power went out. Once the power was restored, the air conditioner started working and lowered the temperature by 4 degrees per hour. We are asked to find the time taken for the air conditioner to restore the warehouse to 43 degrees F. Let the initial temperature be T1 = 70 degrees F (since the temperature rose by 8 degrees per hour for 3 hours, the temperature became 70 degrees F after 3 hours). The rate of temperature decrease is 4 degrees F per hour. The final temperature is T2 = 43 degrees F. The temperature decreases from T1 = 70 degrees F to T2 = 43 degrees F. The time taken for this decrease can be found using the equation: T2 = T1 + rt, where r is the rate of temperature decrease, which is 4 degrees F per hour. Substituting the values, 43 = 70 + 4t. Solving for t, we get t = 9 hours. \boxed{9}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+135                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+202                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+220                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+150                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+168                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+149                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+224                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+152                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+144                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+139                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+161                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+174                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+243                </td>
+                <td>
+235                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

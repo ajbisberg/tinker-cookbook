@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 58</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 58  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T23:10:48  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: They started dating 3 years before they got married. They got married in 2005. Thus they started dating in 2002. They met 2 years before they started dating. They met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna got married in the year 2005. They started dating 3 years before marriage i.e. 2002. They met 2 years before dating i.e. 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: They got married in 2005. They started dating 3 years before they got married i.e., in 2002. They met 2 years before they started dating i.e., in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. Therefore, they started dating in 2002. They met 2 years before that i.e., in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005 which is 20 years from 2025. So they started dating in 2005 - 3 = 2002. They met 2 years before they started dating. So they met in 2002 - 2 = 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they got married. They got married in 2005. Since they got married in 2005, they met in 2003. \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. So, they started dating in 2002. They met 2 years before they started dating. So, they met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. So they started dating in 2002. They met 2 years before they started dating. So they met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. Thus they started dating in 2002. They met 2 years before they started dating. They met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they got married. They got married in 2005. So they met in 2003. \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. They started dating in 2002. They met 2 years before they started dating. They met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they started dating. They started dating 3 years before they got married. They got married in 2005. So they met in 2003. \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna started dating 3 years before they got married. They got married in 2005. So, they started dating in 2002. They met 2 years before they started dating. So, they met in 2000. \boxed{2000}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they got married. They got married in 2005. So they met in 2003. \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they started dating. They started dating 3 years before they got married. They got married in 2005(2025 - 20). So, they met in 2003(2005-3-2). \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Tim and Donna will celebrate their 20th wedding anniversary in 2025.  They started dating 3 years before they got married and met 2 years before that.  When did they meet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Tim and Donna met 2 years before they got married. They got married in 2005. So, they met in 2003. \boxed{2003}          </p>
+          <p class="lt-p">
+Reference Answer: 2000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+53                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+49                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+51                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+54                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+79                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+44                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+58                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+56                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+55                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+36                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+54                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+47                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+58                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+36                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+61                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+37                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York and flies for 4 hours to Chicago. The flight time from New York to Chicago is 4 hours. The plane stays at the port in Chicago for 1 hour. The plane departs for Miami from Chicago. The flight time from Chicago to Miami is 3 * 4 = 12 hours. The total time taken to travel from New York to Miami is 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York City to Chicago. It flies for 4 hours. The time to reach Chicago is 4 hours. It stays at the port for 1 hour in Chicago. It then departs from Chicago to Miami. Since the time taken to fly from New York to Chicago is 4 hours, the time taken to fly from Chicago to Miami = 3 * 4 = 12 hours. Total time taken = 4 hours (from New York to Chicago) + 1 hour (stay at Chicago) + 12 hours (from Chicago to Miami) = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York and flies for 4 hours to Chicago. The flight time from New York to Chicago = 4 hours. The plane stays at the port in Chicago for 1 hour. The plane then flies from Chicago to Miami. The flight time from Chicago to Miami = 4 * 3 = 12 hours. The total time = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York City. It flies to Chicago for 4 hours. So it reaches Chicago at 10:00 a.m. It stays at the port for 1 hour in Chicago. So it departs from Chicago port at 11:00 a.m. The time taken to travel from New York to Chicago is 4 hours. The time taken to travel from Chicago to Miami is 3 * 4 = 12 hours. Total time taken = 4 hours + 1 hour + 12 hours = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off from New York at 6:00 a.m. It flies for 4 hours to Chicago. Time taken to reach Chicago = 4 hours. It stays at Chicago for 1 hour. Time taken at Chicago = 1 hour. It departs from Chicago and flies to Miami. The time taken to fly from New York to Chicago = 4 hours. The time taken to fly from Chicago to Miami = 3 * 4 = 12 hours. Total time taken = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane took off at 6:00 a.m. from New York City and flies for 4 hours to Chicago. The time of arrival in Chicago = 10:00 a.m. The plane stays at the port in Chicago for 1 hour. The departure from Chicago is at 11:00 a.m. From Chicago to Miami, the flight time is three times the flight time from New York to Chicago. Flight time from New York to Chicago = 4 hours Flight time from Chicago to Miami = 3 * 4 = 12 hours Total time = 4 hours (from New York to Chicago) + 1 hour (stay at Chicago) + 12 hours (from Chicago to Miami) = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The aircraft takes off at 6:00 a.m. from New York to Chicago. It travels for 4 hours to Chicago. The time of arrival in Chicago is 10:00 a.m. It stays at the port in Chicago for 1 hour. The departure time from Chicago to Miami is 11:00 a.m. The time taken to fly from New York to Chicago is 4 hours. The time taken to fly from Chicago to Miami is 3 * 4 = 12 hours. The total time taken = 4 hours (New York to Chicago) + 1 hour (stay at Chicago) + 12 hours (Chicago to Miami) = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off from New York city at 6:00 a.m. and flies for 4 hours to Chicago. It stays for 1 hour in Chicago. The flight from New York to Chicago took 4 hours. The flight from Chicago to Miami took 3 * 4 = 12 hours. The total time = 4 hours + 1 hour + 12 hours = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. The plane flies from New York to Chicago for 4 hours. It stays at Chicago for 1 hour. It then departs for Miami. Time taken to fly from New York to Chicago = 4 hours. Time at Chicago = 1 hour. Time taken to fly from Chicago to Miami = 3 * 4 = 12 hours. Total time = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York City. It flies for 4 hours to Chicago. The stay time at Chicago is 1 hour. The departure time from Chicago to Miami is 6 + 4 + 1 = 11:00 a.m. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, lets assume time taken to fly from NY to Chicago = x hours. Time taken to fly from Chicago to Miami = 3 * x hours. Total time = 4 + 1 + 3x = 4 + 1 + 3*4 = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 am from New York and flies for 4 hours to Chicago. So it reaches Chicago at 10:00 am. It stays at the port in Chicago for 1 hour. At 11:00 am, the plane departs from Chicago to Miami. The time taken to fly from New York to Chicago is 4 hours. The time taken to fly from Chicago to Miami is 3 * 4 = 12 hours. Total time = 4 hours (From New York to Chicago) + 1 hour (Stay at Chicago port) + 12 hours (From Chicago to Miami) = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. and flies for 4 hours to Chicago. The time taken to reach Chicago is 4 hours. The plane stays at the port for 1 hour in Chicago. The plane departs for Miami from Chicago. The time taken to travel from New York to Chicago is 4 hours. The time taken to travel from Chicago to Miami = 3 * 4 = 12 hours. The total time taken = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off from New York City at 6:00 a.m. It flies for 4 hours to Chicago. Time taken = 4 hours. It stays at the port in Chicago for 1 hour. It then departs for Miami. Time taken to fly from New York to Chicago = 4 hours. Time taken to stay at port in Chicago = 1 hour. Time taken to fly from Chicago to Miami = 3 * 4 = 12 hours. Total time taken = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. from New York City and flies for 4 hours to Chicago. The travel time from New York City to Chicago is 4 hours. The plane stays at the port in Chicago for 1 hour. The plane departs from Chicago to Miami. The travel time from Chicago to Miami is 3 * 4 = 12 hours. The total time taken to travel from New York to Miami is 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off from New York City at 6:00 a.m. and flies for 4 hours to Chicago. The plane stays at the port in Chicago for 1 hour. Hence the total time in Chicago = 1 hour. The plane departures from Chicago for Miami. The time taken to fly from New York to Chicago = 4 hours. The time taken to fly from Chicago to Miami = 3 * 4 = 12 hours. Total time taken = 4 + 1 + 12 = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The plane stays at the port in Chicago for 1 hour and then departs for Miami. If the aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago, calculate the total time to travel from New York to Miami. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane takes off at 6:00 a.m. and flies for 4 hours from New York City to Chicago. The time taken = 4 hours. The plane stays at the port in Chicago for 1 hour. The time taken = 1 hour. The aircraft took three times as many hours to fly to Miami than it took to fly from New York to Chicago. Let the time taken to fly from New York to Chicago = 4 hours. The time taken to fly to Miami = 3 * 4 hours = 12 hours. Total time taken = 4 hours + 1 hour + 12 hours = 17 hours. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 17          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+109                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+138                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+127                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+121                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+156                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+147                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+157                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+141                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+114                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+121                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+111                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+117                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+189                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny will eat 1 piece. Kai will eat 2 times Manny = 2. Raphael will eat half of Manny = 1/2 = 0.5. Lisa will eat 2 pieces, plus any leftover pieces. Hence Lisa will eat 2 + 0.5 = 2.5 pieces. Aaron doesn&#x27;t like lasagna, so he will eat 0 pieces. Total pieces to serve = 1 + 2 + 0.5 + 2.5 = 6. Therefore Manny should cut the lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny needs one piece. Kai is always hungry and will eat twice as much as Manny. So Kai eats 2 pieces. Raphael always eats half the amount Manny does. So Raphael eats 0.5 pieces. Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. So Lisa eats 2 + 0.5 = 2.5 pieces. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. So Aaron doesn&#x27;t eat any lasagna. Total people eating lasagna = 4 - 1 = 3. Total lasagna pieces eaten = 1 + 2 + 0.5 + 2.5 = 6 pieces. So Manny should cut his lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. Manny will eat 1 piece. Kai is always hungry and will eat twice as much as Manny. That is, Kai will eat 2 pieces. Raphael always eats half the amount Manny does. That is, Raphael will eat 0.5 pieces. Lisa will eat 2 pieces, plus any Raphael has left of his piece. Lisa will eat 2 + 0.5 = 2.5 pieces. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. So Aaron will not eat any lasagna. Total pieces eaten = 1 + 2 + 0.5 + 2.5 = 6 pieces. Manny needs to cut the lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny will eat one piece. Kai will eat twice as much as Manny, so Kai will eat 2 pieces. Raphael will eat half as much as Manny, so he will eat 1/2 of 1 = 1/2 = 0.5 piece. Lisa will eat 2 pieces, plus any leftover piece that Raphael has. Raphael has 0.5 piece left, so Lisa will eat 2 + 0.5 = 2.5 pieces. Aaron does not eat lasagna. Total pieces eaten = 1 + 2 + 0.5 + 2.5 = 6 pieces. Manny should cut the lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny eats 1 piece, Aaron doesn&#x27;t eat lasagna, Kai eats twice as much as Manny, so Kai eats 2 pieces, Raphael eats half as much as Manny, so Raphael eats 0.5 piece, Lisa eats 2 pieces + Raphael&#x27;s 0.5 = 2.5 pieces. Total = 1 + 0 + 2 + 0.5 + 2.5 = 6 pieces. Manny should cut his lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny eats 1 piece. Aaron doesn&#x27;t like lasagna and so he will eat 0 pieces. Kai is always hungry and so he will eat 2*Manny = 2*1 = 2 pieces. Raphael always eats half the amount Manny does, i.e. Raphael eats 1/2 of 1 = 0.5 pieces. Lisa loves lasagna and will eat 2 pieces, plus any pieces Raphael has left, i.e. Lisa eats 2 + 0.5 = 2.5 pieces. Total pieces = 1 + 0 + 2 + 0.5 + 2.5 = 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is making lasagna for 5 people - himself, Lisa, Raphael, Aaron and Kai. Manny only wants one piece. Aaron doesn&#x27;t like lasagna and will eat nothing. Kai is always hungry and will eat twice as much as Manny, so 2 pieces. Raphael always eats half the amount Manny does, so half of 1 = 0.5 pieces. Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. Raphael&#x27;s piece is 0.5, so Lisa will eat 2 + 0.5 = 2.5 pieces. Total pieces eaten = 1 + 0 + 2 + 0.5 + 2.5 = 6. Since Manny made the lasagna for 5 people, he should cut it into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is making lasagna for dinner with his four friends - Lisa, Raphael, Aaron, and Kai. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much. Kai is always hungry and will eat twice as much as Manny - i.e. 2 pieces. Raphael always eats half the amount Manny does - i.e. 0.5 pieces. Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. So, Lisa eats 2 + 0.5 = 2.5 pieces. Total pieces eaten = 1 + 2 + 0.5 + 2.5 = 6 pieces. Total friends = 4. Number of pieces per person = 6 / 4 = 1.5 pieces. Hence, Manny should cut the lasagna into 1.5 pieces. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny eats 1 piece. Aaron doesn&#x27;t like lasagna much, so he eats 0 pieces. Kai is always hungry and eats double Manny&#x27;s piece, so 2 pieces. Raphael eats half of Manny&#x27;s piece, so 0.5. Lisa loves lasagna and eats 2 pieces, plus half of Raphael&#x27;s piece, which is 0.5, so 2.5. Total pieces = 1 + 0 + 2 + 0.5 + 2.5 = 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny eats 1 piece. Aaron doesn&#x27;t like lasagna much and will eat 0 pieces. Kai is always hungry and will eat twice as much as Manny, i.e. 2 pieces. Raphael always eats half the amount Manny does, i.e. 1/2 piece. Lisa loves lasagna and will eat 2 pieces, plus any Raphael has left of his piece, which is 1/2. Total lasagna pieces eaten = 1 + 0 + 2 + 1/2 + 2 + 1/2 = 1 + 0 + 2 + 1/2 + 2 + 1/2 = 1 + 2 + 2 + 1/2 + 1/2 = 6 + 1 = 7 pieces. Hence Manny should cut the lasagna into 7 pieces. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is cutting lasagna for himself and his 4 friends. Manny eats 1 piece. Aaron doesn&#x27;t like lasagna and will eat 0 pieces. Kai is always hungry and will eat twice as much as Manny, i.e. 2 pieces. Raphael always eats half the amount Manny does, i.e. 0.5 piece. Lisa loves lasagna and will eat 2 pieces, plus any Raphael has left of his piece. Raphael has 0.5, so Lisa eats 2 + 0.5 = 2.5 pieces. Total pieces to be cut = 1 + 0 + 2 + 0.5 + 2.5 = 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny will eat one piece. Aaron will eat 0 pieces because he doesn&#x27;t like lasagna. Kai will eat twice as much as Manny, so Kai will eat 2 pieces. Raphael will eat half the amount Manny does, so Raphael will eat 0.5 piece. Lisa will eat 2 pieces plus any remaining piece of Raphael. If Raphael has 0.5 piece, then Lisa will eat 2+0.5 = 2.5 pieces. Total number of pieces = 1 + 0 + 2 + 0.5 + 2.5 = 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is making lasagna for dinner for himself and 4 of his friends. Each of them will eat some lasagna. Manny likes lasagna and will eat 1 piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad, so he will eat 0 pieces. Kai is always hungry and will eat twice as much lasagna as Manny, so Kai will eat 2 pieces. Raphael always eats half the amount Manny does, so Raphael will eat 0.5 pieces. Lisa loves lasagna and will eat 2 pieces, plus any remaining piece that Raphael has left after eating 0.5 of his piece. The total number of lasagna pieces eaten = 1 + 0 + 2 + 0.5 + 2 + 0.5 = 6. Since Manny is making lasagna for 5 people, the total number of pieces required = 6 x 5 = 30. Hence, Manny should cut his lasagna into 30 pieces. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny is making lasagna for himself and 4 friends. Manny will eat one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. Manny = 1 Piece Aaron = 0 Pieces Kai = 2 * 1 = 2 Pieces Raphael = 0.5 * 1 = 0.5 Pieces Lisa = 2 + 0.5 = 2.5 Pieces Total = 1 + 0 + 2 + 0.5 + 2.5 = 6 Pieces Manny should cut the lasagna into 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny needs to cut lasagna for himself, Lisa, Raphael, Aaron, and Kai. Manny will eat 1 piece. Lisa will eat 2 pieces, plus whatever Raphael leaves of his piece. Raphael will eat half of what Manny does (half of 1 = 0.5). Kai will eat twice as much as Manny (twice of 1 = 2). Aaron will not eat lasagna, so he will eat 0 pieces. Number of pieces lasagna is cut into = 1 + 2 + 0.5 + 2 + 0 = 5.5. Round 5.5 to nearest integer = 6. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn&#x27;t like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Manny only wants 1 piece. Aaron will eat nothing. Kai will eat twice as much as Manny, so Kai will eat 2 pieces. Raphael will eat half of Manny&#x27;s 1 piece, which is 0.5. Lisa will eat 2 pieces, plus whatever Raphael has left (0.5), so Lisa will eat 2.5 pieces. Total pieces to cut = 1 + 0 + 2 + 0.5 + 2.5 = 6 pieces. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 6          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+123                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+165                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+174                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+146                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+107                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+142                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+175                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+180                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+113                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+183                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+150                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+129                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+213                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+172                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+142                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+225                </td>
+                <td>
+109                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for damages for loss of a $50,000 annual salary for 30 years = 50,000 * 30 = 1,500,000. Jerry is asking for $200,000 in medical bills. Jerry is asking for punitive damages equal to triple the medical and salary damages = 3 * (1,500,000 + 200,000) = 3 * 1,700,000 = 5,100,000. Total amount asked = 1,500,000 + 200,000 + 5,100,000 = 6,800,000. Jerry gets 80% of what he&#x27;s asking for = 0.8 * 6,800,000 = 5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for losses due to salary, medical bills, and punitive damages. Salary loss: $50,000 per year for 30 years = $1.5 million Medical bills: $200,000 Punitive damages: triple of medical bills + salary = $200,000 + $1.5 million = $1.7 million Total amount Jerry is asking: $1.5 million + $200,000 + $1.7 million = $3.5 million Jerry gets 80% of this: 0.8 * $3.5 million = $2.8 million \boxed{2800}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for $50,000 salary per year for 30 years = 30 * $50,000 = $1,500,000 salary damages. Jerry is asking for $200,000 in medical bills. Jerry is also asking for 3 times the medical and salary damages = 3 * ($1,500,000 + $200,000) = 3 * $1,700,000 = $5,100,000 in punitive damages. Total damages = $1,500,000 + $200,000 + $5,100,000 = $6,800,000. If Jerry gets 80% of this, he gets 0.8 * $6,800,000 = $5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for $50,000 annual salary for 30 years = $50,000 * 30 = $1.5 million. He&#x27;s asking for $200,000 in medical bills. He&#x27;s asking for triple the medical and salary damages = $1.5 million + $200,000 = $1.7 million. Total damages = $1.7 million. Jerry gets 80% of this = 0.8 * 1.7 million = $1.36 million. \boxed{1360}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. So, the total damages is $50,000 * 30 years = $1,500,000. The medical bills are $200,000. The punitive damages is 3 * ($1,500,000 + $200,000) = 3 * $1,700,000 = $5,100,000. The total damages is $1,500,000 + $200,000 + $5,100,000 = $6,800,000. Jerry gets 80% of this amount, which is 0.8 * $6,800,000 = $5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for damages for loss of a $50,000 annual salary for 30 years. This is 50,000 * 30 = 1,500,000. He is also asking for $200,000 in medical bills. His total damage is 1,500,000 + 200,000 = 1,700,000. He is also asking for punitive damages equal to triple the medical and salary damages. Hence, the punitive damages = 3 * (1,500,000 + 200,000) = 3,900,000. Total damages = 1,700,000 + 3,900,000 = 5,600,000. Jerry gets 80% of this amount. Hence, Jerry gets 0.8 * 5,600,000 = 4,480,000. \boxed{4480000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for damages for loss of a $50,000 annual salary for 30 years = 50,000 * 30 = $1.5 million. He&#x27;s asking for $200,000 in medical bills. The total damages = 1.5 million + 200,000 = $1.7 million. Jerry is asking for punitive damages equal to triple the medical and salary damages = 3 * 1.7 million = $5.1 million. The total damages = 1.7 million + 5.1 million = $6.8 million. If he gets 80% of what he&#x27;s asking for, he gets 0.8 * 6.8 million = $5.44 million. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is suing for damages for loss of a $50,000 annual salary for 30 years. The salary for 30 years = 50,000 * 30 = 1,500,000. Jerry is suing for $1,500,000 in salary loss. Jerry is suing for $200,000 in medical bills. Total damages = 1,500,000 + 200,000 = 1,700,000. Jerry is suing for triple the medical and salary damages = 1,700,000 * 3 = 5,100,000. Total amount being sued for = 1,700,000 + 5,100,000 = 6,800,000. Jerry gets 80% of what he is suing for = 6,800,000 * 0.8 = 5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for $50,000 annual salary for 30 years = $50,000 * 30 = $1,500,000. Jerry is asking for $200,000 in medical bills. Jerry is asking for punitive damages = triple($1,500,000 + $200,000) = 3 * $1,700,000 = $5,100,000. Total amount Jerry is asking for = $1,500,000 + $200,000 + $5,100,000 = $6,800,000. Jerry gets 80% of the amount he is asking for = 0.8 * $6,800,000 = $5,440,000. \boxed{5440000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The annual salary is $50,000. He&#x27;s asking for salary losses for 30 years, which is 30 * 50000 = 1500000. The medical bills are $200,000. Punitive damages are triple the medical and salary damages = 3*(200000+1500000) = 6000000. Total damages are 200000 + 1500000 + 6000000 = 8000000. He gets 80% of 8000000 = 0.8 * 8000000 = 6400000. \boxed{6400000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for 50,000 * 30 = 1,500,000 in annual salary damages. Jerry is asking for 200,000 in medical bills. Jerry is asking for triple the medical and salary damages = 3 * (1,500,000 + 200,000) = 5,500,000 in punitive damages. Total damages = 1,500,000 + 200,000 + 5,500,000 = 7,200,000. Jerry gets 80% of 7,200,000 = 0.8 * 7,200,000 = 5,760,000. \boxed{5760000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for 50,000 * 30 = 1.5 Million dollars in salary damages. He&#x27;s asking for 200,000 in medical damages. He&#x27;s asking for triple (3 * 1.5 Million + 200,000 = 4.7 Million in punitive damages. Total damages asked = 1.5 + 200,000 + 4.7 = 6.7 Million. If he gets 80% of what he&#x27;s asking for, he gets 0.8 * 6.7 = 5.36 Million. \boxed{5360}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for $50,000 annual salary for 30 years = $50,000 * 30 = $1,500,000 in salary damages. Jerry is asking for $200,000 in medical bills. Jerry is asking for triple the medical and salary damages = 3 * ($1,500,000 + $200,000) = 3 * $1,700,000 = $5,100,000 in punitive damages. Total damages = $1,500,000 + $200,000 + $5,100,000 = $6,800,000. If he gets 80% of $6,800,000 = 0.8 * $6,800,000 = $5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry suffered loss of $50,000 annual salary for 30 years = 30 * 50,000 = 1,500,000. Jerry had $200,000 in medical bills. Punitive damages = 3 * (1,500,000 + 200,000) = 5,200,000. Total damages = 1,500,000 + 200,000 + 5,200,000 = 6,900,000. Jerry gets 80% of the damages = 0.8 * 6,900,000 = 5,520,000. \boxed{5520000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for $50,000 annual salary for 30 years = $50,000 * 30 = $1,500,000 in salary damages. He&#x27;s also asking for $200,000 in medical bills. So his total damages = $1,500,000 + $200,000 = $1,700,000. He&#x27;s also asking for punitive damages equal to triple the medical and salary damages = 3 * ($1,700,000) = $5,100,000. Total damages = $1,700,000 + $5,100,000 = $6,800,000. He gets 80% of this = 0.8 * $6,800,000 = $5,440,000. \boxed{5440}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jerry files a lawsuit against the convenience store where he works and slipped and fell. He&#x27;s asking for damages for loss of a $50,000 annual salary for 30 years, $200,000 in medical bills, and punitive damages equal to triple the medical and salary damages. If he gets 80% of what he&#x27;s asking for, for much money does he get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jerry is asking for damages of: 50,000 * 30 = 1,500,000 for loss of salary 200,000 for medical bills 1,500,000 + 200,000 = 1,700,000 Jerry is asking for triple the medical and salary damages. 1,700,000 * 3 = 5,100,000 Jerry is asking for total of 5,100,000. He gets 80% of the total. 0.8 * 5,100,000 = 4,080,000 \boxed{4,080,000}          </p>
+          <p class="lt-p">
+Reference Answer: 5440000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+164                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+129                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+162                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+111                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+176                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+183                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+159                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+184                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+154                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+127                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+142                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+126                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+162                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+133                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+163                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+185                </td>
+                <td>
+128                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

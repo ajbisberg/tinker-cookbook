@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 45</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 45  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T23:02:07  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e. $16. He buys a tube of toothpaste for $3, i.e. $3. The total money spent so far is $16 + $3 = $19. The remaining money in the budget is $60 - $19 = $41. The money spent on the box of laundry detergent is $41. The money spent on the box of laundry detergent is $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each, which is $16. He buys a tube of toothpaste for $3. He buys a box of laundry detergent. The total money spent is $16 + 3 + detergent = 19 + detergent. Given that Abraham has $30 remaining in his budget, 60 - 30 = 30. The money spent on the box of laundry detergent is 30 - 19 = 11 dollars. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e. 4 * 4 = $16. He buys a tube of toothpaste for $3. Total money spent = 16 + 3 = $19. The remaining money = 60 - 19 = $41. Abraham spent $41 on other items. Since the total money spent is $41 and Abraham has $30 remaining, the money spent on the box of laundry detergent = 41 - 30 = $11. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each, which costs 4*$4 = $16. He buys a tube of toothpaste for $3. He buys a box of laundry detergent. The total money spent is 16 + 3 = $19. The remaining money is $60 - 19 = $41. The money spent on the box of laundry detergent is $41. \boxed{41}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, which costs 4 * 4 = $16. He buys a tube of toothpaste for $3. The total he spent is 16 + 3 = $19. The remaining money in his budget is $60 - 19 = $41. The money he spent on the box of laundry detergent is $41. The money he spent on the box of laundry detergent is $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each. The cost of 4 shower gels = 4 * $4 = $16. He buys a tube of toothpaste for $3. The cost of the tube of toothpaste = $3. He buys a box of laundry detergent. The remaining budget = $60 - ($16 + $3) = $60 - $19 = $41. The cost of the box of laundry detergent = $41. The cost of the box of laundry detergent = $30. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e. 4 * 4 = $16. He buys a tube of toothpaste for $3. The total amount spent so far is $16 + $3 = $19. The remaining amount is $60 - $19 = $41. The amount spent on the box of laundry detergent is $41. The answer is $41. \boxed{41}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each, which is 4 * 4 = 16 dollars. He buys a tube of toothpaste for $3. The total spent is 16 + 3 = 19 dollars. The remaining balance is 60 - 19 = 41 dollars. He has $30 remaining. The money spent on the box of laundry detergent is 41 - 30 = 11 dollars. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He bought 4 shower gels for $4 each, i.e. 4 * 4 = $16. The cost of the tube of toothpaste is $3. The total amount spent so far is 16 + 3 = $19. The remaining amount is $60 - 19 = $41. He has $30 remaining. The cost of the box of laundry detergent is $41 - $30 = $11. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each which costs 4 * 4 = 16. He buys a tube of toothpaste for $3. He buys a box of laundry detergent. The total money spent = 16 + 3 + expenditure on laundry detergent. The total money spent = 19 + expenditure on laundry detergent. The remaining money = 60 - 19 = 41. The remaining money = expenditure on laundry detergent. The expenditure on laundry detergent = 41. The expenditure on laundry detergent = 41. \boxed{41}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each, which is $16. He buys a tube of toothpaste for $3. He buys a box of laundry detergent. The total spent is $16 + $3 = $19. The amount remaining is $60 - $19 = $41. The amount spent on the box of laundry detergent is $41. The answer is $21. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham&#x27;s budget is $60. He buys 4 shower gels for $4 each, which costs 4 * 4 = 16 dollars. He buys a tube of toothpaste for $3. He buys a box of laundry detergent. The total money spent is 16 + 3 = 19 dollars. The remaining money is 60 - 19 = 41 dollars. The money spent on the box of laundry detergent is 41 - 30 = 11 dollars. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e. 4 * 4 = 16. The cost of shower gels = 16. The cost of a tube of toothpaste = 3. Total cost = 16 + 3 = 19. The remaining money = 60 - 19 = 41. The money spent on the box of laundry detergent = 60 - 41 = 19. \boxed{19}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e. 4 * 4 = 16. The cost of shower gels = 16. The cost of a tube of toothpaste = 3. The total cost = 16 + 3 = 19. The remaining in the budget = 60 - 19 = 41. The money spent on the box of laundry detergent = 60 - 41 = 19. \boxed{19}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60. He buys 4 shower gels for $4 each, i.e., 4 * 4 = $16. He buys a tube of toothpaste for $3. His total expenditure is $16 + $3 = $19. The balance in his budget is $60 - $19 = $41. He has $30 balance remaining. The amount spent on the box of laundry detergent is $41 - $30 = $11. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Abraham is buying some toiletries and creates a budget of $60 for his shopping. He buys 4 shower gels for $4 each, a tube of toothpaste for $3, and a box of laundry detergent. If he has $30 remaining in his budget, how much money, in dollars, did Abraham spend on the box of laundry detergent? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Abraham has a budget of $60 for his shopping. He buys 4 shower gels for $4 each, i.e., 4 * $4 = $16. He buys a tube of toothpaste for $3. Total money spent so far is $16 + $3 = $19. The balance in the budget is $60 - $19 = $41. He has $30 remaining in his budget. Thus, the money spent on the box of laundry detergent is $41 - $30 = $11. \boxed{11}          </p>
+          <p class="lt-p">
+Reference Answer: 11          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+108                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+108                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+118                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+95                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+107                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+123                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+103                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+103                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+124                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+95                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+106                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+105                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+108                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+104                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+181                </td>
+                <td>
+113                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim is 16 miles / 2 hours = 8 miles / hour. Frank ran 20 miles in 2 hours. The speed of Frank is 20 miles / 2 hours = 10 miles / hour. The difference in the speeds is 10 miles / hour - 8 miles / hour = 2 miles / hour. In an hour, the difference in the miles run is 2 miles / hour. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The distance run by Jim in 1 hour = 16 / 2 = 8 miles. Frank ran 20 miles in 2 hours. The distance run by Frank in 1 hour = 20 / 2 = 10 miles. The difference in the distance run by Frank and Jim in 1 hour = 10 - 8 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. Therefore, his speed = 16 miles / 2 hours = 8 miles per hour. Frank ran 20 miles in 2 hours. Therefore, his speed = 20 miles / 2 hours = 10 miles per hour. The difference in speeds = 10 - 8 = 2 miles per hour. The difference in miles run per hour = 2 miles per hour. The difference in miles run in 1 hour = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The distance run by Jim in an hour = 16 / 2 = 8 miles. Frank ran 20 miles in 2 hours. The distance run by Frank in an hour = 20 / 2 = 10 miles. The difference in the distance run by Frank and Jim in an hour = 10 - 8 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 miles / 2 hours = 8 miles per hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 miles / 2 hours = 10 miles per hour. The difference in the speed of Frank and Jim = 10 miles per hour - 8 miles per hour = 2 miles per hour. The difference in the miles run by Frank and Jim in an hour = 2 miles per hour. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 miles / 2 hours = 8 miles / hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 miles / 2 hours = 10 miles / hour. Difference in speed = 10 miles / hour - 8 miles / hour = 2 miles / hour. Number of miles run by Frank than Jim in an hour = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 miles / 2 hours = 8 miles per hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 miles / 2 hours = 10 miles per hour. The difference in the speeds of Frank and Jim = 10 - 8 = 2 miles per hour. The difference in the distances run by Frank and Jim in an hour = 2 * 1 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 / 2 = 8 miles per hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 / 2 = 10 miles per hour. The difference in speed = 10 - 8 = 2 miles per hour. The difference in miles run in an hour = 2 * 1 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The distance run per hour by Jim = 16 / 2 = 8 miles. Frank ran 20 miles in 2 hours. The distance run per hour by Frank = 20 / 2 = 10 miles. The difference in the distance run per hour by Frank and Jim = 10 - 8 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim is 16/2 = 8 miles per hour. Frank ran 20 miles in 2 hours. The speed of Frank is 20/2 = 10 miles per hour. Difference in the speeds = 10 - 8 = 2 miles per hour. Difference in the miles ran by them in an hour = 2 * 1 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The rate at which Jim ran is 16 miles / 2 hours = 8 miles / hour. Frank ran 20 miles in 2 hours. The rate at which Frank ran is 20 miles / 2 hours = 10 miles / hour. The difference in the rates is 10 miles / hour - 8 miles / hour = 2 miles / hour. The difference in the miles traveled in an hour is 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours =&gt; Jim&#x27;s speed = 16 miles / 2 hours = 8 miles per hour. Frank ran 20 miles in 2 hours =&gt; Frank&#x27;s speed = 20 miles / 2 hours = 10 miles per hour. Difference in speed = 10 miles per hour - 8 miles per hour = 2 miles per hour. Difference in miles run in an hour = 2 miles per hour. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The distance covered by Jim in an hour = 16 / 2 = 8 miles. Frank ran 20 miles in 2 hours. The distance covered by Frank in an hour = 20 / 2 = 10 miles. The difference in the distance covered by Frank and Jim in an hour = 10 - 8 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 miles / 2 hours = 8 miles / hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 miles / 2 hours = 10 miles / hour. The difference in the speed of Frank and Jim = 10 - 8 = 2 miles / hour. The difference in the miles run by Frank and Jim in an hour = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The speed of Jim = 16 miles / 2 hours = 8 miles per hour. Frank ran 20 miles in 2 hours. The speed of Frank = 20 miles / 2 hours = 10 miles per hour. The difference in speed = 10 - 8 = 2 miles per hour. The difference in miles run in an hour = 2 * 1 = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Jim ran 16 miles in 2 hours while Frank ran 20 miles in 2 hours. How many more miles did Frank run than Jim in an hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jim ran 16 miles in 2 hours. The rate at which Jim ran = 16 miles / 2 hours = 8 miles / hour. Frank ran 20 miles in 2 hours. The rate at which Frank ran = 20 miles / 2 hours = 10 miles / hour. The difference in the rate at which Frank ran and Jim ran = 10 - 8 = 2 miles / hour. The difference in the miles run by Frank and Jim in an hour = 2 miles. \boxed{2}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+106                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+92                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+89                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+113                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+103                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+111                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+86                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+107                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+99                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+89                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+142                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane hovered in Mountain time for 3 hours on the first day. It hovered in Mountain time for 2 more hours the next day. Total time it hovered in Mountain time = 3 + 2 = 5 hours. The airplane hovered in Central time for 4 hours on the first day. It hovered in Central time for 2 more hours the next day. Total time it hovered in Central time = 4 + 2 = 6 hours. The airplane hovered in Eastern time for 2 hours on the first day. It hovered in Eastern time for 2 more hours the next day. Total time it hovered in Eastern time = 2 + 2 = 4 hours. Total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days = 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane took a trip along the Eastern Coast of the USA. During the trip, it hovered in Mountain time for 3 hrs, Central time for 4 hrs, and Eastern time for 2 hrs. The total time = 3+4+2 = 9 hrs. The next day, it took 2 more hours to hover in each of the places it passed through the previous day. The time spent in Mountain time = 3 + 2 = 5 hrs. The time spent in Central time = 4 + 2 = 6 hrs. The time spent in Eastern time = 2 + 2 = 4 hrs. The total time = 5 + 6 + 4 = 15 hrs. The total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days = 9 + 15 = 24 hrs. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane took 3 hrs to hover in Mountain time the first day and 2 more hours to hover in Mountain time the second day, so total it took 5 hrs to hover in Mountain time in 2 days. The airplane took 4 hrs to hover in Central time the first day and 2 more hours to hover in Central time the second day, so total it took 6 hrs to hover in Central time in 2 days. The airplane took 2 hrs to hover in Eastern time the first day and 2 more hours to hover in Eastern time the second day, so total it took 4 hrs to hover in Eastern time in 2 days. Total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days = 5 + 6 + 4 = 15 hrs. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours the first day. The next day it took 2 more hours, hence 5 hours. Total Mountain time = 5 + 3 = 8 hours. The plane hovered in Central time for 4 hours the first day. The next day it took 2 more hours, hence 6 hours. Total Central time = 6 + 4 = 10 hours. The plane hovered in Eastern time for 2 hours the first day. The next day it took 2 more hours, hence 4 hours. Total Eastern time = 4 + 2 = 6 hours. Total time = 8 + 10 + 6 = 24 hours. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours the first day. The next day it hovered in Mountain time for 2 more hours, totaling 5 hours. The plane hovered in Central time for 4 hours the first day. The next day it hovered in Central time for 2 more hours, totaling 6 hours. The plane hovered in Eastern time for 2 hours the first day. The next day it hovered in Eastern time for 2 more hours, totaling 4 hours. The total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days = 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane hovered in Mountain time for 3 hrs the first day. It hovered in Mountain time for 2 more hrs the next day, so total time in Mountain time = 3 + 2 = 5 hrs. The airplane hovered in Central time for 4 hrs the first day. It hovered in Central time for 2 more hrs the next day, so total time in Central time = 4 + 2 = 6 hrs. The airplane hovered in Eastern time for 2 hrs the first day. It hovered in Eastern time for 2 more hrs the next day, so total time in Eastern time = 2 + 2 = 4 hrs. Total time = 5 + 6 + 4 = 15 hrs. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: On the first day, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The total time in the first day = 3 + 4 + 2 = 9 hrs. On the second day, it took 2 more hours to hover in each of the places it passed through the previous day. The time in Mountain time = 3 + 2 = 5 hrs, the time in central time = 4 + 2 = 6 hrs, and the time in eastern time = 2 + 2 = 4 hrs. The total time in the second day = 5 + 6 + 4 = 15 hrs. The total time in the 2 days = 9 + 15 = 24 hrs. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours the first day. The next day it took 2 more hours to hover in Mountain time, so it took 5 hours in Mountain time in two days. The plane hovered in Central time for 4 hours the first day. The next day it took 2 more hours to hover in Central time, so it took 6 hours in Central time in two days. The plane hovered in Eastern time for 2 hours the first day. The next day it took 2 more hours to hover in Eastern time, so it took 4 hours in Eastern time in two days. Total time taken = 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane hovered in mountain time for 3 hrs the first day. The next day, it hovered for 2 more hours in mountain time. Total time in mountain time = 3 + 2 = 5 hours. The airplane hovered in central time for 4 hrs the first day. The next day, it hovered for 2 more hours in central time. Total time in central time = 4 + 2 = 6 hours. The airplane hovered in eastern time for 2 hrs the first day. The next day, it hovered for 2 more hours in eastern time. Total time in eastern time = 2 + 2 = 4 hours. Total time in two days = 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hrs on day 1. The next day it took 2 more hours to hover in Mountain time. So, the plane.hovered in Mountain time for 5 hrs on day 2. Total time hovered in Mountain time = 3 + 5 = 8 hrs. The plane hovered in Central time for 4 hrs on day 1. The next day it took 2 more hours to hover in Central time. So, the plane.hovered in Central time for 6 hrs on day 2. Total time hovered in Central time = 4 + 6 = 10 hrs. The plane hovered in Eastern time for 2 hrs on day 1. The next day it took 2 more hours to hover in Eastern time. So, the plane.hovered in Eastern time for 4 hrs on day 2. Total time hovered in Eastern time = 2 + 4 = 6 hrs. Total time = 8 + 10 + 6 = 24 hrs. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Total time in Mountain time - 3 hrs each day - 3 * 2 = 6 hrs. Total time in Central time - 4 hrs each day - 4 * 2 = 8 hrs. Total time in Eastern time - 2 hrs each day - 2 * 2 = 4 hrs. Total time taken = 6 + 8 + 4 = 18 hrs. \boxed{18}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours the first day and 2 hours the second day. Total time = 3 + 2 = 5 hours. The plane hovered in Central time for 4 hours the first day and 2 hours the second day. Total time = 4 + 2 = 6 hours. The plane hovered in Eastern time for 2 hours the first day and 2 hours the second day. Total time = 2 + 2 = 4 hours. Total time = 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours on the first day. The next day it took 2 more hours to hover in Mountain time. Hence the total time it took the plane to hover over Mountain time in the two days is 3 + 2 = 5 hours. The plane hovered in Central time for 4 hrs on the first day. The next day it took 2 more hours to hover in Central time. Hence the total time it took the plane to hover over Central time in the two days is 4 + 2 = 6 hours. The plane hovered in Eastern time for 2 hrs on the first day. The next day it took 2 more hours to hover in Eastern time. Hence the total time it took the plane to hover over Eastern time in the two days is 2 + 2 = 4 hours. The total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days is 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours on the first day. It hovered in Mountain time for 2 more hours the next day. Thus, total time it took the plane to hover in Mountain time over the two days = 3 + 2 = 5 hrs. The plane hovered in Central time for 4 hrs on the first day. It hovered in Central time for 2 more hours the next day. Thus, total time it took the plane to hover in Central time over the two days = 4 + 2 = 6 hrs. The plane hovered in Eastern time for 2 hrs on the first day. It hovered in Eastern time for 2 more hours the next day. Thus, total time it took the plane to hover in Eastern time over the two days = 2 + 2 = 4 hrs. Total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days = 5 + 6 + 4 = 15 hrs. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hrs on day 1. The next day it hovered for 2 more hours = 3 + 2 = 5 hrs. Thus, total time for Mountain time = 5 hrs. The plane hovered in Central time for 4 hrs on day 1. The next day it hovered for 2 more hours = 4 + 2 = 6 hrs. Thus, total time for Central time = 6 hrs. The plane hovered in Eastern time for 2 hrs on day 1. The next day it hovered for 2 more hours = 2 + 2 = 4 hrs. Thus, total time for Eastern time = 4 hrs. Total time in two days = 5 + 6 + 4 = 15 hrs. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: An airplane took a trip along the Eastern Coast of the USA. During the trip, the plane hovered in Mountain time for 3 hours, Central time for 4 hrs, and Eastern time for 2 hrs. The next day it took 2 more hours to hover in each of the places it passed through the previous day. Calculate the total time it took the plane to hover over Mountain time, Central time, and Eastern time in the two days. Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The plane hovered in Mountain time for 3 hours on the first day. The next day it hovered for 2 more hours in Mountain time. The total time in Mountain time is 3 + 2 = 5 hours. The plane hovered in Central time for 4 hours on the first day. The next day it hovered for 2 more hours in Central time. The total time in Central time is 4 + 2 = 6 hours. The plane hovered in Eastern time for 2 hours on the first day. The next day it hovered for 2 more hours in Eastern time. The total time in Eastern time is 2 + 2 = 4 hours. The total time is 5 + 6 + 4 = 15 hours. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 24          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+184                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+190                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+178                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+152                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+143                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+158                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+173                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+150                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+161                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+218                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+156                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+125                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+218                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+214                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+170                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+200                </td>
+                <td>
+162                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk production in a day = 52 * 5 = 260 liters. The milk production in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk given by 52 cows in a day = 52 * 5 = 260 liters. The milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced by 52 cows in a day = 52 * 5 = 260 liters. The milk produced by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk given by 52 cows in a day = 52 * 5 = 260 liters. The milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. Milk given by 52 cows in a day = 52 * 5 = 260 liters. Milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. Milk given by 52 cows in a day = 52 * 5 = 260 liters. Milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. Milk given by 52 cows in a day = 52 * 5 = 260 liters. Milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk given by 1 cow in a day = 5 liters The milk given by 52 cows in a day = 5 * 52 = 260 liters The milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced by 52 cows in a day = 52 * 5 = 260 liters. The milk produced by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. Number of liters of milk in a day = 52 * 5 = 260 liters. Number of liters of milk in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced by 52 cows in a day = 52 * 5 = 260 liters. The milk produced by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced by 52 cows in a day = 52 * 5 = 260 liters. The milk produced by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced in a day = 52 * 5 = 260 liters. The milk produced in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. Milk given by 52 cows in a day = 52 * 5 = 260 liters. Milk given by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced in a day = 52 * 5 = 260 liters. The milk produced in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: A farmer has 52 cows. Each cow gives 5 liters of milk a day. How many liters of milk does the farmer get in a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The farmer has 52 cows. Each cow gives 5 liters of milk a day. The milk produced by 52 cows in a day = 52 * 5 = 260 liters. The milk produced by 52 cows in a week = 260 * 7 = 1820 liters. \boxed{1820}          </p>
+          <p class="lt-p">
+Reference Answer: 1820          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+61                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+65                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+61                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+61                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+140                </td>
+                <td>
+69                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

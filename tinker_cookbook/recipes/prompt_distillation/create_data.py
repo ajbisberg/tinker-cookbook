@@ -98,7 +98,7 @@ def setup_clients():
 
 async def create_data_async(cfg: Config, sampling_client: Any, tokenizer: Any, renderer: Any):
     # read sentences from multilingual.txt file
-    with open("tinker_cookbook/example_data/multilingual.txt", "r") as f:
+    with open("tinker_cookbook/example_data/multilingual.txt", "r", encoding="utf-8") as f:
         sentences = f.readlines()
     sentences = [sentence.strip() for sentence in sentences]
 
@@ -132,7 +132,7 @@ async def create_data_async(cfg: Config, sampling_client: Any, tokenizer: Any, r
         questions.append(question)
 
     # save the input and final answer to a file
-    with open(cfg.output_file, "w") as f:
+    with open(cfg.output_file, "w", encoding="utf-8") as f:
         for question, answer in zip(questions, answers):
             if answer is None:
                 continue

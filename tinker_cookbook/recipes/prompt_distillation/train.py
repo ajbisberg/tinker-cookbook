@@ -8,25 +8,30 @@ from datetime import datetime
 
 import chz
 from tinker_cookbook import cli_utils, model_info
+from tinker_cookbook.recipes.prompt_distillation.eval import (
+    PromptDistillationAccuracyEvaluatorBuilder,
+)
 from tinker_cookbook.renderers import TrainOnWhat
 from tinker_cookbook.supervised import train
 from tinker_cookbook.supervised.data import FromConversationFileBuilder
 from tinker_cookbook.supervised.types import ChatDatasetBuilderCommonConfig
 from tinker_cookbook.utils.lr_scheduling import LRSchedule
+from tinker_cookbook.hyperparam_utils import get_lr
 
+student_model = "Qwen/Qwen3-30B-A3B"
 
 @chz.chz
 class CLIConfig:
     # Required parameters
-    file_path: str = "/tmp/tinker-datasets/prompt_distillation_lang.jsonl"
+    file_path: str = "tinker_cookbook/training_data/prompt_distillation_lang.jsonl"
     log_path: str | None = None
-    model_name: str = "Qwen/Qwen3-30B-A3B"
+    model_name: str = student_model
     load_checkpoint_path: str | None = None
 
     # Training parameters
-    learning_rate: float = 1e-4
+    learning_rate: float = get_lr(student_model)
     lr_schedule: LRSchedule = "linear"
-    num_epochs: int = 4
+    num_epochs: int = 1
 
     # Model parameters
     lora_rank: int = 32
@@ -40,9 +45,11 @@ class CLIConfig:
 
     # Dataset-specific parameters
     renderer_name: str | None = None
-    train_on_what: TrainOnWhat = TrainOnWhat.ALL_ASSISTANT_MESSAGES
-    max_length: int = 32768
-    batch_size: int = 128
+    ## how to build the training token mask
+    train_on_what: TrainOnWhat = TrainOnWhat.LAST_ASSISTANT_MESSAGE
+    max_length: int = 256
+    batch_size: int = 64
+    test_size: int = 165
 
     # Logging parameters
     wandb_project: str | None = None
@@ -60,7 +67,7 @@ def cli_main(cli_config: CLIConfig):
     if cli_config.log_path is not None:
         log_path = cli_config.log_path
     else:
-        log_path = f"/tmp/tinker-cookbook/prompt_distillation/{run_name}"
+        log_path = f"tinker_cookbook/training_logs/prompt_distillation/{run_name}"
 
     if cli_config.wandb_name is not None:
         wandb_name = cli_config.wandb_name
@@ -88,7 +95,19 @@ def cli_main(cli_config: CLIConfig):
     dataset = FromConversationFileBuilder(
         common_config=common_config,
         file_path=cli_config.file_path,
+        test_size=cli_config.test_size,
     )
+
+    evaluator_builders = []
+    if cli_config.test_size > 0:
+        evaluator_builders.append(
+            PromptDistillationAccuracyEvaluatorBuilder(
+                file_path=cli_config.file_path,
+                model_name_for_tokenizer=cli_config.model_name,
+                renderer_name=renderer_name,
+                test_size=cli_config.test_size,
+            )
+        )
 
     config = train.Config(
         log_path=log_path,
@@ -104,6 +123,7 @@ def cli_main(cli_config: CLIConfig):
         lora_rank=cli_config.lora_rank,
         save_every=cli_config.save_every,
         eval_every=cli_config.eval_every,
+        evaluator_builders=evaluator_builders,
     )
     asyncio.run(train.main(config))
 

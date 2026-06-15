@@ -373,7 +373,7 @@ def _write_trace(trace: Trace, theme: Theme | None = None) -> None:
 
     trace.path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(trace.path, "w") as f:
+    with open(trace.path, "w", encoding="utf-8") as f:
         f.write("<!doctype html>\n")
         f.write('<html lang="en">\n')
         f.write("<head>\n")
@@ -956,7 +956,7 @@ def write_html_with_default_style(
     path_obj = Path(path)
     path_obj.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(path_obj, "w") as f:
+    with open(path_obj, "w", encoding="utf-8") as f:
         f.write(f'<!doctype html>\n<html lang="{html_module.escape(lang)}">\n')
         f.write("<head>\n")
         f.write(trace.head_html(theme=theme, title=title, extra_head=extra_head))
@@ -1017,7 +1017,7 @@ def render_with_jinja(
     if write_to is not None:
         path = Path(write_to)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf-8") as f:
             f.write(html)
 
     return html

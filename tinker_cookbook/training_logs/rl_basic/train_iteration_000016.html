@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 16</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 16  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:41:43  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in a local high school. 50 percent are freshmen or sophomores. This means 400 x 0.5 = 200 are freshmen or sophomores. 1/5 of freshmen and sophomores own a pet. This means 200 x 0.2 = 40 own a pet. Now, to find the number of freshmen and sophomores that do not own a pet, we subtract 40 from 200, which gives us 160. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students, and 50 percent of 400 equals 200 because 50 percent means 1/2. The freshmen and sophomores are 1/2 or 200 students. 1/5 of 200 equals 40 because 1/5 means one out of 5 or one fourth. This means 40 students are freshmen and sophomores who own a pet. There are 200 freshmen and sophomores, and 40 of them own a pet. This leaves 200 - 40 = 160 freshmen and sophomores who do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 50 percent of 400 which equals 200 freshmen or sophomores. 1/5 of 200 equals 40 freshmen or sophomores who own a pet. 200 - 40 = 160. 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in the school. 50 percent of 400 is 400 * 50% = 400 * 0.50 = 200. 200 are either freshmen or sophomores. 1/5 of 200 is 200/5 = 40. 40 own a pet. 200 - 40 = 160 do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in the high school. 50 percent are freshmen and sophomores. 50% of 400 = 1/2 x 400 = 200 freshmen and sophomores. 1/5 of freshmen and sophomores own a pet. 1/5 of 200 = 1/5 x 200 = 40 freshmen and sophomores own a pet. 200 freshmen and sophomores - 40 freshmen and sophomores who own a pet = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In this school, 50% of the 400 students are freshmen or sophomores, which is equal to (50% * 400) = (1/2 * 400) = 200. 1/5 of freshmen and sophomores own a pet, which is 1/5 * 200 = 40. This means that 200 - 40 = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total students = 400. Percentage of freshmen and sophomores = 50 percent = 50/100 = 0.5. Fraction of freshmen and sophomores who own pets = 1/5 = 0.2. Percentage of freshmen and sophomores who do not own pets = 0.5 - 0.2 = 0.3 = 30 percent. Total freshmen and sophomores = 0.5 (out of 1) * 400 = 200. Total freshmen and sophomores who do not own pets = 0.3 (out of 1) * 200 = 60. \boxed{60}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We first determine the number of freshmen and sophomores. 50 percent of 400 equals 1/2 x 400 = 200. 1/5 of the freshmen and sophomores own a pet, which equals 1/5 x 200 = 40. To find the number of freshmen and sophomores who do not own a pet, we subtract 40 from 200. 200 - 40 = 160. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in the high school. 50 percent of those students are freshmen or sophomores, which is 400 X 0.50 = 200 freshmen and sophomores. 1/5 of freshmen and sophomores own a pet, as 200 X 0.20 = 40 freshmen and sophomores own pets. This means that 200 - 40 = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students. 50 percent are freshmen or sophomores. 50% x 400 = 50% x 400/100 = 200/100 = 2 x 200 = 400 freshmen and sophomores. 1/5 of freshmen and sophomores own a pet. 1/5 x 400 = 1/5 x 400/1 = 400/5 = 80 own a pet. 400 - 80 = 320 do not own a pet. \boxed{320}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in a local high school. 50 percent are freshmen or sophomores, which equals 400 x 50 percent = 400 x 1/2 = 200 freshmen and sophomores.  1/5 of freshmen and sophomores own a pet, so 200 x 1/5 = 40 freshmen and sophomomores own a pet. This means 200 - 40 = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: 50 percent of 400 students equal 50% * 400 =.5 * 400 = 200 freshmen and sophomores. 1/5 of freshmen and sophomores is 1/5 * 200 =.2 * 200 = 40 freshmen and sophomores who own a pet. Therefore, 200 - 40 = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: 50 percent of the 400 students are freshmen or sophomores, that equals 50% * 400 = 50 * 400 = 2000/10 = 200 freshmen and sophomores. 1/5 of 200 equal 1/5 * 200 = 200/5 = 40 freshmen and sophomores who own a pet. That means 200 - 40 = 160 freshmen and sophomomures do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students, and 50 percent are freshmen or sophomores. This equals 400 x 50 percent = 400 x 1/2 = 200 freshmen and sophomores. 1/5 of freshmen and sophomores own a pet, that equals 200 x 1/5 = 40 freshmen and sophomores with pets. 200 - 40 gives us 160 freshmen and sophomores who do not have a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: First, let us find the total number of freshmen and sophomores. We know that 50 percent are freshmen or sophomores, and there are 400 students. Thus the total number of freshmen and sophomores is 50 percent of 400, which is 50% * 400 = 200. Out of the freshmen and sophomores, 1/5 own a pet, so the number of students who own a pet is 1/5 * 200 = 40. This means that 200 - 40 = 160 freshmen and sophomomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 400 students in a local high school. 50 percent are freshmen or sophomores.  1/5 of freshmen and sophomores own a pet.  How many freshmen and sophomores do not own a pet? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 400 students in a local high school. 50 percent of 400 is 200, so 200 students are freshmen or sophomores.  1/5 of 200 is 40, so 40 freshmen and sophomores own a pet. 200 - 40 = 160 freshmen and sophomores do not own a pet. \boxed{160}          </p>
+          <p class="lt-p">
+Reference Answer: 160          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+131                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+67                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+124                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+99                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+141                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+99                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+103                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+115                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+106                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+104                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+133                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+159                </td>
+                <td>
+82                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Brittany has 25 years plus 3 years, which is 28 years. 28 years plus 4 years equals 32 years. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25, so if Brittany is 3 years older, her age is 25 + 3 = 28. If Brittany goes away for 4 years, she returns when she is 28 - 4 = 24 years old. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old, so Brittany is 25 + 3 or 28 years old. Brittany takes a 4-year vacation and is gone for 4 years. So, 28 - 4 = 24 years old when she returns from her vacation. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Brittany is 3 years older, so she is 28 years old. Brittany is gone for 4 years, so when she comes back she has been gone for 4 years. Thus, she is now 28 - 4 = 24 years old. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Since Brittany is 3 years older than Rebecca, that must mean that Brittany is 25 + 3, or 28 years old. Brittany goes on a 4-year vacation, so she is away for 4 years. 28 - 4 = 24, so Brittany is 24 years old when she returns from her vacation. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25, and Brittany is 25 + 3 = 28. If Brittany goes on a 4-year vacation, she is away for 4 years. When she returns, she is 28 - 4 = 24 years old. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Brittany is 25 + 3 = 28 years old. If Brittany is on a 4-year vacation, then when she returns she has been gone for 4 years. So, she was 28 years old when she left, and now she is 28 + 4 = 32 years old. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old and Brittany is 28 years old. If Brittany takes a 4-year vacation, then 4 years pass, and so when she returns she has 28+4 = 32 years old. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Brittany is 25 years older than Rebecca, so if Rebecca is 25 years old, Brittany is 25 + 25 = 50 years old. Brittany is on a 4-year vacation, so when she returns, she has been gone for 4 years. If she was 50 years old when she left, she is now 50 - 4 = 46 years old. \boxed{46}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Brittany is 25 + 3, or 28, which is 3 years older than Rebecca. When Brittany goes on her 4-year vacation, she is 28 years old. After the 4-year vacation, she has been gone for 4 years, and so is now 28 + 4, or 32 years old. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Since Brittany is 3 years older than Rebecca, she is 25 + 3, or 28 years old. Now Brittany takes a 4-year vacation. She is on the vacation for 4 years, and when she returns her age will have gone by 4 years. So, she is 28 + 4, or 32 years old when she returns from her vacation. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25, and Brittany is 25 + 3, or 28. When Brittany goes on her 4-year vacation, she is 28 years old. After 4 years into her vacation, she will be 28 + 4, or 32 years old. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 and Brittany is 28. After a 4-year vacation, Brittany has been away for 4 years. 28 - 4 = 24. So, when she returns from her vacation she is 24 years old. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25, and Brittany is 25 + 3, which equals 28. Brittany is on a 4-year vacation, so when she returns we have to add 4 to 28, which equals 32. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old, and Brittany is 25 + 3 or 28 years old. If Brittany goes on a 4-year vacation, she will be on vacation for 4 years, ending after 4 years. This will put her at 28 + 4 or 32 years old. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Brittany is older than Rebecca by 3 years, who is 25. Brittany goes on a 4-year vacation. How old is Brittany when she returns from her vacation? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rebecca is 25 years old. Brittany is 3 years older than 25, which means that Brittany is 25 + 3 = 28 years old. Brittany is on a 4-year vacation, so when she returns from her vacation 4 years will have passed. 28 + 4 = 32, so Brittany will be 32 years old when she returns from her vacation. \boxed{32}          </p>
+          <p class="lt-p">
+Reference Answer: 32          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+35                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+58                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+62                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+67                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+83                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+59                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+77                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+53                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+86                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+84                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+93                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+65                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+57                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+54                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+70                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+144                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla teaches 105 students. 2 students are in the restroom. One less than three times that number, which is 6 students, are absent. 4 rows with 6 desks each that are 2/3 full means there are 4 times 6 which is 24 desks that are 2/3 full, which means that 24 times 2/3 is 16 students filling these desks. 2 + 6 + 16 = 24. \boxed{105}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so they are in the classroom. The number of students absent is one less than three times that number, so it is 1 less than 3 * 2 = 1 less than 6 = 5 absenet. There are four rows with six desks each, and each row is 2/3 full, so 4 * 6 * (2/3) = 4 * 6 * 0.667 = 16.67, rounded to the nearest whole number = 17 students in the classroom. If there are 17 students in the classroom, plus the 2 in the restroom, plus the 5 absent, that is a total of 17 + 2 + 5 = 24 students in her class. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla is taking attendance for her class. 2 students are in the restroom, 2 x 1 = 2 students. The number of students absent is one less than three times the number of students in the restroom, 3 x 2 - 1 = 5 students. There are 4 rows with 6 desks each that are 2/3 full. 4 x 6 x 2/3 = 16 students. The total number of students Carla teaches, including the ones in and out of the classroom, is 2 + 2 + 5 + 16 = 25 students. \boxed{25}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so we have 2 students in the restroom. One less than three times that number means 2 times 3, which is 6, minus one is 5. Four rows with six desks each that are all 2/3 full means 4 rows with 6 desks each, and each desk is 2/3 full, so the total number of students in the desks are 4 times 6, which is 24, and 2/3 of 24 is 16, so we have 24 - 16 = 8 students in the desks. Therefore, there are 2 + 5 + 8 = 15 students in and out of the classroom. \boxed{15}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that there are 2 students in the restroom, and one less than three times that number makes four: 2 * 3 - 1 = 5. Also there are four rows with six desks each that are 2/3 full: 4 * 6 * 2/3 = 16 * 2/3 = 32/3 = 10 R 2. So the total number of students Carla teaches is 2 + 5 + 10 = 17. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom. One less than three times that number is 1 less than 6, or 5 students. There are 4 rows with 6 desks, and each desk is 2/3 full. 4 x 6 x 2/3 = 16 students in the classroom. 2 + 16 + 5 = 23 students total in Carla&#x27;s class. \boxed{23}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so we have 2 students not in the classroom. She also knows that one less than three times the number of students in the restroom are absent, so we have 3*2 = 6 students absent. There are 4 rows with 6 desks each, and 6/3 = 2 desks 2/3 full, so there are 4*6 = 24 desks total and 4*2 = 8 desks 2/3 full, which means 24 - 8 = 16 desks are full, and we add 2 students in the restroom, 6 absent students, and 16 full desks to get a total of 2 + 6 + 16 = 24 students in the classroom, so Carla teaches 24 students total. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so we have 2 students out of the classroom. She also knows that one less than three times that number are absent, so 3*2 - 1 = 5. There are 4 rows with 6 desks each that are 2/3 full, so this means that 4*6*2/3 = 16*2/3 = 10 and a half desks are full. We have a total of 2 + 5 + 10 and a half, which equals 17 and a half students out of the classroom. We have 17 and a half students out of the classroom for a total of 17 + 17 and a half = 34 and a half students. Carla teaches 34 and a half students. \boxed{34.5}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Students in the restroom are 2, and one less than three times that number that are absent: 2 * 3 - 1 = 5. 4 * 6 * 2/3 = 16 * 2/3 = 32/3 = 10, so we have 10 students in the four rows with six desks each that are 2/3 full. Adding the students in the restroom and those absent, we get 2 + 5 + 10 = 17 students. \boxed{17}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so they are in the classroom. She also knows that one less than three times the number of students in the restroom are absent, so 3 x 2 - 1 = 5 are absent. Since there are 4 rows with 6 desks each that are 2/3 full, 4 x 6 x 2/3 = 16 are in the classroom, so 16 + 2 + 5 = 23 are in total. \boxed{23}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla teaches 2 + 1 less than three times 2, which means Carla teaches 2 + 3 * 2 = 2 + 6 = 8 students. There are four rows with six desks each and 2/3 of each row is full, which means each row has 6 * 2/3 = 6 * 0.66 = 3.96 = 4 students in it, and 4 * 4 = 16 desks that are 2/3 full. Since there are 4 rows, the total number of students in the 4 rows is 4 * 4 = 16. The total number of students is thus 8 + 16 = 24. \boxed{24}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so they are in the classroom. She knows that one less than three times that number of students are absent. One less than three times 2 equals 6, so there are 6 absent students. There are 4 rows, and 6 desks in each row that are 2/3 full. 4 times 6 is 24, and 2/3 of 24 is 16, so each row has 16 - 2/3 = 10.3 desks full. 10.3 rounded to the nearest integer is 10, so each row has 10 desks full. 4 rows with 10 desks each have 4 times 10, or 40 desks. 40 desks in all gives us 6 students per desk, so there are 40 times 6, or 240 students total. \boxed{240}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so we have 2 students out of the classroom. She also knows that one less than three times that number, which is 1 less than 6 students, or 5 students, are absent, so we have 5 students absent. Now, there are 4 rows with 6 desks each that are 2/3 full. This means there are 4 times 6 desks, or 24 desks, and that 2/3 of this number are being used, so we have 2/3 of 24, which is 16, being used, and that leaves 24 - 16, or 8 desks, that are not being used. Since there are 6 desks in each row, 8 desks translates to 8/6, which is 1 2/6, or 1 1/3 rows that are not being used. So, we have 4 full rows, and 1 1/3 rows that are not being used. This means we have 4 + 1 1/3, or 5 1/3, full rows. So, if each row has six desks, then 5 1/3 times          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✗, Correct: ✗, Reward: -0.10          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that there are two students in the restroom (2). We know that one less than three times the number of students in the classroom are absent: one less than 3 times 2 is 5, so there are five absences (1 less than 3 times 2 is 5). There are four rows with six desks each that are 2/3 full: 4 times 6 is 24, and 2/3 of 24 is 16, so there are 16 students in the classroom (4 times 6 is 24, and 2/3 of 24 is 16). 2 + 5 + 16, which are the numbers of students in and out of the classroom, is 23 (2 + 5 + 16 is 23). \boxed{23}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla knows that 2 students are in the restroom, so they are in the classroom. One less than three times that number means one less than 3*2 = 6, so there are 6-1 = 5 students absent. There are 4 rows with 6 desks each that are 2/3 full, so there are 4*6*(2/3) = 16*2/3 = 10.6, which gives us 10 desks that are 2/3 full. Therefore, there are 6+2+5+10 = 23 students in the classroom. \boxed{23}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Carla is taking attendance for her sixth-grade class. She knows that 2 students are in the restroom, and one less than three times that number of students are absent. If there are four rows with six desks each that are all 2/3 full, how many students does Carla teach, including the ones in and out of the classroom? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Carla teaches 6x4=24 students with desks. 2 are in the restroom. The number of students absent is (3x2)-1=5. 2/3 of 6, which is 4, have seats in each row, and there are four rows. 4x4=16. Therefore, there are 24-2+5+16=39 students. \boxed{39}          </p>
+          <p class="lt-p">
+Reference Answer: 23          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+104                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+171                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+133                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+159                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+110                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+177                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+175                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+113                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+112                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+156                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+190                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+256                </td>
+                <td>
+-0.100                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+-0.100                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+173                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+178                </td>
+                <td>
+89                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars, and his teacher says that she will bring 2 more bars for every 1 that Gerald brings. Therefore, Gerald brings 7 bars and his teacher brings 7 × 2 = 14 bars. In total, there are 7 + 14 = 21 bars. There are 24 students in the class, so each student gets 21 ÷ 24 = 0.875, or 7/8 of a bar. There are 8 squares in each bar, so each student gets 7/8 × 8 = 7/2 = 3.5, or 3 whole squares. \boxed{3}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brought 7 bars and each bar contains 8 squares, so 7 x 8 = 56 squares of chocolate. The teacher said that for every bar Gerald brings, she will bring 2 more identical ones. Since Gerald brought 7 bars, the teacher will bring 2 x 7 = 14 additional bars. 7 + 14 = 21 bars. Each bar has 8 squares, so 21 x 8 = 168 squares of chocolate. There are 24 students in the class so 168 ÷ 24 = 7 squares per student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars. The teacher brings 7*2 = 14 more bars, for a total of 7 + 14 = 21 bars. There are 24 students in class. Each student gets 21 / 24 = 0.875 = 7 / 8 bars. There are 7 squares of chocolate in each bar, so each student gets 7 * (7/8) = 49/8 = 6.125 squares. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald is bringing 7 chocolate bars to school with 8 squares per bar, which means 7 x 8 = 56 total squares. Gerald&#x27;s teacher is bringing 2 x 7 = 14 bars, which is 14 x 8 = 112 squares. So we have a total of 56 + 112 = 168 squares. With 24 students, 168 / 24 = 7 squares per student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars. Each bar has 8 squares. 7 x 8 = 56 squares. Gerald&#x27;s teacher brings twice as many bars, which is 14. 14 x 8 = 112 squares. Together, they bring 56 + 112 = 168 squares. There are 24 students in class. 168 / 24 = 7 squares for each student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 chocolate bars, and each bar has 8 squares. Thus, 7 times 8 equals 56 squares. Gerald&#x27;s teacher brings two times 7, which equals 14 more bars. Each of these 14 bars has 8 squares, which is 14 times 8, or 112 squares. So, there are 56 squares from Gerald, plus 112 squares from Gerald&#x27;s teacher, which equals 168 squares total. With 24 students in class, 168 divided by 24 equals 7 squares for each student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 chocolate bars, each with 8 squares per bar. Therefore, there are a total of 7 times 8 = 56 squares of chocolate that Gerald brought to school. Gerald&#x27;s teacher adds two more bars for every bar that Gerald brought. Therefore, there are 7 times 2 = 14 additional bars of chocolate that Gerald&#x27;s teacher brings. Altogether, there are 56 + 14 = 70 bars of chocolate. With 24 students in the class, each student gets 70 divided by 24 = 2.916... bars of chocolate. Since there are 8 squares per bar, each student gets 2.916... times 8 = 23.28... squares of chocolate. We round this to the nearest whole number, which is 23 squares of chocolate for each student. \boxed{23}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars, so his teacher brings 7 * 2 = 14 more bars. Together they bring 7 + 14 = 21 bars to class. There are 24 students in the class. Each student gets 21 divided by 24 = 0.875 or 7/8 of a bar. In each bar, there are 8 squares of chocolate. 7/8 * 8 = 7/2 = 3.5 or 3 whole squares and 1 half of a square per student. \boxed{3 1/2}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brought 7 bars, and each bar has 8 squares, which means he brought a total of 7 x 8 = 56 squares. Gerald&#x27;s teacher said that for every bar he brought, she would bring 2 bars, so she brought 7 x 2 = 14 more bars. These 14 bars have a total of 14 x 8 = 112 squares. Together, Gerald and his teacher brought 56 + 112 = 168 squares for the 24 students, so each student gets 168 ÷ 24 = 7 squares. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars, and for every bar he brings, his teacher brings 2 more identical ones, so the total number of bars brought is 7+2(7)=7+14=21. With 21 bars, and 24 students, we divide 21 by 24 to find that each students gets 21/24=0.875=0 bars. Since a chocolate bar has 8 squares, each student gets 0(8)=0 squares of chocolate. \boxed{0}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars. Each bar has 8 squares. 7 times 8 equals 56 squares. Gerald&#x27;s teacher brings two more bars for each bar Gerald brings, which means she brings 14 more bars. 14 bars times 8 squares per bar equals 112 squares. 56 squares plus 112 squares equals 168 squares in total. There are 24 students in class, so 168 divided by 24 equals 7 squares for each student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brought 7 bars, and each bar has 8 squares, so 7 x 8 = 56 squares that Gerald brought. Now, Gerald&#x27;s teacher will bring 2 more bars for every one that Gerald brought, so she will bring 2 x 7 = 14 more bars. Each of her bars has 8 squares, so she has brought 14 x 8 = 112 more squares. Together, they have 56 + 112 = 168 squares of chocolate. There are 24 students in class, so 168 / 24 = 7 squares of chocolate for each student. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars, and his teacher brings 2 times 7, or 14, bars. We have a total of 7 + 14, or 21, bars and 24 students in the class. Each student gets 21 bars divided by 24 students, or 21 divided by 24, or 7/8, or 0.875, or 0 times 10^3 + 8 times 10^2 + 7 times 10^1 + 5 times 10^0, or 875 squares of chocolate. \boxed{875}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 chocolate bars. Each bar has 8 squares. 7 times 8 is 56 squares. Gerald&#x27;s teacher brings 2 times 7, which equals 14 chocolate bars. 14 times 8 is 112 squares. 56 + 112 equals 168 squares total. There are 24 students in class. 168 divided by 24 is 7. Each student gets 7 squares of chocolate. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 bars, and his teacher brings 7 x 2 = 14 more bars, for a total 21 bars for the class. There are 24 students in class, so each student gets 21 bars divided by 24 students = 0.875 bars. Since each bar has 8 squares, each student gets 0.875 bars x 8 squares per bar = 7 squares, so the answer is 7 squares. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Gerald brings chocolate bars to school for his class to share. Each bar contains 8 squares. He brings 7 total bars. His teacher says that for every bar he brings, she will bring two more identical ones. There are 24 students in class. How many squares of chocolate does each student get? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Gerald brings 7 chocolate bars. Each bar contains 8 squares so 7 x 8 = 56 squares that Gerald brought. Gerald&#x27;s teacher brings two more identical chocolate bars for every chocolate bar that Gerald brings so 7 x 2 = 14 additional chocolate bars that the teacher brings. 7 + 14 = 21 total chocolate bars. With 24 students in the class, 21 divided by 24 = 0.875. Since there are 8 squares for every chocolate bar, 0.875 x 8 = 7 squares that each student gets. \boxed{7}          </p>
+          <p class="lt-p">
+Reference Answer: 7          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+140                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+126                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+104                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+89                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+121                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+176                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+123                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+125                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+107                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+103                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+132                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+125                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+100                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+171                </td>
+                <td>
+126                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

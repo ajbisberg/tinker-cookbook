@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 21</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 21  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:45:07  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, their sister has 50 - 2 = 48 dolls. Since their sister has 48 dolls, Rene has 3 x 48 = 144 dolls. Their grandmother has 50 dolls, their sister has 48 dolls, and Rene has 144 dolls. They have 50 + 48 + 144 = 242 dolls altogether. \boxed{242}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. Let&#x27;s say that her sister has x dolls. Then, Rene has 3x dolls. Their sister has two more dolls than their grandmother. Their grandmother has 50 dolls. Since their sister has two more dolls than their grandmother, their sister has 50 + 2 = 52 dolls. Rene has 3x dolls and their sister has 52 dolls. Together they have 3x + 52 dolls. Since their grandmother has 50 dolls, we have 50 + 52 + 3x = 102 + 3x dolls altogether. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. Let&#x27;s assume that her sister has x dolls. Then, Rene will have 3x dolls. Their sister has two more dolls than their grandmother. Let&#x27;s assume that their grandmother has y dolls. Then, their sister will have y + 2 dolls. It is given that their grandmother has 50 dolls. Therefore, y = 50. Their sister has y + 2 = 50 + 2 = 52 dolls. Rene has 3x = 3x = 3(52) = 156 dolls. They have 50 + 52 + 156 = 258 dolls altogether. \boxed{258}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, their sister has 50 / 3 = 16.66... = 17 dolls. Their grandmother has 50 dolls, and their sister has 17 dolls. Their sister has 2 more dolls than their grandmother, which means their sister has 50 + 2 = 52 dolls. Rene has three times as many dolls as her sister, which means Rene has 3 x 17 = 51 dolls. They have 50 + 52 + 51 = 153 dolls altogether. \boxed{153}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, then their sister has 50 / 3 = 16.66... = 17 dolls. Their sister has two more dolls than their grandmother, therefore their sister has 50 + 2 = 52 dolls. Rene has three times as many dolls as her sister, therefore Rene has 17 x 3 = 51 dolls. They have 17 + 52 + 51 = 120 dolls altogether. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. Rene has 3x = 3 * 52 = 156 dolls. They have 50 + 52 + 156 = 258 dolls altogether. \boxed{258}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, their sister will have 50 / 3 = 16.66 dolls, rounded to 17 dolls. Their sister has two more dolls than their grandmother, so their grandmother has 50 dolls and their sister has 50 + 2 = 52 dolls. Rene has three times as many dolls as her sister, so Rene will have 17 x 3 = 51 dolls. They have 50 + 52 + 51 = 153 dolls altogether. \boxed{153}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, then their sister has 50 / 3 = 16.66 which is approximately 17 dolls. Their sister has two more dolls than their grandmother, so their sister has 50 + 2 = 52 dolls. Rene has three times as many dolls as her sister, so Rene has 17 x 3 = 51 dolls. They have 17 + 52 + 51 = 120 dolls altogether. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. Since their grandmother has 50 dolls, their sister has 50 - 2 = 48 dolls. Since their sister has 48 dolls and Rene has 3 x 48 = 144 dolls, they have 48 + 144 = 192 dolls altogether. \boxed{192}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If her sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. Rene has 3x dolls, and their sister has 52 dolls. Therefore, they have 3x + 52 dolls altogether. Since their grandmother has 50 dolls, substituting 50 for 50 dolls in the expression 3x + 52 gives 3(50) + 52 = 150 + 52 = 202 dolls. They have 202 dolls altogether. \boxed{202}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their grandmother has 50 dolls, their sister has 50 / 3 = 16.66... = 17 dolls. Their sister has two more dolls than their grandmother, which means their sister has 50 + 2 = 52 dolls. Rene has three times as many dolls as her sister, which means Rene has 17 x 3 = 51 dolls. Altogether, they have 17 + 52 + 51 = 120 dolls. \boxed{120}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. We have Rene&#x27;s dolls as 3x and their sister&#x27;s dolls as 52. The total number of dolls they have is 3x + 52. Since their grandmother has 50 dolls, we have 50 + 52 = 102 dolls. Therefore, they have 102 dolls altogether. \boxed{102}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If her sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. Rene has 3x dolls, and their sister has 52 dolls. Therefore, they have 3x + 52 dolls altogether. If their grandmother has 50 dolls, then their sister has 52 dolls, and Rene has 3 x 52 = 156 dolls. They have 52 + 156 = 208 dolls altogether. \boxed{208}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. Rene has 3x dolls, and their sister has 52 dolls. Therefore, Rene has 3x = 3(52) = 156 dolls, and their sister has 52 dolls. Their grandmother has 50 dolls. Thus, they have 50 + 52 + 156 = 258 dolls altogether. \boxed{258}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. Since their grandmother has 50 dolls, their sister has 50 + 2 = 52 dolls. Since their sister has 52 dolls and Rene has 3 x 52 = 156 dolls, they have 52 + 156 = 208 dolls altogether. \boxed{208}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Rene has three times as many dolls as her sister, while her sister has two more dolls than their grandmother. If their grandmother has 50 dolls, how many dolls do they have altogether? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Rene has three times as many dolls as her sister. If their sister has x dolls, then Rene has 3x dolls. Their sister has two more dolls than their grandmother. If their grandmother has 50 dolls, then their sister has 50 + 2 = 52 dolls. Rene has 3x dolls and their sister has 52 dolls. Therefore, the total number of dolls they have is 3x + 52. Since their grandmother has 50 dolls, then x = 50/3 = 16.52, which can be rounded to 17. Therefore, Rene has 3 * 17 = 51 dolls and their sister has 52 dolls. The total number of dolls they have is 51 + 52 = 103. \boxed{103}          </p>
+          <p class="lt-p">
+Reference Answer: 258          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+96                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+132                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+142                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+127                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+110                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+97                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+120                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+111                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+72                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+145                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+113                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+127                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+135                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+131                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+83                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+147                </td>
+                <td>
+163                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 mallard ducks and ten less than twice as many geese as ducks. So, there are 25 mallard ducks and 25 * 2 = 50 minus 10 = 40 geese. 4 ducks arrived at the park, so now there are 25 + 4 = 29 ducks. 5 less than 15 geese left the park, so now there are 15 minus 5 = 10 geese. We have 29 ducks and 10 geese, which means there are 10 geese and 29 minus 10 = 19 ducks remaining at the park. There are 10 geese and 19 ducks, which means there are 10 minus 19 = -9 more geese than ducks remaining at the park. \boxed{-9}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 mallard ducks and ten less than twice as many geese as ducks at the duck park. There are 25 mallard ducks. Ten less than twice as many geese as ducks is 10 less than 2 x 25 = 10 less than 50 = 40. So, there are 40 geese. Then, a small flock of 4 ducks arrived at the park and joined the birds already there. There are 25 + 4 = 29 ducks at the park. Five less than 15 geese leave the park. There are 15 - 5 = 10 geese at the park. So, there are 29 ducks and 10 geese at the park. There are 10 geese and 29 ducks, and 10 - 29 = -19 more geese than ducks remain at the park. \boxed{-19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. 25 mallard ducks and 2 × 25 = 50 geese means there are 50 - 10 = 40 geese at the park. 4 ducks arrived at the park, which means there are now 25 + 4 = 29 ducks at the park. 5 less than 15 geese means 15 - 5 = 10 geese left the park, which means there are now 40 - 10 = 30 geese at the park. There are now 30 geese and 29 ducks at the park, and 30 - 29 = 1 more geese than ducks remain at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 mallard ducks and ten less than twice as many geese as ducks. Since there are 25 mallard ducks, there must be 2 x 25 = 50 geese. However, we are given that ten less than twice as many geese as ducks, which means 50 - 10 = 40 geese. Now, a small flock of 4 ducks arrived at the park and joined the birds already there, which means 25 + 4 = 29 ducks. Finally, five less than 15 geese leave the park, which means 15 - 5 = 10 geese remained at the park. We have 29 ducks and 10 geese remaining at the park, which means there are 10 geese and 29 ducks, and 10 - 29 = -19 more geese than ducks remain at the park. \boxed{-19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 mallard ducks and ten less than twice as many geese as ducks. Therefore, there are 25 ducks and 25*2 - 10 = 50 - 10 = 40 geese at the park. Next, a small flock of 4 ducks arrived at the park and joined the birds already there. Therefore, there are 25 + 4 = 29 ducks at the park after the 4 ducks have arrived. Now, if five less than 15 geese leave the park, then 15 - 5 = 10 geese leave the park. Therefore, there are 40 - 10 = 30 geese remaining at the park. Since there are 29 ducks and 30 geese remaining at the park, there are 30 - 29 = 1 more goose than duck remaining at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. Hence, there are 25 ducks and 2 times 25, which is 50, minus 10, which is 40 geese. Now, a small flock of 4 ducks arrived at the park and joined the birds already there. Hence, there are 25 + 4, which is 29 ducks at the park. If five less than 15 geese leave the park, then there are 15 minus 5, which is 10 geese remaining in the park. There are 29 ducks at the park and 10 geese remaining in the park. Hence, there are 10 geese remaining as compared to 29 ducks remaining. Therefore, there are 10 - 29, which is -19 more geese than ducks remaining at the park. \boxed{-19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. This means that there are 25 mallard ducks and 2 x 25 - 10 = 2 x 15 = 30 - 10 = 20 geese. Next, a small flock of 4 ducks arrived at the park and joined the birds already there. This means that there are 25 + 4 = 29 ducks at the park. Then, five less than 15 geese leave the park, which means that 15 - 5 = 10 geese remain at the park. There are 29 ducks at the park and 10 geese remain at the park. Therefore, there are 29 - 10 = 19 more geese than ducks remain at the park. \boxed{19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. This means that there are 25 mallard ducks and 2 x 25 = 50 less ten = 40 geese. Therefore, there are 25 ducks and 40 geese at the park initially. A small flock of 4 ducks arrived at the park and joined the birds already there. This means that there are 25 + 4 = 29 ducks at the park after the new flock arrived. Five less than 15 geese leave the park, which means that 15 - 5 = 10 geese remain in the park. Therefore, after the new flock arrived and five geese left, there are 29 ducks and 10 geese at the park. There are 10 geese and 29 ducks, which means there are 10 - 29 = -19 more geese than ducks remaining at the park. \boxed{-19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. We know that there are 25 mallard ducks and twice 25 ducks, which is 50 ducks, ten less, which is 40 ducks. Therefore, there are 25 + 40 = 65 ducks at the park initially. A small flock of 4 ducks arrived at the park and joined the birds already there. Therefore, there are 25 + 4 = 29 ducks at the park after the new ducks arrived. Five less than 15 geese leave the park, which is 15 - 5 = 10 geese that leave the park. Therefore, there are 40 - 10 = 30 geese at the park after the geese leave. We know that there are 29 ducks and 30 geese at the park after the ducks and geese made changes. We need to find how many more geese than ducks remain at the park. There are 30 geese and 29 ducks at the park, which means there are 30 - 29 = 1 more geese than ducks remain at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. So, there are 25 ducks and 25 * 2 = 50 - 10 = 40 geese. 4 ducks arrived at the park, so now there are 25 + 4 = 29 ducks. 5 less than 15 geese left the park, so 15 - 5 = 10 geese left the park, leaving 40 - 10 = 30 geese. There are 30 geese and 29 ducks, which means there are 30 - 29 = 1 more goose than duck remains at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. We have 25 ducks and 2 x 25 = 50 geese, therefore ten less than twice as many geese as ducks is 50 - 10 = 40 geese. A small flock of 4 ducks arrived at the park and joined the birds already there. We have 25 + 4 = 29 ducks at the park after the new ducks arrived. If five less than 15 geese leave the park, we have 15 - 5 = 10 geese that remain at the park. We have 29 ducks at the park and 10 geese that remain at the park, therefore there are 10 geese and 29 ducks, which means there are 10 geese and 29 - 10 = 19 ducks remaining at the park, and the number of geese that remain at the park is 10 more than the number of ducks that remain at the park. \boxed{10}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 25 mallard ducks at the duck park. There are ten less than twice as many geese as ducks, so the number of geese can be determined as follows: twice as many ducks as geese = 2 x 25 = 50. Ten less than 50 geese = 50 - 10 = 40 geese. Now, a small flock of 4 ducks arrived at the park and joined the birds already there, so there are 25 + 4 = 29 ducks at the park. Five less than 15 geese leave the park, so there are 15 - 5 = 10 geese remaining at the park. We have 29 ducks and 10 geese remaining at the park, which means there are 10 geese and 29 ducks, and 10 more geese than ducks remain at the park. \boxed{10}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. We know that there are 25 ducks, and ten less than twice as many geese as ducks. Twice as many geese as ducks is 2 * 25 = 50. Ten less than 50 is 50 - 10 = 40. Thus, there are 40 geese. Then, a small flock of 4 ducks arrived at the park and joined the birds already there. There were 25 ducks before the small flock arrived, and 25 + 4 = 29 ducks now. If five less than 15 geese leave the park, 15 - 5 = 10 geese leave the park. Thus, there are 40 - 10 = 30 geese remaining at the park. Now, there are 29 ducks and 30 geese remaining at the park. Therefore, there are 30 geese and 29 ducks remaining at the park, and 30 - 29 = 1 more geese than ducks remain at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 mallard ducks and ten less than twice as many geese as ducks at the duck park. So, there are 25 ducks and 50 - 10 = 40 geese at the duck park. Next, a small flock of 4 ducks arrived at the park and joined the birds already there. So, 25 + 4 = 29 ducks are present at the park. Then, five less than 15 geese leave the park. So, 15 - 5 = 10 geese remain at the park. We have 29 ducks and 10 geese remaining at the park. Therefore, there are 10 geese than ducks remaining at the park. \boxed{10}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: We are given that there are 25 mallard ducks and ten less than twice as many geese as ducks at the duck park. Since there are 25 ducks and ten less than twice as many geese as ducks, there are 25 ducks and 50 - 10 = 40 geese at the duck park. Next, a small flock of 4 ducks arrived at the park and joined the birds already there. Since there were 25 ducks initially and 4 more ducks arrived, there are 25 + 4 = 29 ducks at the park after the new flock arrived. Then, five less than 15 geese leave the park. Since there were 40 geese initially and 15 - 5 = 10 geese left the park, there are 40 - 10 = 30 geese remaining at the park. We are asked how many more geese than ducks remain at the park. There are 30 geese remaining at the park and 29 ducks remaining at the park. Therefore, 30 geese - 29 ducks = 1 more geese than ducks remain at the park. \boxed{1}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks.  Then, a small flock of 4 ducks arrived at the park and joined the birds already there.  If five less than 15 geese leave the park, how many more geese than ducks remain at the park? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At the duck park, there are 25 mallard ducks and ten less than twice as many geese as ducks. We know that there are 25 ducks and 2 times 25, which is 50, minus 10, which equals 40 geese. Thus, there are 25 ducks and 40 geese at the park initially. A small flock of 4 ducks arrived at the park and joined the birds already there. Thus, there are 25 + 4, which equals 29 ducks at the park now. Five less than 15 geese leave the park, which means 15 - 5, which equals 10 geese remain at the park. We have 29 ducks and 10 geese remaining at the park, which means there are 29 ducks and 10 geese more than ducks remain at the park. \boxed{19}          </p>
+          <p class="lt-p">
+Reference Answer: 1          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+169                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+190                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+166                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+192                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+187                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+191                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+177                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+205                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+248                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+149                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+219                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+186                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+234                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+154                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+237                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+179                </td>
+                <td>
+182                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The cost of the Nikes is 150 dollars and the cost of the work boots is 120 dollars. The total cost of the Nikes and work boots is 150 dollars plus 120 dollars, which equals 270 dollars. Since the tax is 10%, 10% of 270 dollars is 0.1 × 270 = 27 dollars. 27 dollars is the tax and 270 dollars plus 27 dollars equals 297 dollars. John paid 297 dollars for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes, so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. Tax is 10%. The cost of the Nikes is 150 dollars and the cost of the work boots is 120 dollars. Since the tax is 10%, the cost of the Nikes with tax is 150 + (150 * 10%) = 150 + 15 = 165 dollars, and the cost of the work boots with tax is 120 + (120 * 10%) = 120 + 12 = 132 dollars. The total cost of everything is 165 dollars for the Nikes and 132 dollars for the work boots, which is 165 + 132 = 297 dollars. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The cost of the Nikes is 150 dollars and the cost of the work boots is 120 dollars. Tax is 10%, which means that 10% of the total cost must be added to the total cost. 10% of the total cost is 0.10 × (150 + 120) = 0.10 × 270 = 27 dollars. The total cost is 150 + 120 + 27 = 297 dollars. He paid 297 dollars for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes. He decides to buy a $150 pair of Nikes and a $120 pair of work boots. The tax is 10%. To find the amount he paid for everything, we need to calculate the cost of Nikes which is 150 dollars, and the cost of work boots which is 120 dollars. Since the tax is 10%, we need to multiply 150 dollars by 0.10 to get 15 dollars, and multiply 120 dollars by 0.10 to get 12 dollars. This means that the cost of Nikes including tax is 150 + 15 = 165 dollars, and the cost of work boots including tax is 120 + 12 = 132 dollars. The total amount paid by John is 165 + 132 = 297 dollars. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The cost of the Nikes is 150 dollars and the cost of the work boots is 120 dollars. The total cost of the Nikes and the work boots is 150 dollars plus 120 dollars which equals 270 dollars.Tax is 10% of 270 dollars which is 0.10 times 270 which equals 27 dollars. The total cost including tax is 270 dollars plus 27 dollars which equals 297 dollars. John paid 297 dollars for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes. He plans to buy a $150 pair of Nikes and a $120 pair of work boots. Tax is 10% which means that the tax on $150 is 150 x 0.10 = 15 and the tax on $120 is 120 x 0.10 = 12. The total cost of the Nikes is 150 + 15 = 165 and the total cost of the work boots is 120 + 12 = 132. The total amount that John paid for everything is 165 + 132 = 297. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. Tax is 10%. The cost of the Nikes is $150, and the cost of the work boots is $120. The tax on the Nikes is 10% of $150 which is 10% * 150 = 0.1 * 150 = 15. The tax on the work boots is 10% of $120 which is 10% * 120 = 0.1 * 120 = 12. The total cost of the Nikes including tax is $150 + 15 = 165. The total cost of the work boots including tax is $120 + 12 = 132. The total cost for both the Nikes and work boots is $165 + 132 = 297. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes. He decides to buy a $150 pair of Nikes and a $120 pair of work boots. The tax is 10%. To find the amount he paid for everything, we need to calculate the total of the pair of Nikes and the pair of work boots. The $150 pair of Nikes is 150 dollars, and the $120 pair of work boots is 120 dollars. The total of the pair of Nikes and the pair of work boots is 150 + 120 = 270 dollars. With a tax of 10%, we need to calculate 10% of 270. 10% of 270 is 0.10 * 270 = 27. The total amount with tax is 270 + 27 = 297 dollars. John paid 297 dollars for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes. He decides to buy a $150 pair of Nikes and a $120 pair of work boots. The tax is 10%. To find the amount of tax, we multiple the price of Nikes which is $150 by the tax rate which is 0.10 to get $150 x 0.10 = $15. Similarly, we multiple the price of work boots which is $120 by the tax rate which is 0.10 to get $120 x 0.10 = $12. Hence, the tax on Nikes is $15 and the tax on work boots is $12. To find the total amount paid, we add $150 which is the price of Nikes, $120 which is the price of work boots, $15 which is the tax on Nikes, and $12 which is the tax on work boots to get $150 + $120 + $15 + $12 = $297. Hence, John paid $297 for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The cost of the pair of Nikes is 150 dollars and the cost of the pair of work boots is 120 dollars. The total cost of the shoes is 150 dollars plus 120 dollars which equals 270 dollars. With a 10% tax, the total cost including tax is 270 dollars plus 0.10 times 270 dollars which is 27 dollars. Therefore, the total cost including tax is 270 dollars plus 27 dollars which equals 297 dollars. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The price of the Nikes is 150 dollars and the price of the work boots is 120 dollars. The total price of both items is 150 + 120 = 270 dollars. Since the tax is 10%, the amount of tax is 0.10 × 270 = 27 dollars. The total amount he paid for everything, including tax, is 270 + 27 = 297 dollars. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The cost of the pair of Nikes is 150 dollars and the cost of the pair of work boots is 120 dollars. The total cost of the pair of Nikes and the pair of work boots is 150 dollars plus 120 dollars which equals 270 dollars. Since tax is 10%, 10% of 270 dollars is 0.10 times 270 which equals 27 dollars. The total cost including tax is 270 dollars plus 27 dollars which equals 297 dollars. He paid 297 dollars for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes, so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. The tax is 10% of the sum of the prices, which is 10% of (150 + 120) = 10% of 270 = 0.10 * 270 = 27. The total cost is 150 + 120 + 27 = 297. So, he paid $297 for everything. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The pair of Nikes costs $150, and the pair of work boots costs $120. The total cost of the Nikes and work boots is 150 + 120 = 270. With a tax of 10%, he needs to pay 10% of 270 = 0.1 * 270 = 27 for tax. Thus, the total amount he pays for everything is 270 + 27 = 297. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots. Tax is 10%. The cost of the Nikes is 150 dollars and the cost of the work boots is 120 dollars. Since the tax is 10%, the amount of tax on the Nikes is 10% of 150 which is 0.10 × 150 which is 15. The amount that John paid for the Nikes is 150 + 15 which is 165. The amount of tax on the work boots is 10% of 120 which is 0.10 × 120 which is 12. The amount that John paid for the work boots is 120 + 12 which is 132. The total amount that John paid for everything is 165 + 132 which is 297. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: John needs to replace his shoes so he decides to buy a $150 pair of Nikes and a $120 pair of work boots.  Tax is 10%.  How much did he pay for everything? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: John needs to replace his shoes. He decides to buy a $150 pair of Nikes and a $120 pair of work boots. The tax is 10%. To find the amount of tax, we multiple the price of the Nikes by the tax rate of 10%, which gives us 150 x 0.10 = 15. We multiple the price of the work boots by the tax rate of 10%, which gives us 120 x 0.10 = 12. The amount of tax is 15 + 12 = 27. To find the total amount that John paid for everything, we add the price of the Nikes, the price of the work boots, and the amount of tax, which gives us 150 + 120 + 27 = 297. \boxed{297}          </p>
+          <p class="lt-p">
+Reference Answer: 297          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+135                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+162                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+136                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+174                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+132                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+128                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+185                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+178                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+212                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+132                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+119                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+104                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+185                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+151                </td>
+                <td>
+169                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Since there are twice that number in the band, there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males &amp; 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males &amp; 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. In total, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Twice that number in the band means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Twice that number in the band means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which totals to 11 + 12 = 23 musicians in the orchestra. Twice that number in the band means 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which totals to 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir. The total number of musicians in the orchestra, the band, and the choir is 23 + 46 + 29 = 98 musicians. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Since there are twice that number in the band, there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which gives us a total of 23 + 46 + 29 = 98 musicians. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males &amp; 12 females in the orchestra. This means that there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males &amp; 17 females in the choir. This means that there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir. The total number of musicians in the orchestra, the band, and the choir is 23 + 46 + 29 = 98. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males &amp; 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males &amp; 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir. The total number of musicians in the orchestra, the band, and the choir are 23 + 46 + 29 = 98 musicians. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Twice that number in the band means 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. There are twice that number in the band, which means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Twice that number in the band means there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir. The total number of musicians in the orchestra, the band, and the choir is 23 + 46 + 29 = 98 musicians. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which gives a total of 11 + 12 = 23 musicians in the orchestra. Since there are twice that number in the band, there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which gives a total of 12 + 17 = 29 musicians in the choir. Altogether, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which gives a total of 23 + 46 + 29 = 98 musicians. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males and 12 females in the orchestra, which means there are 11 + 12 = 23 musicians in the orchestra. Since there are twice that number of musicians in the band, there are 2 x 23 = 46 musicians in the band. There are 12 males and 17 females in the choir, which means there are 12 + 17 = 29 musicians in the choir. Therefore, there are 23 musicians in the orchestra, 46 musicians in the band, and 29 musicians in the choir, which means there are 23 + 46 + 29 = 98 musicians total in the orchestra, the band, and the choir. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: There are 11 males &amp; 12 females in the orchestra and twice that number in the band. There are 12 males &amp; 17 females in the choir. If each musician only participates in one group, how many musicians total are there in the orchestra, the band, and the choir? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: There are 11 males &amp; 12 females in the orchestra = 11 + 12 = 23. Twice that number in the band = 2 x (11 + 12) = 2 x 23 = 46. There are 12 males &amp; 17 females in the choir = 12 + 17 = 29. The total number of musicians in the orchestra, the band, and the choir = 23 + 46 + 29 = 98. \boxed{98}          </p>
+          <p class="lt-p">
+Reference Answer: 98          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+146                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+138                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+137                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+140                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+137                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+149                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+147                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+148                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+141                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+147                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+144                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+139                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+148                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+168                </td>
+                <td>
+105                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

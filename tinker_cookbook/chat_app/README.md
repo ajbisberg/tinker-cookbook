@@ -32,7 +32,7 @@ python -m tinker_cookbook.chat_app.tinker_chat_cli \
 
 You can modify the behavior of the chat by providing additional arguments:
 
-* **max_tokens** *(int, default=512)*
+* **max_tokens** *(int, default=1024)*
   Maximum number of tokens to generate in the response.
 
 * **temperature** *(float, default=0.7)*

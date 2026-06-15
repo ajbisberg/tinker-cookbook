@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 26</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 26  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:48:43  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours, so the water level at the end of the second hour is 40 - (2 * 2) = 40 - 4 = 36 gallons. In hour three, 1 gallon of water is added, so the water level at the end of the third hour is 36 + 1 = 37 gallons. In the fourth hour, 3 gallons of water are added, so the water level at the end of the fourth hour is 37 + 3 = 40 gallons. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours, so at the end of the second hour, the tank has 40 - 2 x 2 = 40 - 4 = 36 gallons of water. In hour three, 1 gallon of water is added, so the tank has 36 + 1 = 37 gallons of water. In hour four, 3 gallons of water are added, so the tank has 37 + 3 = 40 gallons of water. Thus, at the end of the fourth hour, the tank contains 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Hence, in the first two hours it loses 2 x 2 = 4 gallons of water. Hence, at the end of the second hour, the water left in the tank is 40 - 4 = 36 gallons. In the third hour, 1 gallon of water is added to the tank. Hence, at the end of the third hour, the water left in the tank is 36 + 1 = 37 gallons. In the fourth hour, 3 gallons of water is added to the tank. Hence, at the end of the fourth hour, the water left in the tank is 37 + 3 = 40 gallons. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank originally had 40 gallons of water. It lost 2 gallons of water per hour for the first two hours. Therefore, in the first two hours it lost 2 x 2 = 4 gallons of water. After two hours, the tank had 40 - 4 = 36 gallons of water. In the third hour, 1 gallon of water was added to the tank. Therefore, after the third hour, the tank had 36 + 1 = 37 gallons of water. In the fourth hour, 3 gallons of water were added to the tank. Therefore, after the fourth hour, the tank had 37 + 3 = 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. In the first two hours, it loses 2 gallons of water per hour, totaling 4 gallons lost. Thus, at the start of the third hour, there are 40 - 4 = 36 gallons of water in the tank. In the third hour, 1 gallon of water is added, resulting in 36 + 1 = 37 gallons of water in the tank. In the fourth hour, 3 gallons of water are added, resulting in 37 + 3 = 40 gallons of water in the tank. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank initially has 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Hence, at the end of the first two hours, the water in the tank is 40 - (2 x 2) = 40 - 4 = 36 gallons. In the third hour, Hayden adds 1 gallon of water to the tank. Hence, at the end of the third hour, the water in the tank is 36 + 1 = 37 gallons. In the fourth hour, Hayden adds 3 gallons of water to the tank. Hence, at the end of the fourth hour, the water in the tank is 37 + 3 = 40 gallons. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In hour one, the tank loses 2 gallons of water, thus there are 40 - 2 = 38 gallons remaining. In hour two, the tank loses another 2 gallons of water, thus there are 38 - 2 = 36 gallons remaining. In hour three, the tank gains 1 gallon of water, thus there are 36 + 1 = 37 gallons remaining. In hour four, the tank gains 3 gallons of water, thus there are 37 + 3 = 40 gallons remaining. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Therefore, in the first two hours, the tank loses 2 x 2 = 4 gallons of water. Hence, at the end of the second hour, the tank contains 40 - 4 = 36 gallons of water. In the third hour, 1 gallon of water is added to the tank. Hence, at the end of the third hour, the tank contains 36 + 1 = 37 gallons of water. In the fourth hour, 3 gallons of water are added to the tank. Hence, at the end of the fourth hour, the tank contains 37 + 3 = 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Therefore, after the first two hours, the tank contains 40 - 2 x 2 = 40 - 4 = 36 gallons of water. In hour three, Hayden adds 1 gallon of water to the tank. Therefore, after hour three, the tank contains 36 + 1 = 37 gallons of water. In hour four, Hayden adds 3 gallons of water to the tank. Therefore, after hour four, the tank contains 37 + 3 = 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In the first two hours, the tank loses 2 gallons of water per hour, so in 2 hours it loses 2 x 2 = 4 gallons. Therefore, at the end of two hours, there are 40 - 4 = 36 gallons of water in the tank. In the third hour, 1 gallon of water is added, so at the end of the third hour, there are 36 + 1 = 37 gallons of water in the tank. In the fourth hour, 3 gallons of water are added, so at the end of the fourth hour, there are 37 + 3 = 40 gallons of water in the tank. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Hence, at the end of the first two hours, the water in the tank is 40 - 2 × 2 = 40 - 4 = 36 gallons. In the third hour, 1 gallon of water is added to the tank. Hence, at the end of the third hour, the water in the tank is 36 + 1 = 37 gallons. In the fourth hour, 3 gallons of water is added to the tank. Hence, at the end of the fourth hour, the water in the tank is 37 + 3 = 40 gallons. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In the tank, there are initially 40 gallons of water. Over the first two hours, the tank loses 2 gallons of water per hour, so in two hours it loses 2 x 2 = 4 gallons of water. After two hours, there are 40 - 4 = 36 gallons of water remaining in the tank. In the third hour, 1 gallon of water is added to the tank, so the water level becomes 36 + 1 = 37 gallons. In the fourth hour, 3 gallons of water are added to the tank, so the water level becomes 37 + 3 = 40 gallons. At the end of the fourth hour, the tank contains 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first 2 hours. So, in the first 2 hours, it loses 2 x 2 = 4 gallons of water. At the end of the second hour, there are 40 - 4 = 36 gallons of water left in the tank. In the third hour, 1 gallon of water is added to the tank. So, at the end of the third hour, there are 36 + 1 = 37 gallons of water in the tank. In the fourth hour, 3 gallons of water are added to the tank. So, at the end of the fourth hour, there are 37 + 3 = 40 gallons of water in the tank. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Hence, after the first two hours there is 40 - 2 x 2 = 40 - 4 = 36 gallons of water in the tank. In hour three, 1 gallon of water is added to the tank. Hence, there are 36 + 1 = 37 gallons of water in the tank at the end of hour three. In hour four, 3 gallons of water are added to the tank. Hence, there are 37 + 3 = 40 gallons of water in the tank at the end of hour four. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank started with 40 gallons of water. It loses 2 gallons of water per hour for the first 2 hours. Therefore, in the first 2 hours it loses 2 x 2 = 4 gallons of water. After 2 hours, there are 40 - 4 = 36 gallons of water in the tank. In hour 3, 1 gallon of water is added to the tank. Therefore, after 3 hours there are 36 + 1 = 37 gallons of water in the tank. In hour 4, 3 gallons of water are added to the tank. Therefore, after 4 hours there are 37 + 3 = 40 gallons of water in the tank. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Hayden has a tank with a small hole in the bottom. The tank starts with 40 gallons of water. It loses 2 gallons of water per hour. Hayden does not add any water for the first two hours. He adds 1 gallon of water to the tank in hour three. He adds three gallons of water to the tank in the fourth hour. How much water is left in the tank at the end of the fourth hour? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The tank starts with 40 gallons of water. It loses 2 gallons of water per hour for the first two hours. Hence, after two hours, the tank has 40 - 2 x 2 = 40 - 4 = 36 gallons of water. In hour three, 1 gallon of water is added to the tank. Hence, after three hours, the tank has 36 + 1 = 37 gallons of water. In hour four, 3 gallons of water are added to the tank. Hence, after four hours, the tank has 37 + 3 = 40 gallons of water. \boxed{40}          </p>
+          <p class="lt-p">
+Reference Answer: 36          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+133                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+140                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+166                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+148                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+126                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+153                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+116                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+162                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+136                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+145                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+152                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+156                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+168                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+145                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+155                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+197                </td>
+                <td>
+134                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature, so it can be started at 6:00 am. Then, it takes 15 minutes to shape the dough, so shaping can start at 6:01 am and end at 6:16 am. Then, it takes 2 hours to proof, so proofing can start at 6:16 am and end at 8:16 am. Then, it takes 30 minutes to bake, so baking can start at 8:16 am and end at 8:46 am. Then, it takes 15 minutes to cool, so cooling can start at 8:46 am and end at 9:01 am. Therefore, the latest time the head baker can make it to the store to start working is 9:01 am. \boxed{9:01 am}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. It takes 15 minutes to shape the dough and 2 hours to proof. The bread takes 30 minutes to bake and 15 minutes to cool. The total time required is 1 hour + 15 minutes + 2 hours = 3 hours + 15 minutes = 3.25 hours. Therefore, the latest time the head baker can make it to the store to start working is 6:00 am - 3.25 hours = 6:00 am - 3 hours 15 minutes = 2:45 am. \boxed{2:45}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature, so it can be taken out of the refrigerator at 5:00 am. Then, it takes 15 minutes to shape the dough, so shaping starts at 5:15 am and ends at 5:30 am. Then, it takes 2 hours to proof, so proofing starts at 5:30 am and ends at 7:30 am. Then, it takes 30 minutes to bake, so baking starts at 7:30 am and ends at 8:00 am. Then, it takes 15 minutes to cool, so cooling starts at 8:00 am and ends at 8:15 am. The bakery opens at 6:00 am, so the head baker can make it to the store at the latest by 5:30 am to start working. \boxed{5:30}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. After this, it takes 15 minutes to shape the dough and 2 hours to proof. This means it takes a total of 1 + 15 + 2 = 18 minutes for these tasks. The bread then takes 30 minutes to bake and 15 minutes to cool. This means it takes a total of 30 + 15 = 45 minutes for these tasks. Therefore, the total time taken for all these tasks is 18 + 45 = 63 minutes. Since the bakery opens at 6:00 am, the latest time the head baker can make it to the store to start working is 6:00 am - 63 minutes = 5:57 am. \boxed{057}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Refrigerated dough takes 1 hour to come to room temperature. Shaping dough takes 15 minutes. Proofing dough takes 2 hours. Baking bread takes 30 minutes. Cooling bread takes 15 minutes. The bakery opens at 6:00 am. Therefore, the latest time the head baker can make it to the store to start working is: 1 hour for refrigerated dough + 15 minutes for shaping + 2 hours for proofing + 30 minutes for baking + 15 minutes for cooling = 3 hours + 15 minutes = 3.25 hours = 3 hours and 15 minutes = 3:15 am. \boxed{3:15}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. Then, it takes 15 minutes to shape the dough and 2 hours to proof. After proofing, it takes 30 minutes to bake the bread and 15 minutes to cool it. Therefore, 1 hour + 15 minutes + 2 hours + 30 minutes + 15 minutes = 3 hours + 60 minutes = 4 hours. The bakery opens at 6:00 am, so the latest time the head baker can make it to the store to start working is 6:00 am + 4 hours = 10:00 am. \boxed{10:00}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Total time for refrigerated dough to come to room temperature is 1 hour. Total time for shaping the dough is 15 minutes = 0.25 hour. Total time for proof is 2 hours. Total time for baking is 30 minutes = 0.5 hour. Total time for cooling is 15 minutes = 0.25 hour. Therefore, total time required to make bread is 1 + 0.25 + 2 + 0.5 + 0.25 = 3.75 hours = 3 hours 45 minutes. If the bakery opens at 6:00 am, the latest time the head baker can make it to the store to start working is 6:00 am + 3 hours 45 minutes = 9:45 am. \boxed{0945}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Refrigerated dough takes 1 hour to come to room temperature. Shaping the dough takes 15 minutes and proofing takes 2 hours. Baking the bread takes 30 minutes and cooling it takes 15 minutes. Therefore, a total of 1 + 15 + 2 + 30 + 15 = 63 minutes = 1 hour 3 minutes. Since the bakery opens at 6:00 am, the latest time the head baker can make it to the store to start working is 6:01 am - 1:03 am = 5:58 am. \boxed{0558}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Refrigerated dough takes 1 hour to come to room temperature. Shaping the dough takes 15 minutes and proofing takes 2 hours. Baking the dough takes 30 minutes and cooling takes 15 minutes. The bakery opens at 6:00 am. Total time required for prepping the dough and baking it is 1 + 15 + 2 + 30 + 15 = 63 minutes = 1 hour 3 minutes. Latest time the head baker can make it to the store to start working is 6:00 am - 1 hour 3 minutes = 6:00 am - 1:03 am = 4:57 am. \boxed{4:57}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. Then, it takes 15 minutes to shape the dough and 2 hours to proof. After proofing, it takes 30 minutes to bake and 15 minutes to cool. Therefore, the total time taken is 1 hour + 15 minutes + 2 hours + 30 minutes + 15 minutes = 4 hours 35 minutes = 4.583 hours. Since the bakery opens at 6:00 am, the head baker can make it to the store at the latest by 6:00 am - 4.583 hours = 1.417 hours before 6:00 am = 1.417 x 60 minutes = 84.02 minutes = 1 hour 24.02 minutes = 1:24 am. \boxed{1:24}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. The shaping process takes 15 minutes, and the proofing process takes 2 hours. The baking process takes 30 minutes, and the cooling process takes 15 minutes. Therefore, the total time required for the dough to be ready is 1 hour + 15 minutes + 2 hours = 3 hour 15 minutes = 195 minutes. As the bakery opens at 6:00 am, the latest time the head baker can start working is 195 minutes after 6:00 am, which is 6:00 am + 195 minutes = 8:45 am. \boxed{0845}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. After that, it takes 15 minutes to shape the dough and 2 hours to proof. After proofing, it takes 30 minutes to bake and 15 minutes to cool. Therefore, the total time required for making the bread is 1 hour + 15 minutes + 2 hours + 30 minutes + 15 minutes = 4 hours + 30 minutes = 4.5 hours. Since the bakery opens at 6:00 am, the latest time the head baker can make it to the store to start working is 6:00 am - 4.5 hours = 6:00 am - 4 hours and 30 minutes = 1:30 am. \boxed{1:30}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. After 1 hour, we have 5 hours remaining. In the 5 hours, we have 15 minutes for shaping the dough, 2 hours for proofing, 30 minutes for baking, and 15 minutes for cooling. Therefore, we have 15 minutes + 2 hours + 30 minutes + 15 minutes = 2 hours 30 minutes = 150 minutes. 150 minutes from 6:00 am is 6:00 am + 150 minutes = 8:30 am. Therefore, the latest time the head baker can make it to the store to start working is 8:30 am. \boxed{8:30}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Refridgerated dough takes 1 hour to come to room temperature. Shaping the dough takes 15 minutes. Proofing the dough takes 2 hours. Baking the bread takes 30 minutes. Cooling the bread takes 15 minutes. Total preparation time is 1 hour + 15 minutes + 2 hours + 30 minutes + 15 minutes = 4 hours 15 minutes = 4.25 hours. The bakery opens at 6:00 am, so the latest time the head baker can make it to the store to start working is 6:00 am - 4.25 hours = 1:35 am. \boxed{0135}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Refrigerated dough takes 1 hour to come to room temperature. Shaping dough takes 15 minutes, and proofing takes 2 hours. Baking takes 30 minutes, and cooling takes 15 minutes. Therefore, the total time required is 1 hour + 15 minutes + 2 hours = 3 hours + 15 minutes = 3.25 hours. The bakery opens at 6:00 am. Therefore, the latest time the head baker can make it to the store to start working is 6:00 am - 3.25 hours = 6:00 am - 3 hours and 15 minutes = 2:45 am. \boxed{2:45}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: It takes 1 hour for refrigerated dough to come to room temperature.  It takes 15 minutes to shape the dough and 2 hours to proof.  The bread takes 30 minutes to bake and 15 minutes to cool.  If the bakery opens at 6:00 am, what is the latest time the head baker can make it to the store to start working? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The refrigerated dough takes 1 hour to come to room temperature. The shaping process takes 15 minutes. The proofing process takes 2 hours. The baking process takes 30 minutes. The cooling process takes 15 minutes. Total time = 1 hour + 15 minutes + 2 hours + 30 minutes + 15 minutes = 4 hours + 30 minutes = 4.5 hours. The bakery opens at 6:00 am. The head baker can make it to the store latest at 6:00 am - 4.5 hours = 6:00 am - 4.5 hours = 1:30 am. \boxed{1:30}          </p>
+          <p class="lt-p">
+Reference Answer: 2          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+179                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+134                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+187                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+163                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+143                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+139                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+169                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+129                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+147                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+177                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+142                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+164                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+152                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+140                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+145                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+187                </td>
+                <td>
+144                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, he can make 4 x 3 hats = 12 hats out of 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak, therefore he needs 3 x 6 cloaks = 18 yards of velvet to make 6 cloaks. Hence, the total velvet required to make 6 cloaks and 12 hats is 18 + 12 = 30 yards. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 6 cloaks he needs 3 * 6 = 18 yards of velvet. For 12 hats he needs 12 / 4 = 3 yards of velvet. Total velvet needed for 6 cloaks and 12 hats is 18 + 3 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 6 cloaks, he needs 3 x 6 = 18 yards of velvet. For 12 hats, he needs 12 x 4 = 48 yards of velvet. In total, for 6 cloaks and 12 hats, he needs 18 + 48 = 66 yards of velvet. \boxed{66}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, to make 12 hats, he will need 12/4 = 3 yards of velvet. James needs 3 yards of velvet to make a cloak. Therefore, to make 6 cloaks, he will need 6 × 3 = 18 yards of velvet. Total velvet required for 6 cloaks and 12 hats is 3 + 18 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, he can make 4 x 3 = 12 hats out of 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak, therefore he needs 3 x 6 = 18 yards of velvet to make 6 cloaks. Altogether, he needs 18 + 12 = 30 yards of velvet to make 6 cloaks and 12 hats. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 6 cloaks, he needs 3 * 6 = 18 yards of velvet. For 12 hats, he needs 12 / 4 = 3 yards of velvet. Hence, for 6 cloaks and 12 hats, he needs 18 + 3 = 21 yards of velvet. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, he can make 4 x 3 = 12 hats out of 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak. Therefore, he needs 3 x 6 = 18 yards of velvet to make 6 cloaks. He needs 12 hats out of 3 yards of velvet. Therefore, he needs 12 / 4 = 3 yards of velvet to make 12 hats. Total velvet required for 6 cloaks and 12 hats is 18 + 3 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 12 hats, he requires 12/4 = 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak. Therefore, for 6 cloaks, he requires 6 x 3 = 18 yards of velvet. Total velvet required for 6 cloaks and 12 hats is 3 + 18 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, 1 yard of velvet can make 4 hats. James needs 3 yards of velvet to make a cloak. To make 6 cloaks, he needs 6 x 3 = 18 yards of velvet. To make 12 hats, he needs 12/4 = 3 yards of velvet. Therefore, to make 6 cloaks and 12 hats, James needs 18 + 3 = 21 yards of velvet. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, he can make 4 x 3 = 12 hats out of 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak. Therefore, he needs 3 x 6 = 18 yards of velvet to make 6 cloaks. He needs 12 hats out of 3 yards of velvet. Therefore, he needs 12 / 4 = 3 yards of velvet to make 12 hats. Total velvet required for 6 cloaks and 12 hats = 18 + 3 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 6 cloaks, he needs 3 * 6 = 18 yards of velvet. Additionally, for 12 hats, he needs 12 / 4 = 3 yards of velvet. In total, for 6 cloaks and 12 hats, he needs 18 + 3 = 21 yards of velvet. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, to make 12 hats, he needs 12/4 = 3 yards of velvet. James needs 3 yards of velvet to make 1 cloak. Therefore, to make 6 cloaks, he needs 6 x 3 = 18 yards of velvet. Altogether, he needs 3 yards of velvet to make 12 hats and 18 yards of velvet to make 6 cloaks, which is 3 + 18 = 21 yards of velvet. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, to make 12 hats, he needs 12/4 = 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak. Therefore, to make 6 cloaks, he needs 6 x 3 = 18 yards of velvet. Total velvet required for 6 cloaks and 12 hats is 3 + 18 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of one yard of velvet. Therefore, he can make 4 x 3 = 12 hats out of three yards of velvet. He needs three yards of velvet to make 1 cloak. Therefore, he needs 3 x 6 = 18 yards of velvet to make 6 cloaks. Total velvet required for 6 cloaks and 12 hats is 18 + 12 = 30 yards. \boxed{30}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, for 6 cloaks he needs 3 * 6 = 18 yards of velvet. For 12 hats he needs 12 / 4 = 3 yards of velvet. Total velvet required for 6 cloaks and 12 hats = 18 + 3 = 21 yards. \boxed{21}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James can make 4 hats out of one yard of velvet. He needs three yards of velvet to make a cloak. How much velvet does he need to make 6 cloaks and 12 hats? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James can make 4 hats out of 1 yard of velvet. Therefore, he can make 4 x 3 = 12 hats out of 3 yards of velvet. He needs 3 yards of velvet to make 1 cloak, so he needs 3 x 6 = 18 yards of velvet to make 6 cloaks. Hence, he needs 12 hats and 18 cloaks, which totals to 12 + 18 = 30 items. Since he needs 1 yard of velvet to make 4 hats, he needs 30 / 4 = 7.5 yards of velvet to make 30 items. \boxed{7.5}          </p>
+          <p class="lt-p">
+Reference Answer: 21          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+107                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+89                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+102                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+104                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+88                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+135                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+99                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+113                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+135                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+91                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+120                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+150                </td>
+                <td>
+140                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge has 60 acres of property and planted corn on all of them. 1/3rd of 60 acres = 20 acres, and 20 acres are clay-rich soil. The yield of corn in good soil is 400 bushels per acre, and the yield in clay-rich soil is half of that, which is 200 bushels per acre. Good soil covers 60 acres - 20 acres = 40 acres, hence the yield in good soil is 40 acres x 400 bushels/acre = 16000 bushels. Clay-rich soil covers 20 acres, hence the yield in clay-rich soil is 20 acres x 200 bushels/acre = 4000 bushels. The total yield of corn is 16000 bushels + 4000 bushels = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 33 acres (1/3 of 60 acres) have clay-rich soil, and the rest 27 acres (60-33 = 27) have good soil.  In clay-rich soil, the yield is half as much per acre as in good soil. So, the yield in clay-rich soil is 200 bushels per acre (400/2 = 200). The yield in good soil is 400 bushels per acre. The yield in clay-rich soil is 200 * 33 = 6600 bushels. The yield in good soil is 400 * 27 = 10800 bushels. Total yield = 6600 + 10800 = 17400 bushels. \boxed{17400}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on his 60 acres of property last year.  1/3 of his 60 acres of land is clay-rich soil, which means 60 x 1/3 = 20 acres of land have clay-rich soil.  The rest of the land, i.e. 60 - 20 = 40 acres, has good soil.  Normally, corn grown on good soil yields 400 bushels per acre, so 40 acres of good soil will yield 400 bushels per acre, which means 40 acres x 400 bushels per acre = 16000 bushels of corn obtained from good soil.  Clay-rich soil yields half as much per acre as in good soil, so 20 acres of clay-rich soil will yield 400/2 = 200 bushels per acre, which means 20 acres x 200 bushels per acre = 4000 bushels of corn obtained from clay-rich soil.  Therefore, the total bushels of corn obtained last year is 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 20 acres is clay-rich soil, and 40 acres is good soil. 400 bushels per acre in good soil, so 400 x 40 = 16000 bushels in good soil. 200 bushels per acre in clay-rich soil, so 200 x 20 = 4000 bushels in clay-rich soil. Total bushels = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 20 acres of clay-rich soil, and 60 - 20 = 40 acres of good soil. 400 bushels per acre in good soil = 400 x 40 acres = 16000 bushels yielded from good soil. 400/2 = 200 bushels per acre in clay-rich soil = 200 x 20 acres = 4000 bushels yielded from clay-rich soil. Total bushels yielded = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Last year, Jorge planted corn on all of his 60 acres of property. 33 acres (1/3 of 60 acres) is clay-rich soil and the rest 27 acres (60 - 33 = 27) is good soil. Corn grown on good soil yields 400 bushels per acre, thus for 27 acres of good soil, the yield is 27 x 400 = 10800 bushels. Corn grown on clay-rich soil yields half as much per acre as in good soil, thus for 33 acres of clay-rich soil, the yield is 33 x 200 = 6600 bushels. The total yield of corn is 10800 + 6600 = 17400 bushels. \boxed{17400}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 20 acres is clay-rich soil.  The yield of corn in good soil is 400 bushels per acre, so 40 acres of good soil yields 40 x 400 = 16000 bushels.  The yield of corn in clay-rich soil is half of that in good soil, so 20 acres of clay-rich soil yields 20 x 200 = 4000 bushels.  Total yield = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres of land is clay-rich soil, which is 20 acres. The remaining 40 acres of land is good soil. Typically, corn grown on good soil yields 400 bushels per acre, so 40 acres of good soil will yield 40 x 400 = 16000 bushels. In clay-rich soil, the yield is half as much per acre as in good soil, so 20 acres of clay-rich soil will yield 20 x 200 = 4000 bushels. Total corn yield = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge had 60 acres of property and planted corn on all of it. 1/3 of 60 acres = 20 acres is clay-rich soil and the rest 40 acres is good soil. Corn grown in good soil yields 400 bushels per acre, so 40 acres of good soil yield 400 x 40 = 16000 bushels. Corn grown in clay-rich soil yields half as much per acre as in good soil, so it yields 400/2 = 200 bushels per acre, 20 acres of clay-rich soil yield 200 x 20 = 4000 bushels. Total yield = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. Out of 60 acres, one-third or 1/3 = 60/3 = 20 acres is clay-rich soil. The remaining 60 - 20 = 40 acres is good soil. Typically, corn grown on good soil yields 400 bushels per acre. For 40 acres of good soil, the yield is 40 x 400 = 16000 bushels. In clay-rich soil, the yield is only half as much per acre as in good soil. For 20 acres of clay-rich soil, the yield is 20 x (400/2) = 20 x 200 = 4000 bushels. Total yield = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Last year, Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 20 acres of land is clay-rich soil. 1 - 1/3 = 2/3 = 40 acres of land is good soil. 400 bushels per acre in good soil. 400 * 40 acres = 16000 bushels from good soil. 200 bushels per acre in clay-rich soil. 200 * 20 acres = 4000 bushels from clay-rich soil. Total bushels = 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 60/3 = 20 acres of land is clay-rich soil, and the remaining 60 - 20 = 40 acres of land is good soil. Typically, corn grown on good soil yields 400 bushels per acre, so 40 acres of good soil yields 40 x 400 = 16000 bushels of corn. The yield of corn on clay-rich soil is half as much per acre as in good soil, so 20 acres of clay-rich soil yields 20 x (400/2) = 20 x 200 = 4000 bushels of corn. The total yield of corn is 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property.  The yield of corn in good soil is 400 bushels per acre.  The yield of corn in clay-rich soil is half as much as in good soil, which means it is 200 bushels per acre.  One-third of Jorge&#x27;s 60 acres of land, which is 20 acres, is clay-rich soil.  The yield on 20 acres of clay-rich soil is 200 bushels per acre, resulting in 200 x 20 = 4000 bushels.  The remaining 40 acres of good soil yields 400 bushels per acre, resulting in 400 x 40 = 16000 bushels.  Therefore, the total yield on 60 acres is 4000 + 16000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 3/60 acres of land are clay-rich soil and the remaining 57/60 acres are good soil. Corn yield in good soil is 400 bushels per acre, hence corn yield in good soil is 400 X 57/60 = 380 bushels. Corn yield in clay-rich soil is half of the yield in good soil, hence corn yield in clay-rich soil is 200 X 3/60 = 10 bushels. Total corn yield is 380 + 10 = 390 bushels. \boxed{390}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 1/3 of 60 acres = 20 acres is clay-rich soil and 40 acres is good soil. Corn yield in good soil is 400 bushels per acre, so on 40 acres of good soil, the yield is 40 * 400 = 16000 bushels. Corn yield in clay-rich soil is half as much as in good soil, so on 20 acres of clay-rich soil, the yield is 20 * 200 = 4000 bushels. The total yield is 16000 + 4000 = 20000 bushels. \boxed{20000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Last year, Jorge planted corn on all of his 60 acres of property.  Typically, corn grown on good soil yields 400 bushels per acre, but in clay-rich soil, the yield is only half as much per acre as in good soil.  One-third of Jorge&#x27;s 60 acres of land is clay-rich soil and the rest is good soil.  How many bushels of corn did Jorge&#x27;s land yield last year? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Jorge planted corn on all of his 60 acres of property. 30 acres of his land is clay-rich soil and 30 acres of his land is good soil. In clay-rich soil, the yield of corn is 400/2 = 200 bushels per acre. In good soil, the yield of corn is 400 bushels per acre. For 30 acres of clay-rich soil, the yield is 30 x 200 = 6000 bushels. For 30 acres of good soil, the yield is 30 x 400 = 12000 bushels. The total yield of corn is 6000 + 12000 = 18000 bushels. \boxed{18000}          </p>
+          <p class="lt-p">
+Reference Answer: 20000          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+178                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+165                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+229                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+118                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+132                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+158                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+130                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+147                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+151                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+170                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+137                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+171                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+178                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+127                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+140                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+198                </td>
+                <td>
+147                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>

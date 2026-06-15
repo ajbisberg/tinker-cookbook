@@ -349,6 +349,21 @@ async def main(config: Config):
 
         start_batch_idx = start_batch if epoch_idx == start_epoch else 0
         for batch_idx in range(start_batch_idx, n_batches):
+            step = epoch_idx * n_batches + batch_idx
+
+            eval_due = bool(evaluators and config.eval_every > 0 and step % config.eval_every == 0)
+            infrequent_eval_due = bool(
+                infrequent_evaluators
+                and config.infrequent_eval_every > 0
+                and step % config.infrequent_eval_every == 0
+            )
+
+            # If eval is due, first drain any pending train step. This ensures eval observes
+            # post-(step-1) weights and avoids interleaving eval requests with unresolved step futures.
+            if pending_batch is not None and (eval_due or infrequent_eval_due):
+                await finish_batch(pending_batch)
+                pending_batch = None
+
             submitted_batch = await submit_batch(epoch_idx, batch_idx)
             if pending_batch is not None:
                 await finish_batch(pending_batch)

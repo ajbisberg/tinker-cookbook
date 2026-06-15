@@ -7,6 +7,7 @@ import asyncio
 import logging
 import sys
 import os
+import time
 
 import chz
 import tinker
@@ -29,7 +30,7 @@ class Config:
     # If omitted and `model_path` is provided, we'll auto-detect the base model from the training run.
     base_model: str | None = None
     model_path: str | None = None
-    max_tokens: int = 512
+    max_tokens: int = 1024
     temperature: float = 0.7
     top_p: float = 0.9
     base_url: str | None = None
@@ -80,9 +81,33 @@ class ChatSession:
             )
 
             # Generate response
+            start_time = time.perf_counter()
             response = await self.sampling_client.sample_async(
                 prompt=model_input, num_samples=1, sampling_params=sampling_params
             )
+            elapsed_seconds = time.perf_counter() - start_time
+
+            # Best-effort stop diagnostics
+            try:
+                seq = response.sequences[0]
+                token_count = len(seq.tokens) if hasattr(seq, "tokens") else None
+                stop_reason = getattr(seq, "stop_reason", None)
+                tokens_per_second = (
+                    token_count / elapsed_seconds
+                    if token_count is not None and elapsed_seconds > 0
+                    else None
+                )
+                rate_display = (
+                    f", {tokens_per_second:.2f} tok/s"
+                    if tokens_per_second is not None
+                    else ""
+                )
+                print(
+                    f"\n🧪 diagnostics: tokens={token_count}{rate_display}, "
+                    f"stop_reason={stop_reason}"
+                )
+            except Exception:
+                pass
 
             # Parse the response
             parsed_message, _ = self.renderer.parse_response(response.sequences[0].tokens)

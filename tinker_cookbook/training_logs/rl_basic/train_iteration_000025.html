@@ -1,0 +1,4179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>RL Iteration 25</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--lt-bg, #f5f5f5);
+    color: var(--lt-text, #333);
+}
+
+.lt-root {
+    background: var(--lt-card, white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lt-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+    border-bottom: 2px solid var(--lt-border, #e5e7eb);
+    padding-bottom: 0.5rem;
+}
+
+.lt-subtitle {
+    color: var(--lt-sub, #666);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.lt-section {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-section-body {
+    margin-top: 0.5rem;
+}
+
+.lt-section h2, .lt-section h3, .lt-section h4, .lt-section h5, .lt-section h6 {
+    margin: 0.5rem 0;
+    color: var(--lt-accent, #2563eb);
+}
+
+.lt-p {
+    margin: 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.lt-details {
+    margin: 0.5rem 0;
+    border: 1px solid var(--lt-border, #e5e7eb);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.lt-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+.lt-details-body {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--lt-bg, #f5f5f5);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.lt-details-body pre {
+    margin: 0;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+}
+
+.lt-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.lt-table th {
+    background: var(--lt-accent, #2563eb);
+    color: white;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.lt-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--lt-border, #e5e7eb);
+}
+
+.lt-table tr:nth-child(even) {
+    background: var(--lt-bg, #f5f5f5);
+}
+
+.lt-table-caption {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--lt-text, #333);
+}
+
+.lt-exc {
+    background: #fee;
+    border: 2px solid #c00;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.lt-exc summary {
+    color: #c00;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lt-exc pre {
+    margin-top: 0.5rem;
+    font-family: var(--lt-mono, "Courier New", monospace);
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.answer, .reward {
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.25rem 0;
+}
+
+.answer {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reward {
+    background: #dcfce7;
+    color: #166534;
+}
+
+</style></head>
+<body class="lt-root">
+  <h1 class="lt-title">
+RL Iteration 25  </h1>
+  <div class="lt-subtitle">
+Generated 2026-02-17T22:48:05  </div>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. Therefore, 2 small pizzas have 2 x 6 = 12 slices. James ate 2/3 of all the slices, which means he ate (2/3) x 12 = (2/3) x 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. Hence, 2 small pizzas have 2 x 6 = 12 slices. James ate 2/3 of all the slices, which means he ate 2/3 x 12 = 2 x 4 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices in 2 small pizzas is 2 * 6 = 12 slices. James ate 2/3 of all the slices, which means he ate (2/3) * 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas, each pizza has 6 slices, hence there are 2 x 6 = 12 slices in total. James ate 2/3 of all the slices, hence he ate 2/3 x 12 = 2/3 x 10 = 20/3 = 6.66... = 6 (rounded to the nearest integer). Therefore, James ate 6 slices of pizza. \boxed{6}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices, hence 2 small pizzas have 2 * 6 = 12 slices. James ate 2/3 of all the slices, hence he ate 2/3 * 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices is 2 x 6 = 12. James ate 2/3 of all the slices. 2/3 of 12 = 2/3 x 12 = 8. Therefore, James ate 8 slices of pizza. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices, which means that both pizzas have 6 + 6 = 12 slices. James ate 2/3 of all the slices, which means he ate 2/3 x 12 = 2 x 4 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices, so the total number of slices for both pizzas is 2 x 6 = 12 slices. James ate 2/3 of all the slices, so the number of slices eaten by James is 2/3 x 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices = 2 × 6 = 12 slices. James ate 2/3 of all the slices. Therefore, the number of slices eaten by James = 2/3 × 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices from 2 small pizzas = 2 × 6 = 12 slices. James ate 2/3 of all the slices. Number of slices eaten by James = 2/3 × 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices in 2 small pizzas = 2 × 6 = 12 slices. James ate 2/3 of all the slices. Number of slices eaten by James = 2/3 × 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices, which makes 2 x 6 = 12 slices in total. James ate 2/3 of all the slices, which is 2/3 x 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices = 2 x 6 = 12 slices. James ate 2/3 of all the slices. The number of slices eaten by James = 2/3 x 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. The total number of slices in 2 small pizzas = 2 × 6 = 12 slices. James ate 2/3 of all the slices. Therefore, the number of slices eaten by James = 2/3 × 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. Total number of slices = 2 × 6 = 12 slices. James ate 2/3 of all the slices. Number of slices eaten by James = 2/3 × 12 = 8 slices. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. James ate 2/3 of all the slices. How many slices of pizza did James eat? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: James and Lisa ordered 2 small pizzas. Each pizza has 6 slices. Total number of slices = 2 × 6 = 12. James ate 2/3 of all the slices. Number of slices eaten by James = 2/3 × 12 = 8. \boxed{8}          </p>
+          <p class="lt-p">
+Reference Answer: 8          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+77                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+73                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+98                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+65                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+78                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+75                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+72                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+74                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+74                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+62                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+70                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+77                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+68                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+145                </td>
+                <td>
+66                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 34 eggs per hour will take 170/34 = 5 hours to decorate 170 eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 34 eggs per hour will take 170/34 = 5 hours to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, Mia and Billy can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170/34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, Mia and Billy can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 / 34 = 5 hours will be required for Mia and Billy to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, Mia and Billy can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Hence, 170 eggs / 34 eggs per hour = 170 / 34 = 5 hours. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 34 eggs per hour will take 170/34 = 5 hours to decorate 170 eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Hence, 170 / 34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 34 eggs per hour will take 170/34 = 5 hours to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 / 34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 / 34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, Mia and Billy can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 / 34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 eggs / 34 eggs per hour = 5 hours. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Hence, 170 / 34 = 5 hours will be required to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Therefore, their combined capacity to decorate eggs is 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. So, 170 eggs / 34 eggs per hour = 5 hours. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equal to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, Mia and Billy can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 170 / 34 = 5 hours will be required for Mia and Billy to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Mia can decorate 2 dozen Easter eggs per hour. Her little brother Billy can only decorate 10 eggs per hour. They need to decorate 170 eggs for the Easter egg hunt. If they work together, how long will it take them to decorate all the eggs? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Mia can decorate 2 dozen eggs per hour, which is equivalent to 2 x 12 = 24 eggs per hour. Billy can decorate 10 eggs per hour. Together, they can decorate 24 + 10 = 34 eggs per hour. They need to decorate 170 eggs. Therefore, 34 eggs per hour will take 170/34 = 5 hours to decorate all the eggs. \boxed{5}          </p>
+          <p class="lt-p">
+Reference Answer: 5          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+88                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+93                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+91                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+86                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+89                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+83                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+87                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+93                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+163                </td>
+                <td>
+90                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: In the morning, Isabel runs a 365 meter circuit 7 times. Therefore, the total distance covered in the morning = 365 * 7 = 2555 meters. In the afternoon, Isabel runs a 365 meter circuit 3 times. Therefore, the total distance covered in the afternoon = 365 * 3 = 1095 meters. The total distance covered in a week = 2555 + 1095 = 3650 meters. \boxed{3650}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The circuit is 365 meters long. Isabel runs the circuit 7 times in the morning, which means she runs 7 x 365 = 2555 meters in the morning. Isabel runs the circuit 3 times in the afternoon, which means she runs 3 x 365 = 1095 meters in the afternoon. The total distance Isabel runs in a week is 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2545 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. Total distance run in a week = 2545 + 1095 = 3630 meters. \boxed{3630}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. She runs this circuit 7 times in the morning and 3 times in the afternoon. The total distance covered by her in the morning is 7 x 365 = 2555 meters. The total distance covered by her in the afternoon is 3 x 365 = 1095 meters. The total distance covered by her in a day is 2555 + 1095 = 3650 meters. She runs for 7 days in a week. The total distance covered by her in a week is 3650 x 7 = 25550 meters. \boxed{25550}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2545 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. Total meters run in a week = 2545 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. She runs the circuit 7 times in the morning, which means she runs 7 x 365 = 2555 meters in the morning. She runs the circuit 3 times in the afternoon, which means she runs 3 x 365 = 1095 meters in the afternoon. The total distance she runs in a week is 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. She runs the circuit 7 times in the morning, which is 7 x 365 = 2555 meters. She runs the circuit 3 times in the afternoon, which is 3 x 365 = 1095 meters. Therefore, the total distance she runs in a week is 2555 + 1095 = 3650 meters. \boxed{3650}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 meters = 2555 meters. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 meters = 1095 meters. The total distance she runs in a day is 2555 + 1095 = 3650 meters. In a week, she runs the circuit 7 days, which means she runs 7 x 3650 meters = 25510 meters. \boxed{25510}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which is 7 x 365 = 2555 meters. In the afternoon, she runs the circuit 3 times, which is 3 x 365 = 1095 meters. Therefore, in a week, Isabel runs 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2555 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. Therefore, in a week, Isabel runs 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2555 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. Therefore, in a week, Isabel runs 2555 + 1095 = 3650 meters. \boxed{3650}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. She runs the circuit 7 times in the morning, which means she runs 7 x 365 = 2,555 meters in the morning. She runs the circuit 3 times in the afternoon, which means she runs 3 x 365 = 1,095 meters in the afternoon. The total distance she runs in a week is 2,555 + 1,095 = 3,650 meters. \boxed{3650}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2545 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. Thus, in a week, Isabel runs 2545 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. In the morning, she runs the circuit 7 times, which means she runs 7 x 365 = 2555 meters in the morning. In the afternoon, she runs the circuit 3 times, which means she runs 3 x 365 = 1095 meters in the afternoon. The total distance she runs in a week is 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The circuit is 365 meters long. Isabel runs the circuit 7 times in the morning, which means she covers 7 x 365 = 2555 meters in the morning. Isabel runs the circuit 3 times in the afternoon, which means she covers 3 x 365 = 1095 meters in the afternoon. The total distance covered by Isabel in a week is 2555 + 1095 = 3650 meters. \boxed{3650}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Isabel loves to run in the forest and she does it within a circuit that is 365 meters long. She runs the circuit 7 times in the morning and runs it 3 times in the afternoon. How many meters does Isabel run during a week? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: Isabel runs a circuit that is 365 meters long. She runs the circuit 7 times in the morning, which means she runs 7 x 365 = 2555 meters in the morning. She runs the circuit 3 times in the afternoon, which means she runs 3 x 365 = 1095 meters in the afternoon. The total distance Isabel runs in a week is 2555 + 1095 = 3640 meters. \boxed{3640}          </p>
+          <p class="lt-p">
+Reference Answer: 25550          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✗, Reward: 0.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+101                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+96                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+99                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+99                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+99                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+91                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+126                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+90                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+100                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+100                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+104                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+100                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+101                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+97                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+160                </td>
+                <td>
+99                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="lt-section">
+    <h2 class="lt-h2">
+do_group_rollout    </h2>
+    <div class="lt-section-body">
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. It doubled in weight at week 9, so it weighed 12 pounds at week 9. It doubled in weight again at 3 months old, so it weighed 24 pounds at 3 months old. It doubled in weight again at 5 months old, so it weighed 48 pounds at 5 months old. It added another 30 pounds by the time it was one year old, so it weighed 78 pounds at one year old. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At 7 weeks old, the puppy weighed 6 pounds. It doubled in weight by week 9, so the puppy weighed 6 x 2 = 12 pounds at 9 weeks old. It doubled in weight again at 3 months old, so the puppy weighed 12 x 2 = 24 pounds at 3 months old. It doubled in weight again at 5 months old, so the puppy weighed 24 x 2 = 48 pounds at 5 months old. Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old, so the dog weighed 48 + 30 = 78 pounds at one year old. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old, and doubled in weight by week 9. Hence, the puppy weighed 12 pounds at 9 weeks old. It doubled in weight again at 3 months old, hence the puppy weighed 24 pounds at 3 months old. It doubled in weight again at 5 months old, hence the puppy weighed 48 pounds at 5 months old. The dog added another 30 pounds by the time it was one year old, hence the dog weighed 48 + 30 = 78 pounds at one year old. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At 7 weeks old, the puppy weighed 6 pounds. By week 9, the puppy doubled in weight, which means it weighs 6 x 2 = 12 pounds. At 3 months old, the puppy doubled in weight again, which means it weighs 12 x 2 = 24 pounds. At 5 months old, the puppy doubled in weight again, which means it weighs 24 x 2 = 48 pounds. By the time the dog reached one year old, it added another 30 pounds, which means it weighs 48 + 30 = 78 pounds. Therefore, the dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. It doubled in weight at week 9, becoming 12 pounds. It doubled again in weight at 3 months, becoming 24 pounds. It doubled again in weight at 5 months, becoming 48 pounds. It added another 30 pounds by the time it was one year old, becoming 78 pounds. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. By week 9, it doubled in weight, making it 12 pounds. At 3 months old, it doubled in weight again, making it 24 pounds. At 5 months old, it doubled in weight again, making it 48 pounds. By the time it was one year old, it added another 30 pounds, making its final adult weight 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The dog was 7 weeks old at 6 pounds, so it doubled in weight to become 12 pounds by week 9. It then doubled in weight again to become 24 pounds at 3 months old. It then doubled in weight again to become 48 pounds at 5 months old. Finally, it added another 30 pounds by the time it was one year old, making its final adult weight 48 + 30 = 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At 7 weeks old, the puppy weighed 6 pounds. It doubled in weight by week 9, thus weighing 6 x 2 = 12 pounds. It doubled in weight again at 3 months old, thus weighing 12 x 2 = 24 pounds. It doubled in weight again at 5 months old, thus weighing 24 x 2 = 48 pounds. Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old, thus weighing 48 + 30 = 78 pounds. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. It doubled in weight by week 9, which means it weighed 12 pounds at 9 weeks old. It doubled in weight again at 3 months old, which means it weighed 24 pounds at 3 months old. It doubled in weight again at 5 months old, which means it weighed 48 pounds at 5 months old. It added another 30 pounds by the time it was one year old, which means it weighed 78 pounds at one year old. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. It doubled in weight by week 9, which means it weighed 6 x 2 = 12 pounds at 9 weeks old. It doubled in weight again at 3 months old, which means it weighed 12 x 2 = 24 pounds at 3 months old. It doubled in weight again at 5 months old, which means it weighed 24 x 2 = 48 pounds at 5 months old. The dog reached its final adult weight by adding another 30 pounds by the time it was one year old, which means it weighed 48 + 30 = 78 pounds at one year old. Therefore, the dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The dog was 7 weeks old when it weighed 6 pounds. It then doubled in weight by week 9, meaning it weighed 12 pounds at 9 weeks old. It doubled in weight again at 3 months old, meaning it weighed 24 pounds at 3 months old. It doubled in weight again at 5 months old, meaning it weighed 48 pounds at 5 months old. Finally, the dog added another 30 pounds by the time it was one year old, which means it weighed 78 pounds at one year old. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy weighed 6 pounds at 7 weeks old. By week 9, it doubled in weight to 12 pounds. By 3 months old, it doubled in weight again to 24 pounds. By 5 months old, it doubled in weight again to 48 pounds. Finally, by one year old, it added another 30 pounds to reach a total weight of 78 pounds. Therefore, the dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The dog was 7 weeks old at 6 pounds. It doubled in weight by week 9, resulting in 12 pounds at 9 weeks. It doubled in weight again at 3 months old, resulting in 24 pounds at 3 months. It doubled in weight again at 5 months old, resulting in 48 pounds at 5 months. Finally, the dog added another 30 pounds by the time it was one year old, resulting in a total weight of 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: At 7 weeks old, the puppy weighed 6 pounds. By week 9, it doubled in weight to 12 pounds. At 3 months old, it doubled in weight again to 24 pounds. At 5 months old, it doubled in weight again to 48 pounds. By the time the dog was one year old, it added another 30 pounds to its weight, making the total weight 78 pounds. Therefore, the dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The puppy was 7 weeks old and weighed 6 pounds at that time. It doubled in weight by week 9 and weighed 12 pounds. It doubled in weight again at 3 months old and weighed 24 pounds. It doubled in weight again at 5 months old and weighed 48 pounds. It finally reached its final adult weight by adding another 30 pounds by the time it was one year old, making the total weight 78 pounds. The dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+do_single_rollout        </h3>
+        <div class="lt-section-body">
+          <p class="lt-p">
+Problem: Bert&#x27;s golden retriever has grown tremendously since it was a puppy.  At 7 weeks old, the puppy weighed 6 pounds, but doubled in weight by week 9.  It doubled in weight again at 3 months old, and doubled again at 5 months old.  Finally, the dog reached its final adult weight by adding another 30 pounds by the time it was one year old.  What is the dog&#x27;s full adult weight, in pounds? Write your answer in \boxed{} format.          </p>
+          <p class="lt-p">
+Response: The dog was 7 weeks old at 6 pounds. By week 9, it doubled in weight and became 12 pounds. At 3 months old, it doubled in weight again and became 24 pounds. At 5 months old, it doubled in weight again and became 48 pounds. By the time the dog was one year old, it added another 30 pounds and reached a final adult weight of 78 pounds. Therefore, the dog&#x27;s full adult weight is 78 pounds. \boxed{78}          </p>
+          <p class="lt-p">
+Reference Answer: 78          </p>
+          <p class="lt-p">
+Format Valid: ✓, Correct: ✓, Reward: 1.00          </p>
+        </div>
+      </section>
+      <section class="lt-section">
+        <h3 class="lt-h3">
+Trajectory Summary        </h3>
+        <div class="lt-section-body">
+          <div class="lt-table-caption">
+Trajectory 0          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+122                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 1          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+161                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 2          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+124                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 3          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+143                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 4          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+94                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 5          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+96                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 6          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+100                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 7          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+134                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 8          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+127                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 9          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+160                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 10          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+130                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 11          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+101                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 12          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+108                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 13          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+107                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 14          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+110                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="lt-table-caption">
+Trajectory 15          </div>
+          <table class="lt-table">
+            <thead>
+              <tr>
+                <th>
+step                </th>
+                <th>
+ob_len                </th>
+                <th>
+ac_len                </th>
+                <th>
+reward                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+0                </td>
+                <td>
+205                </td>
+                <td>
+108                </td>
+                <td>
+1.000                </td>
+              </tr>
+              <tr>
+                <td>
+final                </td>
+                <td>
+0                </td>
+                <td>
+-                </td>
+                <td>
+0.000                </td>
+              </tr>
+              <tr>
+                <td>
+total                </td>
+                <td>
+-                </td>
+                <td>
+-                </td>
+                <td>
+1.000                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+</body>
+</html>
