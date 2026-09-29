@@ -1,0 +1,273 @@
+### repo: C:\Users\ajbis\OneDrive - Cal Poly\teaching\F26\CSC5870\tinker\tinker-cookbook @ 63cb0c908df3a84c6ee9b3abc5a7625c5de1be65
+modules: tinker_cookbook
+-- repo-wide (vs HEAD, staged+unstaged) --
+diff --git a/conda-install-tinker-cb.ps1 b/conda-install-tinker-cb.ps1
+deleted file mode 100644
+index f46a97b..0000000
+--- a/conda-install-tinker-cb.ps1
++++ /dev/null
+@@ -1 +0,0 @@
+-conda create -n tinker-cb -c conda-forge -c pytorch -c nvidia python=3.11 pytorch numpy pillow pip -y; conda activate tinker-cb; pip install --no-deps -e .; pip install tinker-cookbook
+diff --git a/pyproject.toml b/pyproject.toml
+index fed572b..6ba1d13 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -32,6 +32,7 @@ dependencies = [
+     "tiktoken>=0.12.0", # Required for Kimi tokenizer
+     "tqdm",
+     "modal",
++    "matplotlib>=3.11.2",
+ ]
+ 
+ [project.urls]
+diff --git a/tinker_cookbook/chat_app/run-chat-app-instruct.ps1 b/tinker_cookbook/chat_app/run-chat-app-instruct.ps1
+deleted file mode 100644
+index dbfa144..0000000
+--- a/tinker_cookbook/chat_app/run-chat-app-instruct.ps1
++++ /dev/null
+@@ -1,5 +0,0 @@
+-$Env:TINKER_API_KEY = (Get-Content -Raw "api-key.txt").Trim()
+-$Env:KML_DUPLICATE_LIB_OK = "TRUE"
+-python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-  base_model=meta-llama/Llama-3.1-8B `
+-  model_path=tinker://92c308d4-09a8-566d-b33f-824d618e9aef:train:0/sampler_weights/final `
+diff --git a/tinker_cookbook/chat_app/run-chat-app-llama-8B.ps1 b/tinker_cookbook/chat_app/run-chat-app-llama-8B.ps1
+deleted file mode 100644
+index 0e1a501..0000000
+--- a/tinker_cookbook/chat_app/run-chat-app-llama-8B.ps1
++++ /dev/null
+@@ -1,13 +0,0 @@
+-$CookbookRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+-$Env:TINKER_API_KEY = (Get-Content -Raw (Join-Path $CookbookRoot "api-key.txt")).Trim()
+-$Env:PYTHONUTF8 = "1"
+-[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+-
+-Push-Location $CookbookRoot
+-try {
+-  python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-    base_model=meta-llama/Llama-3.1-8B-Instruct
+-}
+-finally {
+-  Pop-Location
+-}
+diff --git a/tinker_cookbook/chat_app/run-chat-app-qwen.ps1 b/tinker_cookbook/chat_app/run-chat-app-qwen.ps1
+deleted file mode 100644
+index 6f17f4a..0000000
+--- a/tinker_cookbook/chat_app/run-chat-app-qwen.ps1
++++ /dev/null
+@@ -1,4 +0,0 @@
+-$Env:TINKER_API_KEY = (Get-Content -Raw "..\..\api-key.txt").Trim()
+-$Env:KML_DUPLICATE_LIB_OK = "TRUE"
+-python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-  base_model=Qwen/Qwen3-30B-A3B
+\ No newline at end of file
+diff --git a/tinker_cookbook/chat_app/run-chat-app-rlvr.ps1 b/tinker_cookbook/chat_app/run-chat-app-rlvr.ps1
+deleted file mode 100644
+index 1399033..0000000
+--- a/tinker_cookbook/chat_app/run-chat-app-rlvr.ps1
++++ /dev/null
+@@ -1,4 +0,0 @@
+-$Env:TINKER_API_KEY = (gc -Raw "..\..\api-key.txt").Trim()
+-python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-  base_model=meta-llama/Llama-3.1-8B `
+-  model_path=tinker://2b17f030-08ae-5e2b-a212-eb43d780233d:train:0/sampler_weights/final
+diff --git a/tinker_cookbook/chat_app/run-chat-app-translate.ps1 b/tinker_cookbook/chat_app/run-chat-app-translate.ps1
+deleted file mode 100644
+index df2cbbe..0000000
+--- a/tinker_cookbook/chat_app/run-chat-app-translate.ps1
++++ /dev/null
+@@ -1,4 +0,0 @@
+-$Env:TINKER_API_KEY = (Get-Content -Raw "..\..\api-key.txt").Trim()
+-$Env:KML_DUPLICATE_LIB_OK = "TRUE"
+-python -m tinker_cookbook.chat_app.tinker_chat_cli `
+-  model_path=tinker://40aa1ba9-7a4d-5421-b420-947b01bf15d1:train:0/sampler_weights/final `
+diff --git a/tinker_cookbook/model_info.py b/tinker_cookbook/model_info.py
+index c97503f..2ddb620 100644
+--- a/tinker_cookbook/model_info.py
++++ b/tinker_cookbook/model_info.py
+@@ -40,6 +40,7 @@ def get_qwen_info() -> dict[str, ModelAttributes]:
+         "Qwen3-8B-Base": ModelAttributes(org, "3", "8B", False),
+         "Qwen3-14B-Base": ModelAttributes(org, "3", "14B", False),
+         "Qwen3-30B-A3B-Base": ModelAttributes(org, "3", "30B-A3B", False),
++        "Qwen3.5-9B-Base": ModelAttributes(org, "3.5", "9B", False, is_vl=True),
+         "Qwen3-0.6B": ModelAttributes(org, "3", "0.6B", True),
+         "Qwen3-1.7B": ModelAttributes(org, "3", "1.7B", True),
+         "Qwen3-4B": ModelAttributes(org, "3", "4B", True),
+diff --git a/tinker_cookbook/recipes/run_sl_basic.ps1 b/tinker_cookbook/recipes/run_sl_basic.ps1
+index 5b96ea6..1d2b151 100644
+--- a/tinker_cookbook/recipes/run_sl_basic.ps1
++++ b/tinker_cookbook/recipes/run_sl_basic.ps1
+@@ -1,44 +1,13 @@
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference = "Stop"
+ 
+-function Get-UsablePython {
+-  param([string]$RepoRoot)
++# Runs sl_basic (NoRobots SFT) in a uv-managed environment.
++# The venv lives outside OneDrive so it isn't synced; override with UV_PROJECT_ENVIRONMENT.
++# Extra arguments are forwarded as chz overrides, e.g.:
++#   .\run_sl_basic.ps1 model_name=Qwen/Qwen3-8B learning_rate=1e-4
+ 
+-  $directCandidates = @(
+-    (Join-Path $RepoRoot ".venv\Scripts\python.exe"),
+-    "python"
+-  )
+-
+-  $errors = @()
+-
+-  foreach ($candidate in $directCandidates) {
+-    if (($candidate -ne "python") -and -not (Test-Path $candidate)) {
+-      continue
+-    }
+-
+-    try {
+-      & $candidate -c "import sys; assert sys.version_info >= (3, 11), f'Python 3.11+ required, found {sys.version.split()[0]}'; import chz; import torch"
+-      if ($LASTEXITCODE -eq 0) {
+-        return [PSCustomObject]@{ Mode = "direct"; Command = $candidate }
+-      }
+-      $errors += "${candidate}: python preflight failed with exit code $LASTEXITCODE"
+-    }
+-    catch {
+-      $errors += "${candidate}: $($_.Exception.Message)"
+-    }
+-  }
+-
+-  $condaCmd = Get-Command conda -ErrorAction SilentlyContinue
+-  if ($null -ne $condaCmd) {
+-    $condaEnv = if ($Env:TINKER_CONDA_ENV) { $Env:TINKER_CONDA_ENV } else { "tinker-cb" }
+-    & conda --no-plugins run -n $condaEnv python -c "import sys; assert sys.version_info >= (3, 11), f'Python 3.11+ required, found {sys.version.split()[0]}'; import chz; import torch"
+-    if ($LASTEXITCODE -eq 0) {
+-      return [PSCustomObject]@{ Mode = "conda"; EnvName = $condaEnv }
+-    }
+-    $errors += "conda env '${condaEnv}': python preflight failed with exit code $LASTEXITCODE"
+-  }
+-
+-  throw "No usable Python interpreter found. Use Python 3.11+ and install dependencies with pip install -e . Set TINKER_CONDA_ENV to your env name if needed.`n$($errors -join "`n")"
++if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
++  throw "uv not found. Install it: powershell -c `"irm https://astral.sh/uv/install.ps1 | iex`""
+ }
+ 
+ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+@@ -48,20 +17,22 @@ try {
+     throw "Missing api-key.txt in $repoRoot"
+   }
+ 
+-  $pythonSpec = Get-UsablePython -RepoRoot $repoRoot
+-
++  if (-not $Env:UV_PROJECT_ENVIRONMENT) {
++    $Env:UV_PROJECT_ENVIRONMENT = Join-Path $Env:LOCALAPPDATA "uv-envs\tinker-cookbook"
++  }
++  # OneDrive rejects the hardlinks uv uses by default.
++  $Env:UV_LINK_MODE = "copy"
+   $Env:TINKER_API_KEY = (Get-Content -Raw "api-key.txt").Trim()
+   $Env:KMP_DUPLICATE_LIB_OK = "TRUE"
+ 
+-  Write-Host "Running sl_basic"
+-  if ($pythonSpec.Mode -eq "conda") {
+-    Write-Host "Using conda env: $($pythonSpec.EnvName)"
+-    & conda --no-plugins run -n $pythonSpec.EnvName python -m tinker_cookbook.recipes.sl_basic
+-  }
+-  else {
+-    Write-Host "Using python: $($pythonSpec.Command)"
+-    & $pythonSpec.Command -m tinker_cookbook.recipes.sl_basic
++  Write-Host "Using uv env: $Env:UV_PROJECT_ENVIRONMENT"
++  & uv sync --python 3.12
++  if ($LASTEXITCODE -ne 0) {
++    throw "uv sync failed with exit code $LASTEXITCODE"
+   }
++
++  Write-Host "Running sl_basic"
++  & uv run python -m tinker_cookbook.recipes.sl_basic @args
+   if ($LASTEXITCODE -ne 0) {
+     throw "sl_basic failed with exit code $LASTEXITCODE"
+   }
+diff --git a/tinker_cookbook/recipes/sl_basic.py b/tinker_cookbook/recipes/sl_basic.py
+index 395640f..dca46fa 100644
+--- a/tinker_cookbook/recipes/sl_basic.py
++++ b/tinker_cookbook/recipes/sl_basic.py
+@@ -10,7 +10,8 @@ import asyncio
+ 
+ 
+ def build_config_blueprint() -> chz.Blueprint[train.Config]:
+-    model_name = "meta-llama/Llama-3.1-8B"
++    model_name = "Qwen/Qwen3-8B"
++    model_name = "Qwen/Qwen3.5-9B-Base"
+     renderer_name = model_info.get_recommended_renderer_name(model_name)
+     common_config = ChatDatasetBuilderCommonConfig(
+         model_name_for_tokenizer=model_name,
+@@ -28,13 +29,14 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
+         # tinker_cookbook/example_data/conversations.jsonl
+     return chz.Blueprint(train.Config).apply(
+         {
+-            "log_path": "..\training_logs\sl_basic_NoRobots",
++            "log_path": r"tinker_cookbook\training_logs\sl_basic_NoRobots_qwen3.5-9B-base",
+             "model_name": model_name,
+             "dataset_builder": dataset,
+             "learning_rate": 2e-4,
+             "lr_schedule": "linear",
+             "num_epochs": 1,
+             "eval_every": 8,
++            "save_every": 8,
+         }
+     )
+ 
+@@ -46,6 +48,10 @@ def main(config: train.Config):
+ 
+ 
+ if __name__ == "__main__":
++    if sys.platform == "win32":
++        # The default Proactor loop can crash the tinker client's background thread
++        # (WinError 995 -> InvalidStateError); the selector loop avoids that bug.
++        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+     blueprint = build_config_blueprint()
+     blueprint.make_from_argv(sys.argv[1:])
+     main(blueprint.make())
+diff --git a/tinker_cookbook/supervised/train.py b/tinker_cookbook/supervised/train.py
+index 6e334f3..f8171c7 100644
+--- a/tinker_cookbook/supervised/train.py
++++ b/tinker_cookbook/supervised/train.py
+@@ -198,14 +198,14 @@ async def main(config: Config):
+         # Resuming interrupted training - load optimizer state for proper continuation
+         training_client = (
+             await service_client.create_training_client_from_state_with_optimizer_async(
+-                resume_info["state_path"], user_metadata
++                resume_info["state_path"], user_metadata=user_metadata
+             )
+         )
+         logger.info(f"Resumed training from {resume_info['state_path']}")
+     elif config.load_checkpoint_path:
+         # Starting fresh from a checkpoint - load weights only (fresh optimizer)
+         training_client = await service_client.create_training_client_from_state_async(
+-            config.load_checkpoint_path, user_metadata
++            config.load_checkpoint_path, user_metadata=user_metadata
+         )
+         logger.info(f"Loaded weights from {config.load_checkpoint_path}")
+     else:
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/checkpoints.jsonl b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/checkpoints.jsonl
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/checkpoints.jsonl
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/checkpoints.jsonl
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/code.diff b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/code.diff
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/code.diff
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/code.diff
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/config.json b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/config.json
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/config.json
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/config.json
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/logs.log b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/logs.log
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/logs.log
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/logs.log
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/metrics.jsonl b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/metrics.jsonl
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/metrics.jsonl
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/metrics.jsonl
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/metrics.png b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/metrics.png
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/metrics.png
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/metrics.png
+diff --git a/tinker_cookbook/training_logs/sl_basic_NoRobots/visualize.py b/tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/visualize.py
+similarity index 100%
+rename from tinker_cookbook/training_logs/sl_basic_NoRobots/visualize.py
+rename to tinker_cookbook/training_logs/sl_basic_NoRobots_llama3.1-8B/visualize.py

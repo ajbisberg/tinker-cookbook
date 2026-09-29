@@ -198,14 +198,14 @@ async def main(config: Config):
         # Resuming interrupted training - load optimizer state for proper continuation
         training_client = (
             await service_client.create_training_client_from_state_with_optimizer_async(
-                resume_info["state_path"], user_metadata
+                resume_info["state_path"], user_metadata=user_metadata
             )
         )
         logger.info(f"Resumed training from {resume_info['state_path']}")
     elif config.load_checkpoint_path:
         # Starting fresh from a checkpoint - load weights only (fresh optimizer)
         training_client = await service_client.create_training_client_from_state_async(
-            config.load_checkpoint_path, user_metadata
+            config.load_checkpoint_path, user_metadata=user_metadata
         )
         logger.info(f"Loaded weights from {config.load_checkpoint_path}")
     else:

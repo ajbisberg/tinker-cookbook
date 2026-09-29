@@ -5,7 +5,7 @@ $Env:PYTHONUTF8 = "1"
 
 Push-Location $CookbookRoot
 try {
-  python -m tinker_cookbook.chat_app.tinker_chat_cli `
+  uv run python -m tinker_cookbook.chat_app.tinker_chat_cli `
     base_model=meta-llama/Llama-3.1-8B-Instruct
 }
 finally {

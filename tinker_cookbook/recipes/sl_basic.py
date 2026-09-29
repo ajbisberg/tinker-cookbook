@@ -10,7 +10,8 @@ import asyncio
 
 
 def build_config_blueprint() -> chz.Blueprint[train.Config]:
-    model_name = "meta-llama/Llama-3.1-8B"
+    # model_name = "Qwen/Qwen3-8B"
+    model_name = "Qwen/Qwen3.5-9B-Base"
     renderer_name = model_info.get_recommended_renderer_name(model_name)
     common_config = ChatDatasetBuilderCommonConfig(
         model_name_for_tokenizer=model_name,
@@ -28,13 +29,14 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
         # tinker_cookbook/example_data/conversations.jsonl
     return chz.Blueprint(train.Config).apply(
         {
-            "log_path": "..\training_logs\sl_basic_NoRobots",
+            "log_path": r"tinker_cookbook\training_logs\sl_basic_NoRobots_qwen3.5-9B-base",
             "model_name": model_name,
             "dataset_builder": dataset,
             "learning_rate": 2e-4,
             "lr_schedule": "linear",
             "num_epochs": 1,
             "eval_every": 8,
+            "save_every": 8,
         }
     )
 
@@ -46,6 +48,10 @@ def main(config: train.Config):
 
 
 if __name__ == "__main__":
+    if sys.platform == "win32":
+        # The default Proactor loop can crash the tinker client's background thread
+        # (WinError 995 -> InvalidStateError); the selector loop avoids that bug.
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     blueprint = build_config_blueprint()
     blueprint.make_from_argv(sys.argv[1:])
     main(blueprint.make())
